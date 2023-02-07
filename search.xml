@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>mariadb_multiple_install</title>
-    <url>/2023/02/07/mariadb-multiple-install/</url>
-    <content><![CDATA[<h1 id="安裝多個MariaDB在同台主機上"><a href="#安裝多個MariaDB在同台主機上" class="headerlink" title="安裝多個MariaDB在同台主機上"></a>安裝多個MariaDB在同台主機上</h1>]]></content>
-      <categories>
-        <category>MariaDB</category>
-      </categories>
-      <tags>
-        <tag>Install</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/2023/02/05/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -28,5 +17,27 @@
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>ProxySQL</title>
+    <url>/2023/02/07/ProxySQL/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>MariaDB</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mariadb_multiple_install</title>
+    <url>/2023/02/07/mariadb-multiple-install/</url>
+    <content><![CDATA[<h1 id="安裝多個MariaDB在同台主機上"><a href="#安裝多個MariaDB在同台主機上" class="headerlink" title="安裝多個MariaDB在同台主機上"></a>安裝多個MariaDB在同台主機上</h1>]]></content>
+      <categories>
+        <category>MariaDB</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
   </entry>
 </search>
