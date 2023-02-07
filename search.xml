@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>mariadb_multiple_install</title>
-    <url>/2023/02/07/mariadb-multiple-install/</url>
-    <content><![CDATA[<h1 id="安裝多個MariaDB在同台主機上"><a href="#安裝多個MariaDB在同台主機上" class="headerlink" title="安裝多個MariaDB在同台主機上"></a>安裝多個MariaDB在同台主機上</h1>]]></content>
+    <title>ProxySQL</title>
+    <url>/2023/02/07/ProxySQL/</url>
+    <content><![CDATA[]]></content>
       <categories>
         <category>MariaDB</category>
       </categories>
@@ -30,9 +30,9 @@
 ]]></content>
   </entry>
   <entry>
-    <title>ProxySQL</title>
-    <url>/2023/02/07/ProxySQL/</url>
-    <content><![CDATA[]]></content>
+    <title>mariadb_multiple_install</title>
+    <url>/2023/02/07/mariadb-multiple-install/</url>
+    <content><![CDATA[<h1 id="安裝多個MariaDB在同台主機上"><a href="#安裝多個MariaDB在同台主機上" class="headerlink" title="安裝多個MariaDB在同台主機上"></a>安裝多個MariaDB在同台主機上</h1>]]></content>
       <categories>
         <category>MariaDB</category>
       </categories>
