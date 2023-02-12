@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"binhu831open.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"binhu831open.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta property="og:type" content="website">
@@ -160,198 +160,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://binhu831open.github.io/2023/02/11/Oracle-ACL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="敗家貓">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="敗家貓">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/11/Oracle-ACL/" class="post-title-link" itemprop="url">Oracle ACL設定</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              <time title="創建時間：2023-02-11 21:14:23" itemprop="dateCreated datePublished" datetime="2023-02-11T21:14:23+08:00">2023-02-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-02-12 12:54:37" itemprop="dateModified" datetime="2023-02-12T12:54:37+08:00">2023-02-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Oracle/" itemprop="url" rel="index"><span itemprop="name">Oracle</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-
-<p>用SYS執行全部的ACL設定</p>
-<h2 id="刪除ACL設定"><a href="#刪除ACL設定" class="headerlink" title="刪除ACL設定"></a>刪除ACL設定</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line"> dbms_network_acl_admin.drop_acl(acl <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;mail_acl_file.xml&#x27;</span>); </span><br><span class="line"> <span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="新增ACL設定"><a href="#新增ACL設定" class="headerlink" title="新增ACL設定"></a>新增ACL設定</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">DBMS_NETWORK_ACL_ADMIN.create_acl (</span><br><span class="line">acl <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;mail_acl_file.xml&#x27;</span>,</span><br><span class="line">description <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;create by 2020/1/1&#x27;</span>,</span><br><span class="line">principal <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;User帳號&#x27;</span>,<span class="comment">--改這</span></span><br><span class="line">is_grant <span class="operator">=</span><span class="operator">&gt;</span> <span class="literal">TRUE</span>,</span><br><span class="line">privilege <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;connect&#x27;</span>,</span><br><span class="line">start_date <span class="operator">=</span><span class="operator">&gt;</span> SYSTIMESTAMP,</span><br><span class="line">end_date <span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">NULL</span>);</span><br><span class="line"><span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="新增ACL權限"><a href="#新增ACL權限" class="headerlink" title="新增ACL權限"></a>新增ACL權限</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line">  dbms_network_acl_admin.add_privilege (</span><br><span class="line">  acl <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;mail_acl_file.xml&#x27;</span>,</span><br><span class="line">  principal <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;User帳號&#x27;</span>,<span class="comment">--改這</span></span><br><span class="line">  is_grant <span class="operator">=</span><span class="operator">&gt;</span> <span class="literal">true</span>,</span><br><span class="line">  privilege <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;connect&#x27;</span></span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">commit</span>;</span><br><span class="line">  <span class="keyword">end</span>;</span><br><span class="line"><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">dbms_network_acl_admin.add_privilege(</span><br><span class="line">   acl <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;mail_acl_file.xml&#x27;</span>,</span><br><span class="line">   principal <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;User帳號&#x27;</span>,<span class="comment">--改這</span></span><br><span class="line">   is_grant <span class="operator">=</span><span class="operator">&gt;</span> <span class="literal">TRUE</span>,</span><br><span class="line">   privilege <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;resolve&#x27;</span></span><br><span class="line">   ); </span><br><span class="line">  <span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"><span class="operator">/</span> </span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="設定Email-ACL"><a href="#設定Email-ACL" class="headerlink" title="設定Email-ACL"></a>設定Email-ACL</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line">    dbms_network_acl_admin.assign_acl(</span><br><span class="line">    acl <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;mail_acl_file.xml&#x27;</span>,</span><br><span class="line">    host <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;Mail IP&#x27;</span><span class="comment">--改這</span></span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">end</span>;  </span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="相關SQL"><a href="#相關SQL" class="headerlink" title="相關SQL"></a>相關SQL</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> host, lower_port, upper_port, acl <span class="keyword">FROM</span> dba_network_acls;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> acl,principal,privilege,is_grant,to_char(start_date, <span class="string">&#x27;dd-mon-yyyy&#x27;</span>) <span class="keyword">as</span> start_date,to_char(end_date, <span class="string">&#x27;dd-mon-yyyy&#x27;</span>) <span class="keyword">as</span> end_date </span><br><span class="line"><span class="keyword">from</span> dba_network_acl_privileges;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> any_path <span class="keyword">from</span> resource_view <span class="keyword">where</span> any_path <span class="keyword">like</span> <span class="string">&#x27;/sys/acls/%.xml&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Schedule-Mail"><a href="#Schedule-Mail" class="headerlink" title="Schedule Mail"></a>Schedule Mail</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> DBA_SCHEDULER_GLOBAL_ATTRIBUTE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">execute</span> DBMS_SCHEDULER.SET_SCHEDULER_ATTRIBUTE (<span class="string">&#x27;EMAIL_SERVER&#x27;</span>,<span class="string">&#x27; Mail_IP&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">execute</span> DBMS_SCHEDULER.SET_SCHEDULER_ATTRIBUTE (<span class="string">&#x27;EMAIL_SENDER&#x27;</span>,<span class="string">&#x27;寄件者Mail&#x27;</span>);</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Mail-PROCEDURE"><a href="#Mail-PROCEDURE" class="headerlink" title="Mail_PROCEDURE"></a>Mail_PROCEDURE</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">CREATE OR REPLACE PROCEDURE DBA_MONITOR_SEND_MAIL (</span><br><span class="line">   p_from          IN VARCHAR2,</span><br><span class="line">   p_to            IN VARCHAR2,   </span><br><span class="line">   p_cc            IN VARCHAR2 default null,</span><br><span class="line">   p_bcc           IN VARCHAR2 default null,</span><br><span class="line">   p_reply         IN VARCHAR2 default null,</span><br><span class="line">   p_subject       IN VARCHAR2,   </span><br><span class="line">   p_text          IN VARCHAR2 default null,</span><br><span class="line">   p_html          in VARCHAR2 default null,</span><br><span class="line">   p_smtp_hostname in varchar2,</span><br><span class="line">   p_smtp_portnum  in number,</span><br><span class="line">   p_domain        in varchar2 default null,</span><br><span class="line">   p_login         in varchar2,</span><br><span class="line">   p_pwd           in varchar2,</span><br><span class="line">   p_html_body     in clob </span><br><span class="line">   )</span><br><span class="line">IS</span><br><span class="line"> --宣告</span><br><span class="line">  l_mail_conn   UTL_SMTP.connection;</span><br><span class="line">  l_boundary    VARCHAR2(50) := &#x27;----=*#abc1234321cba#*=&#x27;;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">BEGIN</span><br><span class="line"> --設定伺服器</span><br><span class="line">  l_mail_conn := UTL_SMTP.open_connection(p_smtp_hostname, p_smtp_portnum);</span><br><span class="line">  --l_mail_conn := utl_smtp.open_connection(&#x27;1.1.1.1&#x27;, 25);</span><br><span class="line">  UTL_SMTP.helo(l_mail_conn, p_smtp_hostname);</span><br><span class="line"></span><br><span class="line"> --寄件者</span><br><span class="line">  UTL_SMTP.mail(l_mail_conn, p_from);</span><br><span class="line"></span><br><span class="line"> --收件者</span><br><span class="line">  UTL_SMTP.rcpt(l_mail_conn,  p_to);</span><br><span class="line">  if p_cc is not null then    </span><br><span class="line">    UTL_SMTP.rcpt(l_mail_conn,  p_cc);      </span><br><span class="line">  end if;</span><br><span class="line">  UTL_SMTP.open_data(l_mail_conn);</span><br><span class="line"></span><br><span class="line"> -- 主旨</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;From: &#x27; || p_from || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;To: &#x27; || p_to || UTL_TCP.crlf);</span><br><span class="line">  if p_cc is not null then    </span><br><span class="line">    UTL_SMTP.write_data(l_mail_conn, &#x27;Cc: &#x27; || p_cc || UTL_TCP.crlf);  </span><br><span class="line">  end if;</span><br><span class="line">  UTL_smtp.write_raw_data(l_mail_conn, utl_raw.cast_to_raw( &#x27;Subject: &#x27;|| p_subject || UTL_TCP.crlf));</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;MIME-Version: 1.0&#x27; || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;Content-Type: multipart/alternative; boundary=&quot;&#x27; || l_boundary || &#x27;&quot;&#x27; || UTL_TCP.crlf || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;--&#x27; || l_boundary || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;Content-Type: text/html; charset=utf-8/big5&#x27; || UTL_TCP.crlf || UTL_TCP.crlf);</span><br><span class="line">  --utl_smtp.write_data( l_mail_conn, &#x27;Content-Transfer-Encoding: 8bit&#x27; || UTL_TCP.crlf );</span><br><span class="line">  </span><br><span class="line">  --UTL_smtp.write_raw_data(l_mail_conn, utl_raw.cast_to_raw( p_html_body ));</span><br><span class="line">  UTL_smtp.write_raw_data(l_mail_conn, utl_raw.cast_to_raw(CONVERT(dbms_lob.substr(p_html_body), &#x27;UTF8&#x27;)));</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, UTL_TCP.crlf || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;--&#x27; || l_boundary || &#x27;--&#x27; || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.close_data(l_mail_conn);</span><br><span class="line">  UTL_SMTP.quit(l_mail_conn);</span><br><span class="line">END;</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://binhu831open.github.io/2023/02/11/hexo%E9%9B%9C%E8%A8%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="敗家貓">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="敗家貓">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/11/hexo%E9%9B%9C%E8%A8%98/" class="post-title-link" itemprop="url">Hexo雜記</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              <time title="創建時間：2023-02-11 21:07:21" itemprop="dateCreated datePublished" datetime="2023-02-11T21:07:21+08:00">2023-02-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-02-12 12:55:58" itemprop="dateModified" datetime="2023-02-12T12:55:58+08:00">2023-02-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-
-<p>如何刪除 Hexo 已發佈的文章</p>
-<ol>
-<li><p>在%HEXO_HOME%/source/_post 資料夾中刪除不要的文章</p>
-</li>
-<li><p>CMD 執行hexo clean</p>
-</li>
-<li><p>在%HEXO_HOME% 刪除 db.json</p>
-</li>
-<li><p>執行hexo cl</p>
-</li>
-<li><p>執行hexo g -d</p>
-</li>
-</ol>
-<p>首頁只顯示部份內容</p>
-<p>文章中插==<!--more-->==就只會顯示該行以上的內容</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://binhu831open.github.io/2023/02/07/ProxySQL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -375,10 +183,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">發表於</span>
-              
 
-              <time title="創建時間：2023-02-07 23:49:54 / 修改時間：23:50:38" itemprop="dateCreated datePublished" datetime="2023-02-07T23:49:54+08:00">2023-02-07</time>
+              <time title="創建時間：2023-02-07 23:49:54" itemprop="dateCreated datePublished" datetime="2023-02-07T23:49:54+08:00">2023-02-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2023-02-12 14:29:29" itemprop="dateModified" datetime="2023-02-12T14:29:29+08:00">2023-02-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -415,10 +229,83 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://binhu831open.github.io/2023/02/07/mariadb-multiple-install/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="敗家貓">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="敗家貓">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/07/mariadb-multiple-install/" class="post-title-link" itemprop="url">安裝多個MariaDB在同台主機上</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2023-02-07 23:02:36" itemprop="dateCreated datePublished" datetime="2023-02-07T23:02:36+08:00">2023-02-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2023-02-11 22:36:31" itemprop="dateModified" datetime="2023-02-11T22:36:31+08:00">2023-02-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MariaDB/" itemprop="url" rel="index"><span itemprop="name">MariaDB</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="安裝多個MariaDB在同台主機上"><a href="#安裝多個MariaDB在同台主機上" class="headerlink" title="安裝多個MariaDB在同台主機上"></a>安裝多個MariaDB在同台主機上</h1>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一頁"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一頁"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一頁"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
   </nav>
 
 
@@ -528,9 +415,9 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">若要轉載文章，麻煩請保留原作者名稱與原始連結</span>
+  <span class="author" itemprop="copyrightHolder">敗家貓</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 強力驅動
   </div>
 
         
