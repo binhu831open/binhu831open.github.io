@@ -28,7 +28,7 @@
 <meta property="og:description" content="Oracle ACL設定">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2023-02-11T13:14:23.000Z">
-<meta property="article:modified_time" content="2023-02-12T09:04:51.674Z">
+<meta property="article:modified_time" content="2023-02-12T09:08:24.398Z">
 <meta property="article:author" content="敗家貓">
 <meta property="article:tag" content="Script">
 <meta property="article:tag" content="ACL">
@@ -194,7 +194,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-02-12 17:04:51" itemprop="dateModified" datetime="2023-02-12T17:04:51+08:00">2023-02-12</time>
+                <time title="修改時間：2023-02-12 17:08:24" itemprop="dateModified" datetime="2023-02-12T17:08:24+08:00">2023-02-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -218,9 +218,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <span id="more"></span>
+        <p>ACL維護</p>
+<span id="more"></span>
 
-<p>用SYS執行全部的ACL設定</p>
 <h2 id="刪除ACL設定"><a href="#刪除ACL設定" class="headerlink" title="刪除ACL設定"></a>刪除ACL設定</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line"> dbms_network_acl_admin.drop_acl(acl <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;mail_acl_file.xml&#x27;</span>); </span><br><span class="line"> <span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
 
 
