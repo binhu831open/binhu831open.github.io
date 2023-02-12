@@ -167,22 +167,6 @@
       </tags>
   </entry>
   <entry>
-    <title>sqlldr_hdsize</title>
-    <url>/2023/02/12/sqlldr-hdsize/</url>
-    <content><![CDATA[<p>sqlldr傳硬碟資訊到table</p>
-<span id="more"></span>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rem: @echo off</span><br><span class="line">set ORACLE_SID=xxxx</span><br><span class="line">set ScriptHome=F:\dba_for_primary_role\Os</span><br><span class="line">set LogFolder=%ScriptHome%\Log</span><br><span class="line">set OS_HDSize_Info_File=%LogFolder%\OS_HDSize.csv</span><br><span class="line">set SQLLDR_BADFILE=%LogFolder%\OS_HDSize.bad</span><br><span class="line">set SQLLDR_DISCARDFILE=%LogFolder%\OS_HDSize.dsc</span><br><span class="line">set TableName=binhu.dba_HDSIZE_LOG</span><br><span class="line">set SQLLDR_CTL_File=%ScriptHome%\Log\LoadHDSize.ctl</span><br><span class="line">set SQLLDR_CTL_Log=%ScriptHome%\Log\LoadHDSize.log</span><br><span class="line">set GetHOSTIPSql=%ScriptHome%\Log\GetHOSTIP.sql</span><br><span class="line">set GetHOSTIPTxt=%ScriptHome%\Log\GetHOSTIP.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set IP=xxx.xxx.xxx.xxx</span><br><span class="line"></span><br><span class="line">wmic.exe /OUTPUT:%OS_HDSize_Info_File%  logicaldisk where &quot;drivetype=3&quot; get name,freespace,size </span><br><span class="line"></span><br><span class="line">rem: for windows 2008</span><br><span class="line">set GET_COMPUTERNAME=%COMPUTERNAME%</span><br><span class="line"></span><br><span class="line">echo LOAD DATA &gt; %SQLLDR_CTL_File%</span><br><span class="line">echo CHARACTERSET &#x27;AL16UTF16&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo INFILE &#x27;%OS_HDSize_Info_File%&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo BADFILE &#x27;%SQLLDR_BADFILE%&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo DISCARDFILE &#x27;%SQLLDR_DISCARDFILE%&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo INTO TABLE %TableName% &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo APPEND &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo FIELDS TERMINATED BY WHITESPACE &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo TRAILING NULLCOLS &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo (HOSTNAME CONSTANT &quot;%GET_COMPUTERNAME%&quot;, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo FREE_SIZE_BYTE, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo MOUNT_POINT_NAME, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo MOUNT_POINT_SIZE_BYTE, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo HOSTIP CONSTANT  &quot;%IP%&quot;) &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line"></span><br><span class="line">sqlldr / control=%SQLLDR_CTL_File%  log=%SQLLDR_CTL_Log%</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Oracle</category>
-      </categories>
-      <tags>
-        <tag>Script</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>oracle19c_auto_index</title>
     <url>/2023/02/12/oracle19c-auto-index/</url>
     <content><![CDATA[<p>Oracle 19c 新功能 : index 自動建立 (SQL Server早就有…..)</p>
@@ -240,6 +224,22 @@
       <tags>
         <tag>Script</tag>
         <tag>rman</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sqlldr_hdsize</title>
+    <url>/2023/02/12/sqlldr-hdsize/</url>
+    <content><![CDATA[<p>sqlldr傳硬碟資訊到table</p>
+<span id="more"></span>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rem: @echo off</span><br><span class="line">set ORACLE_SID=xxxx</span><br><span class="line">set ScriptHome=F:\dba_for_primary_role\Os</span><br><span class="line">set LogFolder=%ScriptHome%\Log</span><br><span class="line">set OS_HDSize_Info_File=%LogFolder%\OS_HDSize.csv</span><br><span class="line">set SQLLDR_BADFILE=%LogFolder%\OS_HDSize.bad</span><br><span class="line">set SQLLDR_DISCARDFILE=%LogFolder%\OS_HDSize.dsc</span><br><span class="line">set TableName=binhu.dba_HDSIZE_LOG</span><br><span class="line">set SQLLDR_CTL_File=%ScriptHome%\Log\LoadHDSize.ctl</span><br><span class="line">set SQLLDR_CTL_Log=%ScriptHome%\Log\LoadHDSize.log</span><br><span class="line">set GetHOSTIPSql=%ScriptHome%\Log\GetHOSTIP.sql</span><br><span class="line">set GetHOSTIPTxt=%ScriptHome%\Log\GetHOSTIP.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set IP=xxx.xxx.xxx.xxx</span><br><span class="line"></span><br><span class="line">wmic.exe /OUTPUT:%OS_HDSize_Info_File%  logicaldisk where &quot;drivetype=3&quot; get name,freespace,size </span><br><span class="line"></span><br><span class="line">rem: for windows 2008</span><br><span class="line">set GET_COMPUTERNAME=%COMPUTERNAME%</span><br><span class="line"></span><br><span class="line">echo LOAD DATA &gt; %SQLLDR_CTL_File%</span><br><span class="line">echo CHARACTERSET &#x27;AL16UTF16&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo INFILE &#x27;%OS_HDSize_Info_File%&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo BADFILE &#x27;%SQLLDR_BADFILE%&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo DISCARDFILE &#x27;%SQLLDR_DISCARDFILE%&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo INTO TABLE %TableName% &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo APPEND &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo FIELDS TERMINATED BY WHITESPACE &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo TRAILING NULLCOLS &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo (HOSTNAME CONSTANT &quot;%GET_COMPUTERNAME%&quot;, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo FREE_SIZE_BYTE, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo MOUNT_POINT_NAME, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo MOUNT_POINT_SIZE_BYTE, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo HOSTIP CONSTANT  &quot;%IP%&quot;) &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line"></span><br><span class="line">sqlldr / control=%SQLLDR_CTL_File%  log=%SQLLDR_CTL_Log%</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
       </tags>
   </entry>
 </search>
