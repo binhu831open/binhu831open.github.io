@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Ping主機異常用中華SMS發送通知</title>
-    <url>/2023/02/11/OS-SMS/</url>
-    <content><![CDATA[<span id="more"></span>
-
-<p>使用中華電訊SMS通知異常的範本</p>
-<h2 id="Check-Ping-Main-bat"><a href="#Check-Ping-Main-bat" class="headerlink" title="Check_Ping_Main.bat"></a>Check_Ping_Main.bat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">set</span> Check_Host=要檢查的主機IP</span><br><span class="line"><span class="built_in">set</span> SMS_TELNUM=<span class="string">&quot;接收告警電話1,接收告警電話1&quot;</span></span><br><span class="line"><span class="built_in">set</span> execFileBASE=f:\dba</span><br><span class="line"></span><br><span class="line">call %execFileBASE%\check\check_ping_base.bat %Check_Host% %SMS_TELNUM%</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Check-Ping-Base-bat"><a href="#Check-Ping-Base-bat" class="headerlink" title="Check_Ping_Base.bat"></a>Check_Ping_Base.bat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">set</span> Check_Host=%1</span><br><span class="line"><span class="built_in">set</span> SMS_TN=%2</span><br><span class="line"><span class="built_in">set</span> SMS_TELNUM=%SMS_TN:<span class="string">&quot;=  %</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">@For /F &quot;</span>tokens=1,2,3 delims=:. <span class="string">&quot; %%A in (&#x27;echo %time%&#x27;) do @(</span></span><br><span class="line"><span class="string">Set Hour=%%A</span></span><br><span class="line"><span class="string">Set Min=%%B</span></span><br><span class="line"><span class="string">Set Sec=%%C</span></span><br><span class="line"><span class="string">Set p_time=%%A:%%B:%%C</span></span><br><span class="line"><span class="string">)</span></span><br><span class="line"><span class="string">rem: xp @For /f &quot;</span>tokens=1-3 delims=/ <span class="string">&quot; %%a in (&#x27;date /t&#x27;) do (set p_date=%%c-%%b-%%a)</span></span><br><span class="line"><span class="string">rem: windows 2003</span></span><br><span class="line"><span class="string">@For /f &quot;</span>tokens=1-4 delims=/ <span class="string">&quot; %%a in (&#x27;date /t&#x27;) do (set p_date=%%d-%%b-%%c)</span></span><br><span class="line"><span class="string">set DateString=%p_date%-%p_time%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set execFileBASE=f:\dba</span></span><br><span class="line"><span class="string">set check_file=%execFileBASE%\check\log\check_ping_1.ck</span></span><br><span class="line"><span class="string">set SMS_MESSAGE=%Check_Host% is not availabe yet. -- %DateString%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">rem: 中華電訊的sms程式</span></span><br><span class="line"><span class="string">set notify=%execFileBASE%\notify2\Release\notify2.exe</span></span><br><span class="line"><span class="string">set SMS_IP=中華電訊的sms主機IP</span></span><br><span class="line"><span class="string">set SMS_USER=中華電訊的sms帳號</span></span><br><span class="line"><span class="string">set SMS_PWD=中華電訊的sms密碼</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">%SystemRoot%\system32\ping.exe -n 1 %Check_Host% &gt;nul</span></span><br><span class="line"><span class="string">if errorlevel 1 goto NoServer</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">echo %Check_Host% is availabe.</span></span><br><span class="line"><span class="string">if exist %check_file% (del %check_file% /Q)</span></span><br><span class="line"><span class="string">rem Insert commands here, for example 1 or more net use to connect network drives.</span></span><br><span class="line"><span class="string">goto :EOF</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">:NoServer</span></span><br><span class="line"><span class="string">echo %Check_Host% is not availabe yet.</span></span><br><span class="line"><span class="string">if exist %check_file% ( for %%i in (%SMS_TELNUM%) do %notify% %SMS_IP% %SMS_USER%  %SMS_PWD% %%i %SMS_MESSAGE% )</span></span><br><span class="line"><span class="string">echo &quot;</span>error<span class="string">&quot; &gt; %check_file%</span></span><br><span class="line"><span class="string">goto :EOF</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>OS</category>
-      </categories>
-      <tags>
-        <tag>Monitor</tag>
-        <tag>Script</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Oracle ACL設定</title>
     <url>/2023/02/11/Oracle-ACL/</url>
     <content><![CDATA[<span id="more"></span>
@@ -58,9 +37,41 @@
         <category>Oracle</category>
       </categories>
       <tags>
-        <tag>Script</tag>
         <tag>ACL</tag>
         <tag>Email</tag>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ping主機異常用中華SMS發送通知</title>
+    <url>/2023/02/11/OS-SMS/</url>
+    <content><![CDATA[<span id="more"></span>
+
+<p>使用中華電訊SMS通知異常的範本</p>
+<h2 id="Check-Ping-Main-bat"><a href="#Check-Ping-Main-bat" class="headerlink" title="Check_Ping_Main.bat"></a>Check_Ping_Main.bat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">set</span> Check_Host=要檢查的主機IP</span><br><span class="line"><span class="built_in">set</span> SMS_TELNUM=<span class="string">&quot;接收告警電話1,接收告警電話1&quot;</span></span><br><span class="line"><span class="built_in">set</span> execFileBASE=f:\dba</span><br><span class="line"></span><br><span class="line">call %execFileBASE%\check\check_ping_base.bat %Check_Host% %SMS_TELNUM%</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Check-Ping-Base-bat"><a href="#Check-Ping-Base-bat" class="headerlink" title="Check_Ping_Base.bat"></a>Check_Ping_Base.bat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">set</span> Check_Host=%1</span><br><span class="line"><span class="built_in">set</span> SMS_TN=%2</span><br><span class="line"><span class="built_in">set</span> SMS_TELNUM=%SMS_TN:<span class="string">&quot;=  %</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">@For /F &quot;</span>tokens=1,2,3 delims=:. <span class="string">&quot; %%A in (&#x27;echo %time%&#x27;) do @(</span></span><br><span class="line"><span class="string">Set Hour=%%A</span></span><br><span class="line"><span class="string">Set Min=%%B</span></span><br><span class="line"><span class="string">Set Sec=%%C</span></span><br><span class="line"><span class="string">Set p_time=%%A:%%B:%%C</span></span><br><span class="line"><span class="string">)</span></span><br><span class="line"><span class="string">rem: xp @For /f &quot;</span>tokens=1-3 delims=/ <span class="string">&quot; %%a in (&#x27;date /t&#x27;) do (set p_date=%%c-%%b-%%a)</span></span><br><span class="line"><span class="string">rem: windows 2003</span></span><br><span class="line"><span class="string">@For /f &quot;</span>tokens=1-4 delims=/ <span class="string">&quot; %%a in (&#x27;date /t&#x27;) do (set p_date=%%d-%%b-%%c)</span></span><br><span class="line"><span class="string">set DateString=%p_date%-%p_time%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set execFileBASE=f:\dba</span></span><br><span class="line"><span class="string">set check_file=%execFileBASE%\check\log\check_ping_1.ck</span></span><br><span class="line"><span class="string">set SMS_MESSAGE=%Check_Host% is not availabe yet. -- %DateString%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">rem: 中華電訊的sms程式</span></span><br><span class="line"><span class="string">set notify=%execFileBASE%\notify2\Release\notify2.exe</span></span><br><span class="line"><span class="string">set SMS_IP=中華電訊的sms主機IP</span></span><br><span class="line"><span class="string">set SMS_USER=中華電訊的sms帳號</span></span><br><span class="line"><span class="string">set SMS_PWD=中華電訊的sms密碼</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">%SystemRoot%\system32\ping.exe -n 1 %Check_Host% &gt;nul</span></span><br><span class="line"><span class="string">if errorlevel 1 goto NoServer</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">echo %Check_Host% is availabe.</span></span><br><span class="line"><span class="string">if exist %check_file% (del %check_file% /Q)</span></span><br><span class="line"><span class="string">rem Insert commands here, for example 1 or more net use to connect network drives.</span></span><br><span class="line"><span class="string">goto :EOF</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">:NoServer</span></span><br><span class="line"><span class="string">echo %Check_Host% is not availabe yet.</span></span><br><span class="line"><span class="string">if exist %check_file% ( for %%i in (%SMS_TELNUM%) do %notify% %SMS_IP% %SMS_USER%  %SMS_PWD% %%i %SMS_MESSAGE% )</span></span><br><span class="line"><span class="string">echo &quot;</span>error<span class="string">&quot; &gt; %check_file%</span></span><br><span class="line"><span class="string">goto :EOF</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>OS</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+        <tag>Monitor</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ProxySQL</title>
+    <url>/2023/02/07/ProxySQL/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>MariaDB</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
       </tags>
   </entry>
   <entry>
@@ -76,17 +87,6 @@
       </categories>
       <tags>
         <tag>Script</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ProxySQL</title>
-    <url>/2023/02/07/ProxySQL/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>MariaDB</category>
-      </categories>
-      <tags>
-        <tag>Install</tag>
       </tags>
   </entry>
   <entry>
