@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Ping主機異常用中華SMS發送通知</title>
-    <url>/2023/02/11/OS-SMS/</url>
-    <content><![CDATA[<p>使用中華電訊SMS通知異常的範本</p>
-<span id="more"></span>
-
-<h2 id="Check-Ping-Main-bat"><a href="#Check-Ping-Main-bat" class="headerlink" title="Check_Ping_Main.bat"></a>Check_Ping_Main.bat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">set</span> Check_Host=要檢查的主機IP</span><br><span class="line"><span class="built_in">set</span> SMS_TELNUM=<span class="string">&quot;接收告警電話1,接收告警電話1&quot;</span></span><br><span class="line"><span class="built_in">set</span> execFileBASE=f:\dba</span><br><span class="line"></span><br><span class="line">call %execFileBASE%\check\check_ping_base.bat %Check_Host% %SMS_TELNUM%</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Check-Ping-Base-bat"><a href="#Check-Ping-Base-bat" class="headerlink" title="Check_Ping_Base.bat"></a>Check_Ping_Base.bat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">set</span> Check_Host=%1</span><br><span class="line"><span class="built_in">set</span> SMS_TN=%2</span><br><span class="line"><span class="built_in">set</span> SMS_TELNUM=%SMS_TN:<span class="string">&quot;=  %</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">@For /F &quot;</span>tokens=1,2,3 delims=:. <span class="string">&quot; %%A in (&#x27;echo %time%&#x27;) do @(</span></span><br><span class="line"><span class="string">Set Hour=%%A</span></span><br><span class="line"><span class="string">Set Min=%%B</span></span><br><span class="line"><span class="string">Set Sec=%%C</span></span><br><span class="line"><span class="string">Set p_time=%%A:%%B:%%C</span></span><br><span class="line"><span class="string">)</span></span><br><span class="line"><span class="string">rem: xp @For /f &quot;</span>tokens=1-3 delims=/ <span class="string">&quot; %%a in (&#x27;date /t&#x27;) do (set p_date=%%c-%%b-%%a)</span></span><br><span class="line"><span class="string">rem: windows 2003</span></span><br><span class="line"><span class="string">@For /f &quot;</span>tokens=1-4 delims=/ <span class="string">&quot; %%a in (&#x27;date /t&#x27;) do (set p_date=%%d-%%b-%%c)</span></span><br><span class="line"><span class="string">set DateString=%p_date%-%p_time%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set execFileBASE=f:\dba</span></span><br><span class="line"><span class="string">set check_file=%execFileBASE%\check\log\check_ping_1.ck</span></span><br><span class="line"><span class="string">set SMS_MESSAGE=%Check_Host% is not availabe yet. -- %DateString%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">rem: 中華電訊的sms程式</span></span><br><span class="line"><span class="string">set notify=%execFileBASE%\notify2\Release\notify2.exe</span></span><br><span class="line"><span class="string">set SMS_IP=中華電訊的sms主機IP</span></span><br><span class="line"><span class="string">set SMS_USER=中華電訊的sms帳號</span></span><br><span class="line"><span class="string">set SMS_PWD=中華電訊的sms密碼</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">%SystemRoot%\system32\ping.exe -n 1 %Check_Host% &gt;nul</span></span><br><span class="line"><span class="string">if errorlevel 1 goto NoServer</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">echo %Check_Host% is availabe.</span></span><br><span class="line"><span class="string">if exist %check_file% (del %check_file% /Q)</span></span><br><span class="line"><span class="string">rem Insert commands here, for example 1 or more net use to connect network drives.</span></span><br><span class="line"><span class="string">goto :EOF</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">:NoServer</span></span><br><span class="line"><span class="string">echo %Check_Host% is not availabe yet.</span></span><br><span class="line"><span class="string">if exist %check_file% ( for %%i in (%SMS_TELNUM%) do %notify% %SMS_IP% %SMS_USER%  %SMS_PWD% %%i %SMS_MESSAGE% )</span></span><br><span class="line"><span class="string">echo &quot;</span>error<span class="string">&quot; &gt; %check_file%</span></span><br><span class="line"><span class="string">goto :EOF</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>OS</category>
-      </categories>
-      <tags>
-        <tag>Monitor</tag>
-        <tag>Script</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Oracle ACL設定</title>
     <url>/2023/02/11/Oracle-ACL/</url>
     <content><![CDATA[<p>ACL維護和Mail</p>
@@ -62,9 +41,46 @@
         <category>Oracle</category>
       </categories>
       <tags>
-        <tag>Script</tag>
         <tag>ACL</tag>
         <tag>Email</tag>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ping主機異常用中華SMS發送通知</title>
+    <url>/2023/02/11/OS-SMS/</url>
+    <content><![CDATA[<p>使用中華電訊SMS通知異常的範本</p>
+<span id="more"></span>
+
+<h2 id="Check-Ping-Main-bat"><a href="#Check-Ping-Main-bat" class="headerlink" title="Check_Ping_Main.bat"></a>Check_Ping_Main.bat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">set</span> Check_Host=要檢查的主機IP</span><br><span class="line"><span class="built_in">set</span> SMS_TELNUM=<span class="string">&quot;接收告警電話1,接收告警電話1&quot;</span></span><br><span class="line"><span class="built_in">set</span> execFileBASE=f:\dba</span><br><span class="line"></span><br><span class="line">call %execFileBASE%\check\check_ping_base.bat %Check_Host% %SMS_TELNUM%</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Check-Ping-Base-bat"><a href="#Check-Ping-Base-bat" class="headerlink" title="Check_Ping_Base.bat"></a>Check_Ping_Base.bat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">set</span> Check_Host=%1</span><br><span class="line"><span class="built_in">set</span> SMS_TN=%2</span><br><span class="line"><span class="built_in">set</span> SMS_TELNUM=%SMS_TN:<span class="string">&quot;=  %</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">@For /F &quot;</span>tokens=1,2,3 delims=:. <span class="string">&quot; %%A in (&#x27;echo %time%&#x27;) do @(</span></span><br><span class="line"><span class="string">Set Hour=%%A</span></span><br><span class="line"><span class="string">Set Min=%%B</span></span><br><span class="line"><span class="string">Set Sec=%%C</span></span><br><span class="line"><span class="string">Set p_time=%%A:%%B:%%C</span></span><br><span class="line"><span class="string">)</span></span><br><span class="line"><span class="string">rem: xp @For /f &quot;</span>tokens=1-3 delims=/ <span class="string">&quot; %%a in (&#x27;date /t&#x27;) do (set p_date=%%c-%%b-%%a)</span></span><br><span class="line"><span class="string">rem: windows 2003</span></span><br><span class="line"><span class="string">@For /f &quot;</span>tokens=1-4 delims=/ <span class="string">&quot; %%a in (&#x27;date /t&#x27;) do (set p_date=%%d-%%b-%%c)</span></span><br><span class="line"><span class="string">set DateString=%p_date%-%p_time%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set execFileBASE=f:\dba</span></span><br><span class="line"><span class="string">set check_file=%execFileBASE%\check\log\check_ping_1.ck</span></span><br><span class="line"><span class="string">set SMS_MESSAGE=%Check_Host% is not availabe yet. -- %DateString%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">rem: 中華電訊的sms程式</span></span><br><span class="line"><span class="string">set notify=%execFileBASE%\notify2\Release\notify2.exe</span></span><br><span class="line"><span class="string">set SMS_IP=中華電訊的sms主機IP</span></span><br><span class="line"><span class="string">set SMS_USER=中華電訊的sms帳號</span></span><br><span class="line"><span class="string">set SMS_PWD=中華電訊的sms密碼</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">%SystemRoot%\system32\ping.exe -n 1 %Check_Host% &gt;nul</span></span><br><span class="line"><span class="string">if errorlevel 1 goto NoServer</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">echo %Check_Host% is availabe.</span></span><br><span class="line"><span class="string">if exist %check_file% (del %check_file% /Q)</span></span><br><span class="line"><span class="string">rem Insert commands here, for example 1 or more net use to connect network drives.</span></span><br><span class="line"><span class="string">goto :EOF</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">:NoServer</span></span><br><span class="line"><span class="string">echo %Check_Host% is not availabe yet.</span></span><br><span class="line"><span class="string">if exist %check_file% ( for %%i in (%SMS_TELNUM%) do %notify% %SMS_IP% %SMS_USER%  %SMS_PWD% %%i %SMS_MESSAGE% )</span></span><br><span class="line"><span class="string">echo &quot;</span>error<span class="string">&quot; &gt; %check_file%</span></span><br><span class="line"><span class="string">goto :EOF</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>OS</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+        <tag>Monitor</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle Check URL</title>
+    <url>/2023/02/11/Oracle-Check-URL/</url>
+    <content><![CDATA[<p>Oracle檢查URL範本</p>
+<span id="more"></span>
+
+<h2 id="基本範例"><a href="#基本範例" class="headerlink" title="基本範例"></a>基本範例</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE OR REPLACE PROCEDURE DBA_Check_URL_Status(t_url in varchar2)</span><br><span class="line">IS</span><br><span class="line">  request UTL_HTTP.REQ;</span><br><span class="line">  response UTL_HTTP.RESP;</span><br><span class="line">  v_url varchar2(4000);</span><br><span class="line">  v_ck_txt varchar2(4000);</span><br><span class="line">  clob_buff CLOB;</span><br><span class="line">  buff VARCHAR2(4000);</span><br><span class="line">  v_seq number ;</span><br><span class="line">  V_MSG varchar2(4000);</span><br><span class="line">  V_USER_FROM varchar2(4000);  </span><br><span class="line">  c  utl_tcp.connection;  -- TCP/IP connection to the Web server</span><br><span class="line">  ret_val pls_integer;</span><br><span class="line">  v_temp varchar2 (1000);</span><br><span class="line">BEGIN</span><br><span class="line">  EXECUTE IMMEDIATE &#x27;ALTER SESSION SET NLS_LANGUAGE= &#x27;&#x27;AMERICAN&#x27;&#x27;&#x27;;</span><br><span class="line">  v_url := t_url;</span><br><span class="line">  v_ck_txt := null;</span><br><span class="line">  </span><br><span class="line">  if instr(lower(v_url),&#x27;https:&#x27;) &gt; 0 then</span><br><span class="line">    --處理HTTPS</span><br><span class="line">    select REGEXP_SUBSTR(REGEXP_REPLACE(v_url,&#x27;^http[s]?://&#x27;,&#x27;&#x27;,1),&#x27;[a-z,A-Z,0-9,-]+(\.\w+)+&#x27;) INTO v_temp from dual;</span><br><span class="line">    BEGIN</span><br><span class="line">       c := utl_tcp.open_connection(remote_host =&gt; v_temp,</span><br><span class="line">                                    remote_port =&gt;  443,</span><br><span class="line">                                    tx_timeout =&gt; 5,</span><br><span class="line">                                    charset     =&gt; &#x27;UTF-8&#x27;);  -- open connection</span><br><span class="line">       ret_val := utl_tcp.write_line(c, &#x27;GET / HTTP/1.1&#x27;);    -- send HTTP request</span><br><span class="line">       ret_val := utl_tcp.write_line(c);</span><br><span class="line">       BEGIN</span><br><span class="line">         LOOP</span><br><span class="line">           dbms_output.put_line(utl_tcp.get_line(c, TRUE));  -- read result</span><br><span class="line">         END LOOP;</span><br><span class="line">       EXCEPTION</span><br><span class="line">         WHEN utl_tcp.end_of_input THEN</span><br><span class="line">           dbms_output.put_line(&#x27;Check_SSL_URL_OK End&#x27;);  -- read result</span><br><span class="line">       END;</span><br><span class="line">       utl_tcp.close_connection(c);</span><br><span class="line">    EXCEPTION</span><br><span class="line">      WHEN OTHERS THEN</span><br><span class="line">        --記錄錯誤和簡訊通知</span><br><span class="line">    END;</span><br><span class="line">  else</span><br><span class="line">    BEGIN  </span><br><span class="line">      --處理HTTP</span><br><span class="line">      UTL_HTTP.SET_RESPONSE_ERROR_CHECK(FALSE);</span><br><span class="line">      request := UTL_HTTP.BEGIN_REQUEST(v_url, &#x27;GET&#x27;);</span><br><span class="line">      UTL_HTTP.SET_HEADER(request, &#x27;User-Agent&#x27;, &#x27;Mozilla/4.0&#x27;);</span><br><span class="line">      response := UTL_HTTP.GET_RESPONSE(request);</span><br><span class="line">      DBMS_OUTPUT.PUT_LINE(&#x27;HTTP response status code: &#x27; || response.status_code);</span><br><span class="line">      </span><br><span class="line">      IF response.status_code = 200 THEN</span><br><span class="line">            BEGIN</span><br><span class="line">                clob_buff := EMPTY_CLOB;</span><br><span class="line">                LOOP</span><br><span class="line">                    UTL_HTTP.READ_TEXT(response, buff, LENGTH(buff));</span><br><span class="line">                    clob_buff := clob_buff || buff;</span><br><span class="line">                END LOOP;</span><br><span class="line">                UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">            EXCEPTION</span><br><span class="line">                WHEN UTL_HTTP.END_OF_BODY THEN</span><br><span class="line">                        UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">                WHEN OTHERS THEN</span><br><span class="line">                  --記錄錯誤和簡訊通知</span><br><span class="line">             END;</span><br><span class="line">            --DBMS_OUTPUT.PUT_LINE(clob_buff);</span><br><span class="line">            v_ck_txt := substr(clob_buff,1,2000);</span><br><span class="line">            v_ck_txt := trim(v_ck_txt);</span><br><span class="line">            </span><br><span class="line">            IF instr(v_ck_txt,&#x27;ORA-&#x27;) &gt; 0  THEN</span><br><span class="line">               --記錄錯誤和簡訊通知</span><br><span class="line">            elsif length(v_ck_txt)=1 and v_ck_txt||&#x27;&#x27;=&#x27;1&#x27; then</span><br><span class="line">               --判讀回傳特定值就視為正確</span><br><span class="line">            else</span><br><span class="line">              --記錄錯誤和簡訊通知</span><br><span class="line">            END IF;</span><br><span class="line">      ELSE</span><br><span class="line">         --記錄錯誤和簡訊通知</span><br><span class="line">         UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">      END IF;</span><br><span class="line">      </span><br><span class="line">    EXCEPTION</span><br><span class="line">        WHEN Utl_Http.request_failed THEN</span><br><span class="line">        v_ck_txt := substr(Utl_Http.get_detailed_sqlerrm,1,100);</span><br><span class="line">        --記錄錯誤和簡訊通知</span><br><span class="line">    END;</span><br><span class="line">   end if;                           </span><br><span class="line">END;</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
       </tags>
   </entry>
   <entry>
@@ -97,19 +113,16 @@
       </tags>
   </entry>
   <entry>
-    <title>Oracle Check URL</title>
-    <url>/2023/02/11/Oracle-Check-URL/</url>
-    <content><![CDATA[<p>Oracle檢查URL範本</p>
+    <title>ProxySQL</title>
+    <url>/2023/02/07/ProxySQL/</url>
+    <content><![CDATA[<p>Prox暫定</p>
 <span id="more"></span>
-
-<h2 id="基本範例"><a href="#基本範例" class="headerlink" title="基本範例"></a>基本範例</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE OR REPLACE PROCEDURE DBA_Check_URL_Status(t_url in varchar2)</span><br><span class="line">IS</span><br><span class="line">  request UTL_HTTP.REQ;</span><br><span class="line">  response UTL_HTTP.RESP;</span><br><span class="line">  v_url varchar2(4000);</span><br><span class="line">  v_ck_txt varchar2(4000);</span><br><span class="line">  clob_buff CLOB;</span><br><span class="line">  buff VARCHAR2(4000);</span><br><span class="line">  v_seq number ;</span><br><span class="line">  V_MSG varchar2(4000);</span><br><span class="line">  V_USER_FROM varchar2(4000);  </span><br><span class="line">  c  utl_tcp.connection;  -- TCP/IP connection to the Web server</span><br><span class="line">  ret_val pls_integer;</span><br><span class="line">  v_temp varchar2 (1000);</span><br><span class="line">BEGIN</span><br><span class="line">  EXECUTE IMMEDIATE &#x27;ALTER SESSION SET NLS_LANGUAGE= &#x27;&#x27;AMERICAN&#x27;&#x27;&#x27;;</span><br><span class="line">  v_url := t_url;</span><br><span class="line">  v_ck_txt := null;</span><br><span class="line">  </span><br><span class="line">  if instr(lower(v_url),&#x27;https:&#x27;) &gt; 0 then</span><br><span class="line">    --處理HTTPS</span><br><span class="line">    select REGEXP_SUBSTR(REGEXP_REPLACE(v_url,&#x27;^http[s]?://&#x27;,&#x27;&#x27;,1),&#x27;[a-z,A-Z,0-9,-]+(\.\w+)+&#x27;) INTO v_temp from dual;</span><br><span class="line">    BEGIN</span><br><span class="line">       c := utl_tcp.open_connection(remote_host =&gt; v_temp,</span><br><span class="line">                                    remote_port =&gt;  443,</span><br><span class="line">                                    tx_timeout =&gt; 5,</span><br><span class="line">                                    charset     =&gt; &#x27;UTF-8&#x27;);  -- open connection</span><br><span class="line">       ret_val := utl_tcp.write_line(c, &#x27;GET / HTTP/1.1&#x27;);    -- send HTTP request</span><br><span class="line">       ret_val := utl_tcp.write_line(c);</span><br><span class="line">       BEGIN</span><br><span class="line">         LOOP</span><br><span class="line">           dbms_output.put_line(utl_tcp.get_line(c, TRUE));  -- read result</span><br><span class="line">         END LOOP;</span><br><span class="line">       EXCEPTION</span><br><span class="line">         WHEN utl_tcp.end_of_input THEN</span><br><span class="line">           dbms_output.put_line(&#x27;Check_SSL_URL_OK End&#x27;);  -- read result</span><br><span class="line">       END;</span><br><span class="line">       utl_tcp.close_connection(c);</span><br><span class="line">    EXCEPTION</span><br><span class="line">      WHEN OTHERS THEN</span><br><span class="line">        --記錄錯誤和簡訊通知</span><br><span class="line">    END;</span><br><span class="line">  else</span><br><span class="line">    BEGIN  </span><br><span class="line">      --處理HTTP</span><br><span class="line">      UTL_HTTP.SET_RESPONSE_ERROR_CHECK(FALSE);</span><br><span class="line">      request := UTL_HTTP.BEGIN_REQUEST(v_url, &#x27;GET&#x27;);</span><br><span class="line">      UTL_HTTP.SET_HEADER(request, &#x27;User-Agent&#x27;, &#x27;Mozilla/4.0&#x27;);</span><br><span class="line">      response := UTL_HTTP.GET_RESPONSE(request);</span><br><span class="line">      DBMS_OUTPUT.PUT_LINE(&#x27;HTTP response status code: &#x27; || response.status_code);</span><br><span class="line">      </span><br><span class="line">      IF response.status_code = 200 THEN</span><br><span class="line">            BEGIN</span><br><span class="line">                clob_buff := EMPTY_CLOB;</span><br><span class="line">                LOOP</span><br><span class="line">                    UTL_HTTP.READ_TEXT(response, buff, LENGTH(buff));</span><br><span class="line">                    clob_buff := clob_buff || buff;</span><br><span class="line">                END LOOP;</span><br><span class="line">                UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">            EXCEPTION</span><br><span class="line">                WHEN UTL_HTTP.END_OF_BODY THEN</span><br><span class="line">                        UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">                WHEN OTHERS THEN</span><br><span class="line">                  --記錄錯誤和簡訊通知</span><br><span class="line">             END;</span><br><span class="line">            --DBMS_OUTPUT.PUT_LINE(clob_buff);</span><br><span class="line">            v_ck_txt := substr(clob_buff,1,2000);</span><br><span class="line">            v_ck_txt := trim(v_ck_txt);</span><br><span class="line">            </span><br><span class="line">            IF instr(v_ck_txt,&#x27;ORA-&#x27;) &gt; 0  THEN</span><br><span class="line">               --記錄錯誤和簡訊通知</span><br><span class="line">            elsif length(v_ck_txt)=1 and v_ck_txt||&#x27;&#x27;=&#x27;1&#x27; then</span><br><span class="line">               --判讀回傳特定值就視為正確</span><br><span class="line">            else</span><br><span class="line">              --記錄錯誤和簡訊通知</span><br><span class="line">            END IF;</span><br><span class="line">      ELSE</span><br><span class="line">         --記錄錯誤和簡訊通知</span><br><span class="line">         UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">      END IF;</span><br><span class="line">      </span><br><span class="line">    EXCEPTION</span><br><span class="line">        WHEN Utl_Http.request_failed THEN</span><br><span class="line">        v_ck_txt := substr(Utl_Http.get_detailed_sqlerrm,1,100);</span><br><span class="line">        --記錄錯誤和簡訊通知</span><br><span class="line">    END;</span><br><span class="line">   end if;                           </span><br><span class="line">END;</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
-
 ]]></content>
       <categories>
-        <category>Oracle</category>
+        <category>MariaDB</category>
       </categories>
       <tags>
-        <tag>Script</tag>
+        <tag>Install</tag>
       </tags>
   </entry>
   <entry>
@@ -141,19 +154,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ProxySQL</title>
-    <url>/2023/02/07/ProxySQL/</url>
-    <content><![CDATA[<p>Prox暫定</p>
-<span id="more"></span>
-]]></content>
-      <categories>
-        <category>MariaDB</category>
-      </categories>
-      <tags>
-        <tag>Install</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>安裝多個MariaDB在同台主機上</title>
     <url>/2023/02/07/mariadb-multiple-install/</url>
     <content><![CDATA[<p>安裝多個MariaDB在同台主機上</p>
@@ -173,7 +173,7 @@
 <span id="more"></span>
 
 <h2 id="Exadate的功能，一般Oracle要自行開起"><a href="#Exadate的功能，一般Oracle要自行開起" class="headerlink" title="Exadate的功能，一般Oracle要自行開起"></a>Exadate的功能，一般Oracle要自行開起</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200123.png" alt="image-20230212184248797"></p>
-<p><img src="C:/Users/bij83/AppData/Roaming/Typora/typora-user-images/image-20230212184342490.png" alt="image-20230212184342490"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200363.png" alt="image-20230212184342490"></p>
 <h2 id="設定存放Index的Tablespace"><a href="#設定存放Index的Tablespace" class="headerlink" title="設定存放Index的Tablespace"></a>設定存放Index的Tablespace</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200130.png" alt="image-20230212184445846"></p>
 <h2 id="指定那個schema生效，預設是全帳的schema"><a href="#指定那個schema生效，預設是全帳的schema" class="headerlink" title="指定那個schema生效，預設是全帳的schema"></a>指定那個schema生效，預設是全帳的schema</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200141.png" alt="image-20230212184520235"></p>
 <h2 id="可設定index自動維護是否關畢、產出建議、立即生效"><a href="#可設定index自動維護是否關畢、產出建議、立即生效" class="headerlink" title="可設定index自動維護是否關畢、產出建議、立即生效"></a>可設定index自動維護是否關畢、產出建議、立即生效</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200146.png" alt="image-20230212184551105"></p>
@@ -204,6 +204,7 @@
 ]]></content>
       <categories>
         <category>Oracle</category>
+        <category>Oracle19c</category>
       </categories>
       <tags>
         <tag>PerformanceTuning</tag>
