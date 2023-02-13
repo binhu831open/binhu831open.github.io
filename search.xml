@@ -157,19 +157,6 @@
       </tags>
   </entry>
   <entry>
-    <title>安裝多個MariaDB在同台主機上</title>
-    <url>/2023/02/07/mariadb-multiple-install/</url>
-    <content><![CDATA[<p>安裝多個MariaDB在同台主機上</p>
-<span id="more"></span>
-]]></content>
-      <categories>
-        <category>MariaDB</category>
-      </categories>
-      <tags>
-        <tag>Install</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hexo雜記</title>
     <url>/2023/02/11/hexo%E9%9B%9C%E8%A8%98/</url>
     <content><![CDATA[<p>Hexo設定記錄</p>
@@ -195,6 +182,19 @@
       </categories>
       <tags>
         <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>安裝多個MariaDB在同台主機上</title>
+    <url>/2023/02/07/mariadb-multiple-install/</url>
+    <content><![CDATA[<p>安裝多個MariaDB在同台主機上</p>
+<span id="more"></span>
+]]></content>
+      <categories>
+        <category>MariaDB</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
       </tags>
   </entry>
   <entry>
@@ -259,22 +259,6 @@
       </tags>
   </entry>
   <entry>
-    <title>windows_update</title>
-    <url>/2023/02/13/windows-update/</url>
-    <content><![CDATA[<p>Update失敗時解決方案1</p>
-<span id="more"></span>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">net stop wuauserv</span><br><span class="line">--停止update服務</span><br><span class="line"></span><br><span class="line">C:\Windows\SoftwareDistribution</span><br><span class="line">--將目錄更名後，再重建一個SoftwareDistribution</span><br><span class="line"></span><br><span class="line">net start wuauserv</span><br><span class="line">--起動update服務</span><br><span class="line"></span><br><span class="line">再試看看了~</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Windows</category>
-      </categories>
-      <tags>
-        <tag>Script</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>sqlldr_hdsize</title>
     <url>/2023/02/12/sqlldr-hdsize/</url>
     <content><![CDATA[<p>sqlldr傳硬碟資訊到table</p>
@@ -285,6 +269,22 @@
 ]]></content>
       <categories>
         <category>Oracle</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>windows_update</title>
+    <url>/2023/02/13/windows-update/</url>
+    <content><![CDATA[<p>Update失敗時解決方案1</p>
+<span id="more"></span>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">net stop wuauserv</span><br><span class="line">--停止update服務</span><br><span class="line"></span><br><span class="line">C:\Windows\SoftwareDistribution</span><br><span class="line">--將目錄更名後，再重建一個SoftwareDistribution</span><br><span class="line"></span><br><span class="line">net start wuauserv</span><br><span class="line">--起動update服務</span><br><span class="line"></span><br><span class="line">再試看看了~</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Windows</category>
       </categories>
       <tags>
         <tag>Script</tag>
