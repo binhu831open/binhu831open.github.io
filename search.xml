@@ -113,19 +113,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ProxySQL</title>
-    <url>/2023/02/07/ProxySQL/</url>
-    <content><![CDATA[<p>Prox暫定</p>
-<span id="more"></span>
-]]></content>
-      <categories>
-        <category>MariaDB</category>
-      </categories>
-      <tags>
-        <tag>Install</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Oracle19c_Rman_Restore_Table</title>
     <url>/2023/02/12/Oracle19c-Rman-Restore-Table/</url>
     <content><![CDATA[<p>Oracle 19c 新功能 : Rman Restore table</p>
@@ -157,6 +144,32 @@
       </tags>
   </entry>
   <entry>
+    <title>ProxySQL</title>
+    <url>/2023/02/07/ProxySQL/</url>
+    <content><![CDATA[<p>Prox暫定</p>
+<span id="more"></span>
+]]></content>
+      <categories>
+        <category>MariaDB</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>安裝多個MariaDB在同台主機上</title>
+    <url>/2023/02/07/mariadb-multiple-install/</url>
+    <content><![CDATA[<p>安裝多個MariaDB在同台主機上</p>
+<span id="more"></span>
+]]></content>
+      <categories>
+        <category>MariaDB</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo雜記</title>
     <url>/2023/02/11/hexo%E9%9B%9C%E8%A8%98/</url>
     <content><![CDATA[<p>Hexo設定記錄</p>
@@ -185,16 +198,20 @@
       </tags>
   </entry>
   <entry>
-    <title>安裝多個MariaDB在同台主機上</title>
-    <url>/2023/02/07/mariadb-multiple-install/</url>
-    <content><![CDATA[<p>安裝多個MariaDB在同台主機上</p>
+    <title>rman_info</title>
+    <url>/2023/02/12/rman-info/</url>
+    <content><![CDATA[<p>rman限制I/O和檢查datafile</p>
 <span id="more"></span>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"></span><br><span class="line">@For /F <span class="string">&quot;tokens=1,2,3 delims=:. &quot;</span> %%A <span class="keyword">in</span> (<span class="string">&#x27;echo %time%&#x27;</span>) <span class="keyword">do</span> @(</span><br><span class="line">Set Hour=%%A</span><br><span class="line">Set Min=%%B</span><br><span class="line">Set Sec=%%C</span><br><span class="line">Set p_time=%%A_%%B_%%C</span><br><span class="line">)</span><br><span class="line">rem: xp @For /f <span class="string">&quot;tokens=1-3 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%c-%%b-%%a)</span><br><span class="line">rem: windows 2003 /f <span class="string">&quot;tokens=1-4 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%c-%%b-%%d)</span><br><span class="line">@For /f <span class="string">&quot;tokens=1-4 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%b-%%c)</span><br><span class="line"><span class="built_in">set</span> DateString=%p_date%-%p_time%</span><br><span class="line"></span><br><span class="line">@For /F <span class="string">&quot;tokens=1,2,3 delims=:. &quot;</span> %%A <span class="keyword">in</span> (<span class="string">&#x27;echo %time%&#x27;</span>) <span class="keyword">do</span> @(</span><br><span class="line">Set Hour=%%A</span><br><span class="line">Set Min=%%B</span><br><span class="line">Set Sec=%%C</span><br><span class="line">Set mail_time=%%A:%%B:%%C</span><br><span class="line">)</span><br><span class="line"><span class="built_in">set</span> ScriptHome=f:\dba</span><br><span class="line"><span class="built_in">set</span> ORACLE_SID=xxxx</span><br><span class="line"><span class="built_in">set</span> RmanBackupsetFolder=F:\Backup_RMAN_history\%ORACLE_SID%</span><br><span class="line"><span class="built_in">set</span> RmanRcvFile=%ScriptHome%\Rman\Log\rman_full_db_archivelog_%ORACLE_SID%.rcv</span><br><span class="line"><span class="built_in">set</span> RmanLogFile=%ScriptHome%\Rman\Log\rman_full_db_and_archivelog-%DateString%_%ORACLE_SID%.<span class="built_in">log</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> GetDateSql=%ScriptHome%\Rman\Log\GetDateString_for_rman_fbrhist.sql</span><br><span class="line"><span class="built_in">set</span> GetDateTxt=%ScriptHome%\Rman\Log\GetDateString_for_rman_fbrhist.txt</span><br><span class="line"></span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br><span class="line"><span class="built_in">echo</span> run &gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> &#123; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE RETENTION POLICY TO REDUNDANCY 3; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE BACKUP OPTIMIZATION OFF; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> SET CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_CONTROLFILE_%%F&#x27;</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE CONTROLFILE AUTOBACKUP ON; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> crosscheck backup; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> crosscheck archivelog all; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt expired backup; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt expired archivelog all; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t1 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t2 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t3 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_DB_FULL_%%U&#x27;</span> database include current controlfile; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_ARCH_%%U&#x27;</span> archivelog all not backed up 1 <span class="built_in">times</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_ARCH_%%U&#x27;</span> archivelog until time <span class="string">&#x27;sysdate-1&#x27;</span> delete input not backed up 1 <span class="built_in">times</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as copy current controlfile format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_CONTROLFILE_%DateString%_%%U&#x27;</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt obsolete; &gt;&gt;  %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup validate check logical database; &gt;&gt;  %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> &#125; &gt;&gt; %RmanRcvFile%</span><br><span class="line"></span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br><span class="line">rman target / @%RmanRcvFile% &gt; %RmanLogFile%</span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
-        <category>MariaDB</category>
+        <category>Oracle</category>
       </categories>
       <tags>
-        <tag>Install</tag>
+        <tag>Script</tag>
+        <tag>Rman</tag>
       </tags>
   </entry>
   <entry>
@@ -242,20 +259,19 @@
       </tags>
   </entry>
   <entry>
-    <title>rman_info</title>
-    <url>/2023/02/12/rman-info/</url>
-    <content><![CDATA[<p>rman限制I/O和檢查datafile</p>
+    <title>windows_update</title>
+    <url>/2023/02/13/windows-update/</url>
+    <content><![CDATA[<p>Update失敗時解決方案1</p>
 <span id="more"></span>
 
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"></span><br><span class="line">@For /F <span class="string">&quot;tokens=1,2,3 delims=:. &quot;</span> %%A <span class="keyword">in</span> (<span class="string">&#x27;echo %time%&#x27;</span>) <span class="keyword">do</span> @(</span><br><span class="line">Set Hour=%%A</span><br><span class="line">Set Min=%%B</span><br><span class="line">Set Sec=%%C</span><br><span class="line">Set p_time=%%A_%%B_%%C</span><br><span class="line">)</span><br><span class="line">rem: xp @For /f <span class="string">&quot;tokens=1-3 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%c-%%b-%%a)</span><br><span class="line">rem: windows 2003 /f <span class="string">&quot;tokens=1-4 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%c-%%b-%%d)</span><br><span class="line">@For /f <span class="string">&quot;tokens=1-4 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%b-%%c)</span><br><span class="line"><span class="built_in">set</span> DateString=%p_date%-%p_time%</span><br><span class="line"></span><br><span class="line">@For /F <span class="string">&quot;tokens=1,2,3 delims=:. &quot;</span> %%A <span class="keyword">in</span> (<span class="string">&#x27;echo %time%&#x27;</span>) <span class="keyword">do</span> @(</span><br><span class="line">Set Hour=%%A</span><br><span class="line">Set Min=%%B</span><br><span class="line">Set Sec=%%C</span><br><span class="line">Set mail_time=%%A:%%B:%%C</span><br><span class="line">)</span><br><span class="line"><span class="built_in">set</span> ScriptHome=f:\dba</span><br><span class="line"><span class="built_in">set</span> ORACLE_SID=xxxx</span><br><span class="line"><span class="built_in">set</span> RmanBackupsetFolder=F:\Backup_RMAN_history\%ORACLE_SID%</span><br><span class="line"><span class="built_in">set</span> RmanRcvFile=%ScriptHome%\Rman\Log\rman_full_db_archivelog_%ORACLE_SID%.rcv</span><br><span class="line"><span class="built_in">set</span> RmanLogFile=%ScriptHome%\Rman\Log\rman_full_db_and_archivelog-%DateString%_%ORACLE_SID%.<span class="built_in">log</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> GetDateSql=%ScriptHome%\Rman\Log\GetDateString_for_rman_fbrhist.sql</span><br><span class="line"><span class="built_in">set</span> GetDateTxt=%ScriptHome%\Rman\Log\GetDateString_for_rman_fbrhist.txt</span><br><span class="line"></span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br><span class="line"><span class="built_in">echo</span> run &gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> &#123; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE RETENTION POLICY TO REDUNDANCY 3; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE BACKUP OPTIMIZATION OFF; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> SET CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_CONTROLFILE_%%F&#x27;</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE CONTROLFILE AUTOBACKUP ON; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> crosscheck backup; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> crosscheck archivelog all; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt expired backup; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt expired archivelog all; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t1 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t2 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t3 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_DB_FULL_%%U&#x27;</span> database include current controlfile; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_ARCH_%%U&#x27;</span> archivelog all not backed up 1 <span class="built_in">times</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_ARCH_%%U&#x27;</span> archivelog until time <span class="string">&#x27;sysdate-1&#x27;</span> delete input not backed up 1 <span class="built_in">times</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as copy current controlfile format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_CONTROLFILE_%DateString%_%%U&#x27;</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt obsolete; &gt;&gt;  %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup validate check logical database; &gt;&gt;  %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> &#125; &gt;&gt; %RmanRcvFile%</span><br><span class="line"></span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br><span class="line">rman target / @%RmanRcvFile% &gt; %RmanLogFile%</span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">net stop wuauserv</span><br><span class="line">--停止update服務</span><br><span class="line"></span><br><span class="line">C:\Windows\SoftwareDistribution</span><br><span class="line">--將目錄更名後，再重建一個SoftwareDistribution</span><br><span class="line"></span><br><span class="line">net start wuauserv</span><br><span class="line">--起動update服務</span><br><span class="line"></span><br><span class="line">再試看看了~</span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
-        <category>Oracle</category>
+        <category>Windows</category>
       </categories>
       <tags>
         <tag>Script</tag>
-        <tag>Rman</tag>
       </tags>
   </entry>
   <entry>
@@ -269,19 +285,6 @@
 ]]></content>
       <categories>
         <category>Oracle</category>
-      </categories>
-      <tags>
-        <tag>Script</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>windows_update</title>
-    <url>/2023/02/13/windows-update/</url>
-    <content><![CDATA[<h2 id="Update失敗時解決方案1"><a href="#Update失敗時解決方案1" class="headerlink" title="Update失敗時解決方案1"></a>Update失敗時解決方案1</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">net stop wuauserv</span><br><span class="line">--停止update服務</span><br><span class="line"></span><br><span class="line">C:\Windows\SoftwareDistribution</span><br><span class="line">--將目錄更名後，再重建一個SoftwareDistribution</span><br><span class="line"></span><br><span class="line">net start wuauserv</span><br><span class="line">--起動update服務</span><br><span class="line"></span><br><span class="line">再試看看了~</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Windows</category>
       </categories>
       <tags>
         <tag>Script</tag>
