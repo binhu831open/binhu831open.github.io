@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"binhu831open.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前罝作業">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL_FailOver_Cluster">
+<meta property="og:url" content="https://binhu831open.github.io/2023/02/19/SQL-FailOver-Cluster/index.html">
+<meta property="og:site_name" content="敗家貓">
+<meta property="og:description" content="前罝作業">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816546.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816583.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816669.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816710.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816796.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677078814.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677079083.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677161946.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162135.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162243.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162311.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162648.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162760.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162811.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163154.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163644.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163396.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677164904.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677165290.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677165408.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677166783.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677166824.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677166863.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677167958.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677167755.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899515.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899539.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899554.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899600.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903422.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903495.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903529.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903611.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903634.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903732.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903783.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903833.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903883.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903936.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903969.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676905003.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080612.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080642.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080660.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080679.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163709.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163787.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163826.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677167405.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168121.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168557.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168797.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168807.png">
+<meta property="article:published_time" content="2023-02-19T13:17:39.000Z">
+<meta property="article:modified_time" content="2023-02-25T13:28:25.453Z">
+<meta property="article:author" content="敗家貓">
+<meta property="article:tag" content="Install">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816546.png">
+
+<link rel="canonical" href="https://binhu831open.github.io/2023/02/19/SQL-FailOver-Cluster/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>SQL_FailOver_Cluster | 敗家貓</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">敗家貓</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://binhu831open.github.io/2023/02/19/SQL-FailOver-Cluster/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="敗家貓">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="敗家貓">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQL_FailOver_Cluster
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2023-02-19 21:17:39" itemprop="dateCreated datePublished" datetime="2023-02-19T21:17:39+08:00">2023-02-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2023-02-25 21:28:25" itemprop="dateModified" datetime="2023-02-25T21:28:25+08:00">2023-02-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/HA/" itemprop="url" rel="index"><span itemprop="name">HA</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MSSQL/" itemprop="url" rel="index"><span itemprop="name">MSSQL</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>前罝作業</p>
+<span id="more"></span>
+
+<blockquote>
+<p>1.測SQL FailOver Cluster是要AD和iSCSI</p>
+<p>2.是測AlwaysOn可不用AD，可用工作群組設</p>
+<p>3.方便測試可關畢:密碼政策、防火牆</p>
+<p>4.不論是FailOver Cluster或AlwaysOn都需要Windows Failover Cluster</p>
+<p>5.FailOver Cluster安裝時要留意安裝SQL Home時的硬碟有沒有選錯，進FailOver Cluster Manager確認一下，以免安裝錯誤要調整或重來一次都麻煩</p>
+<p>6.TLS 1.0 要考慮是否要開起，舊版的SQL並不支援TLS 1.2</p>
+<p>7.遠端登入要開起</p>
+<p>8.Windows Update記的要做，以免少Patch</p>
+<p>9.AD有包含DNS的話，記的把C:\Windows\System32\drivers\etc\hosts內容盡可能清空，以免讓DNS和hosts裏面的內容出現衝突</p>
+</blockquote>
+<hr>
+<h2 id="TLS-1-0-開起方式"><a href="#TLS-1-0-開起方式" class="headerlink" title="TLS 1.0 開起方式"></a>TLS 1.0 開起方式</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1.regedit</span><br><span class="line">2.HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols</span><br><span class="line">3.建新目錄TLS 1.0，下面再建Client和Server，各別新增2個 DWORD </span><br><span class="line">  --DisabledByDefault  (值設為0)</span><br><span class="line">  --Enabled  (值設為1)</span><br><span class="line">4.重開OS後，用powershell進行檢查</span><br><span class="line">Get-ItemProperty -Path &quot;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client&quot; -Name DisabledByDefault</span><br><span class="line">Get-ItemProperty -Path &quot;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server&quot; -Name DisabledByDefault</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="Windows-FailOver-Cluster留意事項"><a href="#Windows-FailOver-Cluster留意事項" class="headerlink" title="Windows FailOver Cluster留意事項"></a>Windows FailOver Cluster留意事項</h2><h3 id="設定Quorum-Disk-仲裁磁碟"><a href="#設定Quorum-Disk-仲裁磁碟" class="headerlink" title="設定Quorum Disk(仲裁磁碟)"></a>設定Quorum Disk(仲裁磁碟)</h3><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816546.png" alt="image-20230219222207793"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816583.png" alt="image-20230219222254144"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816669.png" alt="image-20230219222429300"></p>
+<p>選擇那個硬碟要當仲裁磁碟</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816710.png" alt="image-20230219222509987"></p>
+<p>沒錯誤的話，應該會是Disk Witness in Quorum</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816796.png" alt="image-20230219222636220"></p>
+<hr>
+<h2 id="SQL-FailOver-Cluster錯誤處理"><a href="#SQL-FailOver-Cluster錯誤處理" class="headerlink" title="SQL FailOver Cluster錯誤處理"></a>SQL FailOver Cluster錯誤處理</h2><h3 id="多張網卡"><a href="#多張網卡" class="headerlink" title="多張網卡"></a>多張網卡</h3><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677078814.png" alt="image-20230222231334277"></p>
+<blockquote>
+<p>設定網卡只留一個cluster and client在除錯上會容易很多</p>
+</blockquote>
+<h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677079083.png" alt="image-20230222231803452"></p>
+<blockquote>
+<p>1.安裝windows failover cluster 的帳號要有異動dns和查詢node主機資源的權限，用較大的權限建立避免一些權限問題</p>
+<p>2.當windows/sql 的 failover cluster的vip無法自動建立在dns裏時，可手動補建。相對來說，如有產生錯誤的dns記錄的話，直接手動刪除就可以</p>
+<p>3.node主機網卡的第一個dns ip建議寫網域的</p>
+</blockquote>
+<h3 id="Remote-Registry-權限"><a href="#Remote-Registry-權限" class="headerlink" title="Remote Registry 權限"></a>Remote Registry 權限</h3><blockquote>
+<p>Run wmimgmt.msc</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677161946.png" alt="image-20230223221906009"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162135.png" alt="image-20230223222215469"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162243.png" alt="image-20230223222403422"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162311.png" alt="image-20230223222511496"></p>
+<h3 id="DCOM-權限"><a href="#DCOM-權限" class="headerlink" title="DCOM 權限"></a>DCOM 權限</h3><blockquote>
+<p>Run dcomcnfg</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162648.png" alt="image-20230223223048305"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162760.png" alt="image-20230223223240744"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162811.png" alt="image-20230223223331758"></p>
+<h3 id="WMI-權限"><a href="#WMI-權限" class="headerlink" title="WMI 權限"></a>WMI 權限</h3><blockquote>
+<p>Run dcomcnfg</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163154.png" alt="image-20230223223914623"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163644.png" alt="image-20230223224057210"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163396.png" alt="image-20230223224316383"></p>
+<h3 id="修正SQL-Server-Agent是null的情況"><a href="#修正SQL-Server-Agent是null的情況" class="headerlink" title="修正SQL Server Agent是null的情況"></a>修正SQL Server Agent是null的情況</h3><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677164904.png" alt="image-20230223230823870"></p>
+<h4 id="PowerShell"><a href="#PowerShell" class="headerlink" title="PowerShell"></a>PowerShell</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ClusterName = &quot;sqlcluster&quot;</span><br><span class="line">$FciClusterGroupName = &quot;SQL Server (MSSQLSERVER)&quot;</span><br><span class="line">Add-ClusterResourceType -Name &quot;SQL Server Agent&quot; -Dll &quot;sqagtres.dll&quot; </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677165290.png" alt="image-20230223231450729"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677165408.png" alt="image-20230223231647851"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677166783.png" alt="image-20230223233943452"></p>
+<h4 id="SQL-Server-Agent進行配置"><a href="#SQL-Server-Agent進行配置" class="headerlink" title="SQL Server Agent進行配置"></a>SQL Server Agent進行配置</h4><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677166824.png" alt="image-20230223234023893"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677166863.png" alt="image-20230223234103405"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677167958.png" alt="image-20230223235918061"></p>
+<p>重起SQL FailOver Cluster後再用SSMS試看看能否正常登入DB</p>
+<h2 id="Add-Node-to-SQL-FailOver-Cluster不知的錯誤"><a href="#Add-Node-to-SQL-FailOver-Cluster不知的錯誤" class="headerlink" title="Add Node to SQL FailOver Cluster不知的錯誤"></a>Add Node to SQL FailOver Cluster不知的錯誤</h2><blockquote>
+<p>遇到該檢查和確認的都沒問題，但就是在安裝過程中出現錯誤，試的檢查 regedit : Primary DB主機，這些參數都要為1</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677167755.png" alt="image-20230223235555095"></p>
+<hr>
+<h2 id="SQL-FailOver-Cluster安裝"><a href="#SQL-FailOver-Cluster安裝" class="headerlink" title="SQL FailOver Cluster安裝"></a>SQL FailOver Cluster安裝</h2><h3 id="Node-A"><a href="#Node-A" class="headerlink" title="Node A"></a>Node A</h3><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899515.png" alt="image-20230220212455255"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899539.png" alt="image-20230220212522748"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899554.png" alt="image-20230220212553903"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899600.png" alt="image-20230220212640200"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903422.png" alt="image-20230220223021981"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903495.png" alt="image-20230220223135663"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903529.png" alt="image-20230220223208973"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903611.png" alt="image-20230220223331211"></p>
+<p>我網卡沒配置好，不然應該是要設成固定IP較佳</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903634.png" alt="image-20230220223353803"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903732.png" alt="image-20230220223532356"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903783.png" alt="image-20230220223623645"></p>
+<p>Share Disk</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903833.png" alt="image-20230220223713560"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903883.png" alt="image-20230220223803736"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903936.png" alt="image-20230220223856159"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903969.png" alt="image-20230220223929225"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676905003.png" alt="image-20230220225643580"></p>
+<blockquote>
+<p>可先建立起後，再進windows failover cluster manager進行重新檢查sql failover cluster無法起動的原因</p>
+<p>檢查:TLS支援度、各node、vip 主機名稱在DNS裏是不是正確、防火牆、起動sql服務的ad帳號權限是否有node主機的administrator權限</p>
+</blockquote>
+<h3 id="Node-B"><a href="#Node-B" class="headerlink" title="Node B"></a>Node B</h3><p>新增node到sql failover cluster</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080612.png" alt="image-20230222234331936"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080642.png" alt="image-20230222234401864"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080660.png" alt="image-20230222234420672"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080679.png" alt="image-20230222234439731"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163709.png" alt="image-20230223224829524"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163787.png" alt="image-20230223224932838"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163826.png" alt="image-20230223225026687"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677167405.png" alt="image-20230223235005122"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168121.png" alt="image-20230224000200930"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168557.png" alt="image-20230224000917091"></p>
+<p>重起原本的primdy db主機後，可以在另一台主機看到已正確接手</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168797.png" alt="image-20230224001317302"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168807.png" alt="image-20230224001327038"></p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論:"></a>結論:</h2><blockquote>
+<p>1.安裝SQL的主機權限要額外設定，不然就算用Administrator安裝也一樣報錯</p>
+<p>2.DCOM的權限是跟SSIS有關</p>
+<p>3.WMI和Reomte Registry的權限問題是有關連的，要一併處理</p>
+<p>4.FailOver Cluster的價錢比AlwaysOn便宜，並且無AlwaysOn切換時有資料不一致問題。如Storage有保護機制的，FailOver Cluster也不是無法使用的HA方案</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Install/" rel="tag"># Install</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/18/Oracle-DW/" rel="prev" title="Oracle_DW">
+      <i class="fa fa-chevron-left"></i> Oracle_DW
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/02/Oracle-ORA-1861/" rel="next" title="Oracle-ORA-1861">
+      Oracle-ORA-1861 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+<script src="https://utteranc.es/client.js"
+        repo="binhu831open/repo"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TLS-1-0-%E9%96%8B%E8%B5%B7%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">TLS 1.0 開起方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows-FailOver-Cluster%E7%95%99%E6%84%8F%E4%BA%8B%E9%A0%85"><span class="nav-number">2.</span> <span class="nav-text">Windows FailOver Cluster留意事項</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9AQuorum-Disk-%E4%BB%B2%E8%A3%81%E7%A3%81%E7%A2%9F"><span class="nav-number">2.1.</span> <span class="nav-text">設定Quorum Disk(仲裁磁碟)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-FailOver-Cluster%E9%8C%AF%E8%AA%A4%E8%99%95%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">SQL FailOver Cluster錯誤處理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%BC%B5%E7%B6%B2%E5%8D%A1"><span class="nav-number">3.1.</span> <span class="nav-text">多張網卡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS"><span class="nav-number">3.2.</span> <span class="nav-text">DNS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Remote-Registry-%E6%AC%8A%E9%99%90"><span class="nav-number">3.3.</span> <span class="nav-text">Remote Registry 權限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DCOM-%E6%AC%8A%E9%99%90"><span class="nav-number">3.4.</span> <span class="nav-text">DCOM 權限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WMI-%E6%AC%8A%E9%99%90"><span class="nav-number">3.5.</span> <span class="nav-text">WMI 權限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%AD%A3SQL-Server-Agent%E6%98%AFnull%E7%9A%84%E6%83%85%E6%B3%81"><span class="nav-number">3.6.</span> <span class="nav-text">修正SQL Server Agent是null的情況</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PowerShell"><span class="nav-number">3.6.1.</span> <span class="nav-text">PowerShell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL-Server-Agent%E9%80%B2%E8%A1%8C%E9%85%8D%E7%BD%AE"><span class="nav-number">3.6.2.</span> <span class="nav-text">SQL Server Agent進行配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Add-Node-to-SQL-FailOver-Cluster%E4%B8%8D%E7%9F%A5%E7%9A%84%E9%8C%AF%E8%AA%A4"><span class="nav-number">4.</span> <span class="nav-text">Add Node to SQL FailOver Cluster不知的錯誤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-FailOver-Cluster%E5%AE%89%E8%A3%9D"><span class="nav-number">5.</span> <span class="nav-text">SQL FailOver Cluster安裝</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-A"><span class="nav-number">5.1.</span> <span class="nav-text">Node A</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-B"><span class="nav-number">5.2.</span> <span class="nav-text">Node B</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text">結論:</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">敗家貓</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/binhu831open" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;binhu831open" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">敗家貓</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 強力驅動
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
