@@ -24,6 +24,41 @@
       </tags>
   </entry>
   <entry>
+    <title>Oracle-Broker</title>
+    <url>/2023/03/12/Oracle-Broker/</url>
+    <content><![CDATA[<p>11g 刪除 broker 設定值</p>
+<span id="more"></span>
+
+
+
+<p>1.設定dg_broker_start為false</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">system</span> <span class="keyword">set</span> dg_broker_start <span class="operator">=</span> <span class="literal">FALSE</span> ;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.刪除dg_broker_config_file1/2</p>
+<blockquote>
+<p>刪除dg_broker_config_file1/2的檔案</p>
+</blockquote>
+<p>3.設定dg_broker_start為true</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">system</span> <span class="keyword">set</span> dg_broker_start <span class="operator">=</span> <span class="literal">TRUE</span> <span class="keyword">Scope</span><span class="operator">=</span><span class="keyword">both</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>4.重新配置broker</p>
+<blockquote>
+<p>show configuration應該要會空才對</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle11g</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Oracle ACL設定</title>
     <url>/2023/02/11/Oracle-ACL/</url>
     <content><![CDATA[<p>ACL維護和Mail</p>
@@ -70,57 +105,6 @@
         <tag>Script</tag>
         <tag>ACL</tag>
         <tag>Email</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Oracle-Broker</title>
-    <url>/2023/03/12/Oracle-Broker/</url>
-    <content><![CDATA[<p>11g 刪除 broker 設定值</p>
-<span id="more"></span>
-
-
-
-<p>1.設定dg_broker_start為false</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">system</span> <span class="keyword">set</span> dg_broker_start <span class="operator">=</span> <span class="literal">FALSE</span> ;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>2.刪除dg_broker_config_file1/2</p>
-<blockquote>
-<p>刪除dg_broker_config_file1/2的檔案</p>
-</blockquote>
-<p>3.設定dg_broker_start為true</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">system</span> <span class="keyword">set</span> dg_broker_start <span class="operator">=</span> <span class="literal">TRUE</span> <span class="keyword">Scope</span><span class="operator">=</span><span class="keyword">both</span>;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>4.重新配置broker</p>
-<blockquote>
-<p>show configuration應該要會空才對</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Oracle</category>
-        <category>Oracle11g</category>
-      </categories>
-      <tags>
-        <tag>Install</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Oracle Check URL</title>
-    <url>/2023/02/11/Oracle-Check-URL/</url>
-    <content><![CDATA[<p>Oracle檢查URL範本</p>
-<span id="more"></span>
-
-<h2 id="基本範例"><a href="#基本範例" class="headerlink" title="基本範例"></a>基本範例</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE OR REPLACE PROCEDURE DBA_Check_URL_Status(t_url in varchar2)</span><br><span class="line">IS</span><br><span class="line">  request UTL_HTTP.REQ;</span><br><span class="line">  response UTL_HTTP.RESP;</span><br><span class="line">  v_url varchar2(4000);</span><br><span class="line">  v_ck_txt varchar2(4000);</span><br><span class="line">  clob_buff CLOB;</span><br><span class="line">  buff VARCHAR2(4000);</span><br><span class="line">  v_seq number ;</span><br><span class="line">  V_MSG varchar2(4000);</span><br><span class="line">  V_USER_FROM varchar2(4000);  </span><br><span class="line">  c  utl_tcp.connection;  -- TCP/IP connection to the Web server</span><br><span class="line">  ret_val pls_integer;</span><br><span class="line">  v_temp varchar2 (1000);</span><br><span class="line">BEGIN</span><br><span class="line">  EXECUTE IMMEDIATE &#x27;ALTER SESSION SET NLS_LANGUAGE= &#x27;&#x27;AMERICAN&#x27;&#x27;&#x27;;</span><br><span class="line">  v_url := t_url;</span><br><span class="line">  v_ck_txt := null;</span><br><span class="line">  </span><br><span class="line">  if instr(lower(v_url),&#x27;https:&#x27;) &gt; 0 then</span><br><span class="line">    --處理HTTPS</span><br><span class="line">    select REGEXP_SUBSTR(REGEXP_REPLACE(v_url,&#x27;^http[s]?://&#x27;,&#x27;&#x27;,1),&#x27;[a-z,A-Z,0-9,-]+(\.\w+)+&#x27;) INTO v_temp from dual;</span><br><span class="line">    BEGIN</span><br><span class="line">       c := utl_tcp.open_connection(remote_host =&gt; v_temp,</span><br><span class="line">                                    remote_port =&gt;  443,</span><br><span class="line">                                    tx_timeout =&gt; 5,</span><br><span class="line">                                    charset     =&gt; &#x27;UTF-8&#x27;);  -- open connection</span><br><span class="line">       ret_val := utl_tcp.write_line(c, &#x27;GET / HTTP/1.1&#x27;);    -- send HTTP request</span><br><span class="line">       ret_val := utl_tcp.write_line(c);</span><br><span class="line">       BEGIN</span><br><span class="line">         LOOP</span><br><span class="line">           dbms_output.put_line(utl_tcp.get_line(c, TRUE));  -- read result</span><br><span class="line">         END LOOP;</span><br><span class="line">       EXCEPTION</span><br><span class="line">         WHEN utl_tcp.end_of_input THEN</span><br><span class="line">           dbms_output.put_line(&#x27;Check_SSL_URL_OK End&#x27;);  -- read result</span><br><span class="line">       END;</span><br><span class="line">       utl_tcp.close_connection(c);</span><br><span class="line">    EXCEPTION</span><br><span class="line">      WHEN OTHERS THEN</span><br><span class="line">        --記錄錯誤和簡訊通知</span><br><span class="line">    END;</span><br><span class="line">  else</span><br><span class="line">    BEGIN  </span><br><span class="line">      --處理HTTP</span><br><span class="line">      UTL_HTTP.SET_RESPONSE_ERROR_CHECK(FALSE);</span><br><span class="line">      request := UTL_HTTP.BEGIN_REQUEST(v_url, &#x27;GET&#x27;);</span><br><span class="line">      UTL_HTTP.SET_HEADER(request, &#x27;User-Agent&#x27;, &#x27;Mozilla/4.0&#x27;);</span><br><span class="line">      response := UTL_HTTP.GET_RESPONSE(request);</span><br><span class="line">      DBMS_OUTPUT.PUT_LINE(&#x27;HTTP response status code: &#x27; || response.status_code);</span><br><span class="line">      </span><br><span class="line">      IF response.status_code = 200 THEN</span><br><span class="line">            BEGIN</span><br><span class="line">                clob_buff := EMPTY_CLOB;</span><br><span class="line">                LOOP</span><br><span class="line">                    UTL_HTTP.READ_TEXT(response, buff, LENGTH(buff));</span><br><span class="line">                    clob_buff := clob_buff || buff;</span><br><span class="line">                END LOOP;</span><br><span class="line">                UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">            EXCEPTION</span><br><span class="line">                WHEN UTL_HTTP.END_OF_BODY THEN</span><br><span class="line">                        UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">                WHEN OTHERS THEN</span><br><span class="line">                  --記錄錯誤和簡訊通知</span><br><span class="line">             END;</span><br><span class="line">            --DBMS_OUTPUT.PUT_LINE(clob_buff);</span><br><span class="line">            v_ck_txt := substr(clob_buff,1,2000);</span><br><span class="line">            v_ck_txt := trim(v_ck_txt);</span><br><span class="line">            </span><br><span class="line">            IF instr(v_ck_txt,&#x27;ORA-&#x27;) &gt; 0  THEN</span><br><span class="line">               --記錄錯誤和簡訊通知</span><br><span class="line">            elsif length(v_ck_txt)=1 and v_ck_txt||&#x27;&#x27;=&#x27;1&#x27; then</span><br><span class="line">               --判讀回傳特定值就視為正確</span><br><span class="line">            else</span><br><span class="line">              --記錄錯誤和簡訊通知</span><br><span class="line">            END IF;</span><br><span class="line">      ELSE</span><br><span class="line">         --記錄錯誤和簡訊通知</span><br><span class="line">         UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">      END IF;</span><br><span class="line">      </span><br><span class="line">    EXCEPTION</span><br><span class="line">        WHEN Utl_Http.request_failed THEN</span><br><span class="line">        v_ck_txt := substr(Utl_Http.get_detailed_sqlerrm,1,100);</span><br><span class="line">        --記錄錯誤和簡訊通知</span><br><span class="line">    END;</span><br><span class="line">   end if;                           </span><br><span class="line">END;</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Oracle</category>
-      </categories>
-      <tags>
-        <tag>Script</tag>
       </tags>
   </entry>
   <entry>
@@ -185,6 +169,22 @@
       </categories>
       <tags>
         <tag>PerformanceTuning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle Check URL</title>
+    <url>/2023/02/11/Oracle-Check-URL/</url>
+    <content><![CDATA[<p>Oracle檢查URL範本</p>
+<span id="more"></span>
+
+<h2 id="基本範例"><a href="#基本範例" class="headerlink" title="基本範例"></a>基本範例</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE OR REPLACE PROCEDURE DBA_Check_URL_Status(t_url in varchar2)</span><br><span class="line">IS</span><br><span class="line">  request UTL_HTTP.REQ;</span><br><span class="line">  response UTL_HTTP.RESP;</span><br><span class="line">  v_url varchar2(4000);</span><br><span class="line">  v_ck_txt varchar2(4000);</span><br><span class="line">  clob_buff CLOB;</span><br><span class="line">  buff VARCHAR2(4000);</span><br><span class="line">  v_seq number ;</span><br><span class="line">  V_MSG varchar2(4000);</span><br><span class="line">  V_USER_FROM varchar2(4000);  </span><br><span class="line">  c  utl_tcp.connection;  -- TCP/IP connection to the Web server</span><br><span class="line">  ret_val pls_integer;</span><br><span class="line">  v_temp varchar2 (1000);</span><br><span class="line">BEGIN</span><br><span class="line">  EXECUTE IMMEDIATE &#x27;ALTER SESSION SET NLS_LANGUAGE= &#x27;&#x27;AMERICAN&#x27;&#x27;&#x27;;</span><br><span class="line">  v_url := t_url;</span><br><span class="line">  v_ck_txt := null;</span><br><span class="line">  </span><br><span class="line">  if instr(lower(v_url),&#x27;https:&#x27;) &gt; 0 then</span><br><span class="line">    --處理HTTPS</span><br><span class="line">    select REGEXP_SUBSTR(REGEXP_REPLACE(v_url,&#x27;^http[s]?://&#x27;,&#x27;&#x27;,1),&#x27;[a-z,A-Z,0-9,-]+(\.\w+)+&#x27;) INTO v_temp from dual;</span><br><span class="line">    BEGIN</span><br><span class="line">       c := utl_tcp.open_connection(remote_host =&gt; v_temp,</span><br><span class="line">                                    remote_port =&gt;  443,</span><br><span class="line">                                    tx_timeout =&gt; 5,</span><br><span class="line">                                    charset     =&gt; &#x27;UTF-8&#x27;);  -- open connection</span><br><span class="line">       ret_val := utl_tcp.write_line(c, &#x27;GET / HTTP/1.1&#x27;);    -- send HTTP request</span><br><span class="line">       ret_val := utl_tcp.write_line(c);</span><br><span class="line">       BEGIN</span><br><span class="line">         LOOP</span><br><span class="line">           dbms_output.put_line(utl_tcp.get_line(c, TRUE));  -- read result</span><br><span class="line">         END LOOP;</span><br><span class="line">       EXCEPTION</span><br><span class="line">         WHEN utl_tcp.end_of_input THEN</span><br><span class="line">           dbms_output.put_line(&#x27;Check_SSL_URL_OK End&#x27;);  -- read result</span><br><span class="line">       END;</span><br><span class="line">       utl_tcp.close_connection(c);</span><br><span class="line">    EXCEPTION</span><br><span class="line">      WHEN OTHERS THEN</span><br><span class="line">        --記錄錯誤和簡訊通知</span><br><span class="line">    END;</span><br><span class="line">  else</span><br><span class="line">    BEGIN  </span><br><span class="line">      --處理HTTP</span><br><span class="line">      UTL_HTTP.SET_RESPONSE_ERROR_CHECK(FALSE);</span><br><span class="line">      request := UTL_HTTP.BEGIN_REQUEST(v_url, &#x27;GET&#x27;);</span><br><span class="line">      UTL_HTTP.SET_HEADER(request, &#x27;User-Agent&#x27;, &#x27;Mozilla/4.0&#x27;);</span><br><span class="line">      response := UTL_HTTP.GET_RESPONSE(request);</span><br><span class="line">      DBMS_OUTPUT.PUT_LINE(&#x27;HTTP response status code: &#x27; || response.status_code);</span><br><span class="line">      </span><br><span class="line">      IF response.status_code = 200 THEN</span><br><span class="line">            BEGIN</span><br><span class="line">                clob_buff := EMPTY_CLOB;</span><br><span class="line">                LOOP</span><br><span class="line">                    UTL_HTTP.READ_TEXT(response, buff, LENGTH(buff));</span><br><span class="line">                    clob_buff := clob_buff || buff;</span><br><span class="line">                END LOOP;</span><br><span class="line">                UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">            EXCEPTION</span><br><span class="line">                WHEN UTL_HTTP.END_OF_BODY THEN</span><br><span class="line">                        UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">                WHEN OTHERS THEN</span><br><span class="line">                  --記錄錯誤和簡訊通知</span><br><span class="line">             END;</span><br><span class="line">            --DBMS_OUTPUT.PUT_LINE(clob_buff);</span><br><span class="line">            v_ck_txt := substr(clob_buff,1,2000);</span><br><span class="line">            v_ck_txt := trim(v_ck_txt);</span><br><span class="line">            </span><br><span class="line">            IF instr(v_ck_txt,&#x27;ORA-&#x27;) &gt; 0  THEN</span><br><span class="line">               --記錄錯誤和簡訊通知</span><br><span class="line">            elsif length(v_ck_txt)=1 and v_ck_txt||&#x27;&#x27;=&#x27;1&#x27; then</span><br><span class="line">               --判讀回傳特定值就視為正確</span><br><span class="line">            else</span><br><span class="line">              --記錄錯誤和簡訊通知</span><br><span class="line">            END IF;</span><br><span class="line">      ELSE</span><br><span class="line">         --記錄錯誤和簡訊通知</span><br><span class="line">         UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">      END IF;</span><br><span class="line">      </span><br><span class="line">    EXCEPTION</span><br><span class="line">        WHEN Utl_Http.request_failed THEN</span><br><span class="line">        v_ck_txt := substr(Utl_Http.get_detailed_sqlerrm,1,100);</span><br><span class="line">        --記錄錯誤和簡訊通知</span><br><span class="line">    END;</span><br><span class="line">   end if;                           </span><br><span class="line">END;</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
       </tags>
   </entry>
   <entry>
@@ -323,21 +323,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ProxySQL</title>
-    <url>/2023/02/07/ProxySQL/</url>
-    <content><![CDATA[<p>Prox暫定</p>
-<span id="more"></span>
-
-<p>待</p>
-]]></content>
-      <categories>
-        <category>MariaDB</category>
-      </categories>
-      <tags>
-        <tag>Install</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Oracle19c_Rman_Restore_Table</title>
     <url>/2023/02/12/Oracle19c-Rman-Restore-Table/</url>
     <content><![CDATA[<p>Oracle 19c 新功能 : Rman Restore table</p>
@@ -371,6 +356,21 @@
       </tags>
   </entry>
   <entry>
+    <title>ProxySQL</title>
+    <url>/2023/02/07/ProxySQL/</url>
+    <content><![CDATA[<p>Prox暫定</p>
+<span id="more"></span>
+
+<p>待</p>
+]]></content>
+      <categories>
+        <category>MariaDB</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo雜記</title>
     <url>/2023/02/11/hexo%E9%9B%9C%E8%A8%98/</url>
     <content><![CDATA[<p>Hexo設定記錄</p>
@@ -396,35 +396,6 @@
       </categories>
       <tags>
         <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>lab設定</title>
-    <url>/2023/02/15/lab-info/</url>
-    <content><![CDATA[<p>做測試時會用的設定參考網址</p>
-<span id="more"></span>
-
-<h2 id="Windows-關畢密碼政策"><a href="#Windows-關畢密碼政策" class="headerlink" title="Windows 關畢密碼政策"></a>Windows 關畢密碼政策</h2><blockquote>
-<p>1.<a href="https://dev.twsiyuan.com/2017/01/configuring-password-policies-with-windows-server-2016.html">https://dev.twsiyuan.com/2017/01/configuring-password-policies-with-windows-server-2016.html</a></p>
-<p>2.gpedit.msc</p>
-</blockquote>
-<h2 id="Windows-AD-關畢密碼政策"><a href="#Windows-AD-關畢密碼政策" class="headerlink" title="Windows AD 關畢密碼政策"></a>Windows AD 關畢密碼政策</h2><blockquote>
-<p>1.gpmc.msc</p>
-<p>2.Computer Configuration &gt; Policies &gt; Windows Settings &gt; Security Settings &gt; Account Policies &gt; Password Policy</p>
-<p>3.Double-click on the “Password must meet complexity requirements” policy &gt; Select “Disabled”</p>
-</blockquote>
-<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><blockquote>
-<p>7Zip</p>
-<p>Notepad++</p>
-<p>Typora</p>
-<p>virtualbox</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>OS</category>
-      </categories>
-      <tags>
-        <tag>Script</tag>
       </tags>
   </entry>
   <entry>
@@ -556,18 +527,49 @@
       </tags>
   </entry>
   <entry>
-    <title>安裝多個MariaDB在同台主機上</title>
-    <url>/2023/02/07/mariadb-multiple-install/</url>
-    <content><![CDATA[<p>安裝多個MariaDB在同台主機上</p>
+    <title>lab設定</title>
+    <url>/2023/02/15/lab-info/</url>
+    <content><![CDATA[<p>做測試時會用的設定參考網址</p>
 <span id="more"></span>
 
-<p>待</p>
+<h2 id="Windows-關畢密碼政策"><a href="#Windows-關畢密碼政策" class="headerlink" title="Windows 關畢密碼政策"></a>Windows 關畢密碼政策</h2><blockquote>
+<p>1.<a href="https://dev.twsiyuan.com/2017/01/configuring-password-policies-with-windows-server-2016.html">https://dev.twsiyuan.com/2017/01/configuring-password-policies-with-windows-server-2016.html</a></p>
+<p>2.gpedit.msc</p>
+</blockquote>
+<h2 id="Windows-AD-關畢密碼政策"><a href="#Windows-AD-關畢密碼政策" class="headerlink" title="Windows AD 關畢密碼政策"></a>Windows AD 關畢密碼政策</h2><blockquote>
+<p>1.gpmc.msc</p>
+<p>2.Computer Configuration &gt; Policies &gt; Windows Settings &gt; Security Settings &gt; Account Policies &gt; Password Policy</p>
+<p>3.Double-click on the “Password must meet complexity requirements” policy &gt; Select “Disabled”</p>
+</blockquote>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><blockquote>
+<p>7Zip</p>
+<p>Notepad++</p>
+<p>Typora</p>
+<p>virtualbox</p>
+</blockquote>
 ]]></content>
       <categories>
-        <category>MariaDB</category>
+        <category>OS</category>
       </categories>
       <tags>
-        <tag>Install</tag>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>rman_info</title>
+    <url>/2023/02/12/rman-info/</url>
+    <content><![CDATA[<p>rman限制I/O和檢查datafile</p>
+<span id="more"></span>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"></span><br><span class="line">@For /F <span class="string">&quot;tokens=1,2,3 delims=:. &quot;</span> %%A <span class="keyword">in</span> (<span class="string">&#x27;echo %time%&#x27;</span>) <span class="keyword">do</span> @(</span><br><span class="line">Set Hour=%%A</span><br><span class="line">Set Min=%%B</span><br><span class="line">Set Sec=%%C</span><br><span class="line">Set p_time=%%A_%%B_%%C</span><br><span class="line">)</span><br><span class="line">rem: xp @For /f <span class="string">&quot;tokens=1-3 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%c-%%b-%%a)</span><br><span class="line">rem: windows 2003 /f <span class="string">&quot;tokens=1-4 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%c-%%b-%%d)</span><br><span class="line">@For /f <span class="string">&quot;tokens=1-4 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%b-%%c)</span><br><span class="line"><span class="built_in">set</span> DateString=%p_date%-%p_time%</span><br><span class="line"></span><br><span class="line">@For /F <span class="string">&quot;tokens=1,2,3 delims=:. &quot;</span> %%A <span class="keyword">in</span> (<span class="string">&#x27;echo %time%&#x27;</span>) <span class="keyword">do</span> @(</span><br><span class="line">Set Hour=%%A</span><br><span class="line">Set Min=%%B</span><br><span class="line">Set Sec=%%C</span><br><span class="line">Set mail_time=%%A:%%B:%%C</span><br><span class="line">)</span><br><span class="line"><span class="built_in">set</span> ScriptHome=f:\dba</span><br><span class="line"><span class="built_in">set</span> ORACLE_SID=xxxx</span><br><span class="line"><span class="built_in">set</span> RmanBackupsetFolder=F:\Backup_RMAN_history\%ORACLE_SID%</span><br><span class="line"><span class="built_in">set</span> RmanRcvFile=%ScriptHome%\Rman\Log\rman_full_db_archivelog_%ORACLE_SID%.rcv</span><br><span class="line"><span class="built_in">set</span> RmanLogFile=%ScriptHome%\Rman\Log\rman_full_db_and_archivelog-%DateString%_%ORACLE_SID%.<span class="built_in">log</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> GetDateSql=%ScriptHome%\Rman\Log\GetDateString_for_rman_fbrhist.sql</span><br><span class="line"><span class="built_in">set</span> GetDateTxt=%ScriptHome%\Rman\Log\GetDateString_for_rman_fbrhist.txt</span><br><span class="line"></span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br><span class="line"><span class="built_in">echo</span> run &gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> &#123; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE RETENTION POLICY TO REDUNDANCY 3; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE BACKUP OPTIMIZATION OFF; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> SET CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_CONTROLFILE_%%F&#x27;</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE CONTROLFILE AUTOBACKUP ON; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> crosscheck backup; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> crosscheck archivelog all; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt expired backup; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt expired archivelog all; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t1 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t2 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t3 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_DB_FULL_%%U&#x27;</span> database include current controlfile; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_ARCH_%%U&#x27;</span> archivelog all not backed up 1 <span class="built_in">times</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_ARCH_%%U&#x27;</span> archivelog until time <span class="string">&#x27;sysdate-1&#x27;</span> delete input not backed up 1 <span class="built_in">times</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as copy current controlfile format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_CONTROLFILE_%DateString%_%%U&#x27;</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt obsolete; &gt;&gt;  %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup validate check logical database; &gt;&gt;  %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> &#125; &gt;&gt; %RmanRcvFile%</span><br><span class="line"></span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br><span class="line">rman target / @%RmanRcvFile% &gt; %RmanLogFile%</span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+        <tag>Rman</tag>
       </tags>
   </entry>
   <entry>
@@ -618,20 +620,21 @@
       </tags>
   </entry>
   <entry>
-    <title>rman_info</title>
-    <url>/2023/02/12/rman-info/</url>
-    <content><![CDATA[<p>rman限制I/O和檢查datafile</p>
+    <title>script_ftp_restart</title>
+    <url>/2023/04/16/script-ftp-restart/</url>
+    <content><![CDATA[<p>Ftp檢查檔案Size不相同，執行續傳</p>
 <span id="more"></span>
 
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"></span><br><span class="line">@For /F <span class="string">&quot;tokens=1,2,3 delims=:. &quot;</span> %%A <span class="keyword">in</span> (<span class="string">&#x27;echo %time%&#x27;</span>) <span class="keyword">do</span> @(</span><br><span class="line">Set Hour=%%A</span><br><span class="line">Set Min=%%B</span><br><span class="line">Set Sec=%%C</span><br><span class="line">Set p_time=%%A_%%B_%%C</span><br><span class="line">)</span><br><span class="line">rem: xp @For /f <span class="string">&quot;tokens=1-3 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%c-%%b-%%a)</span><br><span class="line">rem: windows 2003 /f <span class="string">&quot;tokens=1-4 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%c-%%b-%%d)</span><br><span class="line">@For /f <span class="string">&quot;tokens=1-4 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%b-%%c)</span><br><span class="line"><span class="built_in">set</span> DateString=%p_date%-%p_time%</span><br><span class="line"></span><br><span class="line">@For /F <span class="string">&quot;tokens=1,2,3 delims=:. &quot;</span> %%A <span class="keyword">in</span> (<span class="string">&#x27;echo %time%&#x27;</span>) <span class="keyword">do</span> @(</span><br><span class="line">Set Hour=%%A</span><br><span class="line">Set Min=%%B</span><br><span class="line">Set Sec=%%C</span><br><span class="line">Set mail_time=%%A:%%B:%%C</span><br><span class="line">)</span><br><span class="line"><span class="built_in">set</span> ScriptHome=f:\dba</span><br><span class="line"><span class="built_in">set</span> ORACLE_SID=xxxx</span><br><span class="line"><span class="built_in">set</span> RmanBackupsetFolder=F:\Backup_RMAN_history\%ORACLE_SID%</span><br><span class="line"><span class="built_in">set</span> RmanRcvFile=%ScriptHome%\Rman\Log\rman_full_db_archivelog_%ORACLE_SID%.rcv</span><br><span class="line"><span class="built_in">set</span> RmanLogFile=%ScriptHome%\Rman\Log\rman_full_db_and_archivelog-%DateString%_%ORACLE_SID%.<span class="built_in">log</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> GetDateSql=%ScriptHome%\Rman\Log\GetDateString_for_rman_fbrhist.sql</span><br><span class="line"><span class="built_in">set</span> GetDateTxt=%ScriptHome%\Rman\Log\GetDateString_for_rman_fbrhist.txt</span><br><span class="line"></span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br><span class="line"><span class="built_in">echo</span> run &gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> &#123; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE RETENTION POLICY TO REDUNDANCY 3; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE BACKUP OPTIMIZATION OFF; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> SET CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_CONTROLFILE_%%F&#x27;</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE CONTROLFILE AUTOBACKUP ON; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> crosscheck backup; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> crosscheck archivelog all; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt expired backup; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt expired archivelog all; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t1 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t2 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t3 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_DB_FULL_%%U&#x27;</span> database include current controlfile; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_ARCH_%%U&#x27;</span> archivelog all not backed up 1 <span class="built_in">times</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_ARCH_%%U&#x27;</span> archivelog until time <span class="string">&#x27;sysdate-1&#x27;</span> delete input not backed up 1 <span class="built_in">times</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as copy current controlfile format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_CONTROLFILE_%DateString%_%%U&#x27;</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt obsolete; &gt;&gt;  %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup validate check logical database; &gt;&gt;  %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> &#125; &gt;&gt; %RmanRcvFile%</span><br><span class="line"></span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br><span class="line">rman target / @%RmanRcvFile% &gt; %RmanLogFile%</span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/bash</span></span><br><span class="line"></span><br><span class="line">zip_passwd=`<span class="built_in">date</span> +%b%d%Y`</span><br><span class="line">dump_folder=/dbback/data_pump</span><br><span class="line">ftp_name=/oradata/schedule/log/dba_ftp_</span><br><span class="line">ftp_name_list=<span class="variable">$&#123;ftp_name&#125;</span>_list</span><br><span class="line">ftp_ck_name=/oradata/schedule/log/dba_ftp_ck_</span><br><span class="line">ftp_size_name=/oradata/schedule/log/dba_ftp_size_</span><br><span class="line">ftp_reput_name=/oradata/schedule/log/dba_ftp_reput_</span><br><span class="line"></span><br><span class="line"><span class="built_in">ls</span> -ltr <span class="variable">$&#123;dump_folder&#125;</span> | grep <span class="variable">$&#123;zip_passwd&#125;</span> | <span class="built_in">tr</span> -s <span class="string">&#x27; &#x27;</span> | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f9 &gt; <span class="variable">$&#123;ftp_name_list&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;user ftpuser ftppasswd&#x27;</span> &gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;bi&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;prompt&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> lcd <span class="variable">$&#123;dump_folder&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> put <span class="variable">$&#123;line&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;bye&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&#x27;user ftpuser ftppasswd&#x27;</span> &gt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">  <span class="built_in">echo</span> <span class="built_in">dir</span> <span class="variable">$&#123;line&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&#x27;bye&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  ftp -n FTP_IP &lt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">  ftp -n FTP_IP &lt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span> &gt; <span class="variable">$&#123;ftp_size_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  ftp_sfile=`<span class="built_in">cat</span> <span class="variable">$&#123;ftp_size_name&#125;</span><span class="variable">$&#123;line&#125;</span> | grep <span class="variable">$&#123;zip_passwd&#125;</span> | <span class="built_in">tr</span> -s <span class="string">&#x27; &#x27;</span> | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f5`</span><br><span class="line">  local_sfile=`<span class="built_in">ls</span> -ltr <span class="variable">$&#123;dump_folder&#125;</span> | grep <span class="variable">$&#123;line&#125;</span> | <span class="built_in">tr</span> -s <span class="string">&#x27; &#x27;</span> | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f5`</span><br><span class="line">  <span class="keyword">if</span> [ <span class="variable">$&#123;ftp_sfile&#125;</span> -gt 0 ] &amp;&amp; [ <span class="variable">$&#123;ftp_sfile&#125;</span> -ne <span class="variable">$&#123;local_sfile&#125;</span> ]; <span class="keyword">then</span></span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;user ftpuser ftppasswd&#x27;</span> &gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;bi&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;prompt&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> lcd <span class="variable">$&#123;dump_folder&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> restart <span class="variable">$&#123;ftp_sfile&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> put <span class="variable">$&#123;line&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;bye&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     ftp -n FTP_IP &lt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span> ;</span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
-        <category>Oracle</category>
+        <category>OS</category>
       </categories>
       <tags>
         <tag>Script</tag>
-        <tag>Rman</tag>
       </tags>
   </entry>
   <entry>
@@ -667,21 +670,18 @@
       </tags>
   </entry>
   <entry>
-    <title>script_ftp_restart</title>
-    <url>/2023/04/16/script-ftp-restart/</url>
-    <content><![CDATA[<p>Ftp檢查檔案Size不相同，執行續傳</p>
+    <title>安裝多個MariaDB在同台主機上</title>
+    <url>/2023/02/07/mariadb-multiple-install/</url>
+    <content><![CDATA[<p>安裝多個MariaDB在同台主機上</p>
 <span id="more"></span>
 
-
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/bash</span></span><br><span class="line"></span><br><span class="line">zip_passwd=`<span class="built_in">date</span> +%b%d%Y`</span><br><span class="line">dump_folder=/dbback/data_pump</span><br><span class="line">ftp_name=/oradata/schedule/log/dba_ftp_</span><br><span class="line">ftp_name_list=<span class="variable">$&#123;ftp_name&#125;</span>_list</span><br><span class="line">ftp_ck_name=/oradata/schedule/log/dba_ftp_ck_</span><br><span class="line">ftp_size_name=/oradata/schedule/log/dba_ftp_size_</span><br><span class="line">ftp_reput_name=/oradata/schedule/log/dba_ftp_reput_</span><br><span class="line"></span><br><span class="line"><span class="built_in">ls</span> -ltr <span class="variable">$&#123;dump_folder&#125;</span> | grep <span class="variable">$&#123;zip_passwd&#125;</span> | <span class="built_in">tr</span> -s <span class="string">&#x27; &#x27;</span> | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f9 &gt; <span class="variable">$&#123;ftp_name_list&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;user ftpuser ftppasswd&#x27;</span> &gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;bi&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;prompt&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> lcd <span class="variable">$&#123;dump_folder&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> put <span class="variable">$&#123;line&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;bye&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&#x27;user ftpuser ftppasswd&#x27;</span> &gt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">  <span class="built_in">echo</span> <span class="built_in">dir</span> <span class="variable">$&#123;line&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&#x27;bye&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  ftp -n FTP_IP &lt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">  ftp -n FTP_IP &lt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span> &gt; <span class="variable">$&#123;ftp_size_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  ftp_sfile=`<span class="built_in">cat</span> <span class="variable">$&#123;ftp_size_name&#125;</span><span class="variable">$&#123;line&#125;</span> | grep <span class="variable">$&#123;zip_passwd&#125;</span> | <span class="built_in">tr</span> -s <span class="string">&#x27; &#x27;</span> | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f5`</span><br><span class="line">  local_sfile=`<span class="built_in">ls</span> -ltr <span class="variable">$&#123;dump_folder&#125;</span> | grep <span class="variable">$&#123;line&#125;</span> | <span class="built_in">tr</span> -s <span class="string">&#x27; &#x27;</span> | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f5`</span><br><span class="line">  <span class="keyword">if</span> [ <span class="variable">$&#123;ftp_sfile&#125;</span> -gt 0 ] &amp;&amp; [ <span class="variable">$&#123;ftp_sfile&#125;</span> -ne <span class="variable">$&#123;local_sfile&#125;</span> ]; <span class="keyword">then</span></span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;user ftpuser ftppasswd&#x27;</span> &gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;bi&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;prompt&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> lcd <span class="variable">$&#123;dump_folder&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> restart <span class="variable">$&#123;ftp_sfile&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> put <span class="variable">$&#123;line&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;bye&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     ftp -n FTP_IP &lt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span> ;</span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-
+<p>待</p>
 ]]></content>
       <categories>
-        <category>OS</category>
+        <category>MariaDB</category>
       </categories>
       <tags>
-        <tag>Script</tag>
+        <tag>Install</tag>
       </tags>
   </entry>
 </search>
