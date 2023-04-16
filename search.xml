@@ -1,0 +1,727 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Ping主機異常用中華SMS發送通知</title>
+    <url>/2023/02/11/OS-SMS/</url>
+    <content><![CDATA[<p>使用中華電訊SMS通知異常的範本</p>
+<span id="more"></span>
+
+<h2 id="Check-Ping-Main-bat"><a href="#Check-Ping-Main-bat" class="headerlink" title="Check_Ping_Main.bat"></a>Check_Ping_Main.bat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">set</span> Check_Host=要檢查的主機IP</span><br><span class="line"><span class="built_in">set</span> SMS_TELNUM=<span class="string">&quot;接收告警電話1,接收告警電話1&quot;</span></span><br><span class="line"><span class="built_in">set</span> execFileBASE=f:\dba</span><br><span class="line"></span><br><span class="line">call %execFileBASE%\check\check_ping_base.bat %Check_Host% %SMS_TELNUM%</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="Check-Ping-Base-bat"><a href="#Check-Ping-Base-bat" class="headerlink" title="Check_Ping_Base.bat"></a>Check_Ping_Base.bat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">set</span> Check_Host=%1</span><br><span class="line"><span class="built_in">set</span> SMS_TN=%2</span><br><span class="line"><span class="built_in">set</span> SMS_TELNUM=%SMS_TN:<span class="string">&quot;=  %</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">@For /F &quot;</span>tokens=1,2,3 delims=:. <span class="string">&quot; %%A in (&#x27;echo %time%&#x27;) do @(</span></span><br><span class="line"><span class="string">Set Hour=%%A</span></span><br><span class="line"><span class="string">Set Min=%%B</span></span><br><span class="line"><span class="string">Set Sec=%%C</span></span><br><span class="line"><span class="string">Set p_time=%%A:%%B:%%C</span></span><br><span class="line"><span class="string">)</span></span><br><span class="line"><span class="string">rem: xp @For /f &quot;</span>tokens=1-3 delims=/ <span class="string">&quot; %%a in (&#x27;date /t&#x27;) do (set p_date=%%c-%%b-%%a)</span></span><br><span class="line"><span class="string">rem: windows 2003</span></span><br><span class="line"><span class="string">@For /f &quot;</span>tokens=1-4 delims=/ <span class="string">&quot; %%a in (&#x27;date /t&#x27;) do (set p_date=%%d-%%b-%%c)</span></span><br><span class="line"><span class="string">set DateString=%p_date%-%p_time%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set execFileBASE=f:\dba</span></span><br><span class="line"><span class="string">set check_file=%execFileBASE%\check\log\check_ping_1.ck</span></span><br><span class="line"><span class="string">set SMS_MESSAGE=%Check_Host% is not availabe yet. -- %DateString%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">rem: 中華電訊的sms程式</span></span><br><span class="line"><span class="string">set notify=%execFileBASE%\notify2\Release\notify2.exe</span></span><br><span class="line"><span class="string">set SMS_IP=中華電訊的sms主機IP</span></span><br><span class="line"><span class="string">set SMS_USER=中華電訊的sms帳號</span></span><br><span class="line"><span class="string">set SMS_PWD=中華電訊的sms密碼</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">%SystemRoot%\system32\ping.exe -n 1 %Check_Host% &gt;nul</span></span><br><span class="line"><span class="string">if errorlevel 1 goto NoServer</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">echo %Check_Host% is availabe.</span></span><br><span class="line"><span class="string">if exist %check_file% (del %check_file% /Q)</span></span><br><span class="line"><span class="string">rem Insert commands here, for example 1 or more net use to connect network drives.</span></span><br><span class="line"><span class="string">goto :EOF</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">:NoServer</span></span><br><span class="line"><span class="string">echo %Check_Host% is not availabe yet.</span></span><br><span class="line"><span class="string">if exist %check_file% ( for %%i in (%SMS_TELNUM%) do %notify% %SMS_IP% %SMS_USER%  %SMS_PWD% %%i %SMS_MESSAGE% )</span></span><br><span class="line"><span class="string">echo &quot;</span>error<span class="string">&quot; &gt; %check_file%</span></span><br><span class="line"><span class="string">goto :EOF</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>OS</category>
+      </categories>
+      <tags>
+        <tag>Monitor</tag>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle ACL設定</title>
+    <url>/2023/02/11/Oracle-ACL/</url>
+    <content><![CDATA[<p>ACL維護和Mail</p>
+<span id="more"></span>
+
+<h2 id="刪除ACL設定"><a href="#刪除ACL設定" class="headerlink" title="刪除ACL設定"></a>刪除ACL設定</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line"> dbms_network_acl_admin.drop_acl(acl <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;mail_acl_file.xml&#x27;</span>); </span><br><span class="line"> <span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="新增ACL設定"><a href="#新增ACL設定" class="headerlink" title="新增ACL設定"></a>新增ACL設定</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">DBMS_NETWORK_ACL_ADMIN.create_acl (</span><br><span class="line">acl <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;mail_acl_file.xml&#x27;</span>,</span><br><span class="line">description <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;create by 2020/1/1&#x27;</span>,</span><br><span class="line">principal <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;User帳號&#x27;</span>,<span class="comment">--改這</span></span><br><span class="line">is_grant <span class="operator">=</span><span class="operator">&gt;</span> <span class="literal">TRUE</span>,</span><br><span class="line">privilege <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;connect&#x27;</span>,</span><br><span class="line">start_date <span class="operator">=</span><span class="operator">&gt;</span> SYSTIMESTAMP,</span><br><span class="line">end_date <span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">NULL</span>);</span><br><span class="line"><span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="新增ACL權限"><a href="#新增ACL權限" class="headerlink" title="新增ACL權限"></a>新增ACL權限</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line">  dbms_network_acl_admin.add_privilege (</span><br><span class="line">  acl <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;mail_acl_file.xml&#x27;</span>,</span><br><span class="line">  principal <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;User帳號&#x27;</span>,<span class="comment">--改這</span></span><br><span class="line">  is_grant <span class="operator">=</span><span class="operator">&gt;</span> <span class="literal">true</span>,</span><br><span class="line">  privilege <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;connect&#x27;</span></span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">commit</span>;</span><br><span class="line">  <span class="keyword">end</span>;</span><br><span class="line"><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">dbms_network_acl_admin.add_privilege(</span><br><span class="line">   acl <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;mail_acl_file.xml&#x27;</span>,</span><br><span class="line">   principal <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;User帳號&#x27;</span>,<span class="comment">--改這</span></span><br><span class="line">   is_grant <span class="operator">=</span><span class="operator">&gt;</span> <span class="literal">TRUE</span>,</span><br><span class="line">   privilege <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;resolve&#x27;</span></span><br><span class="line">   ); </span><br><span class="line">  <span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"><span class="operator">/</span> </span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="設定Email-ACL"><a href="#設定Email-ACL" class="headerlink" title="設定Email-ACL"></a>設定Email-ACL</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line">    dbms_network_acl_admin.assign_acl(</span><br><span class="line">    acl <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;mail_acl_file.xml&#x27;</span>,</span><br><span class="line">    host <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;Mail IP&#x27;</span><span class="comment">--改這</span></span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">end</span>;  </span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="相關SQL"><a href="#相關SQL" class="headerlink" title="相關SQL"></a>相關SQL</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> host, lower_port, upper_port, acl <span class="keyword">FROM</span> dba_network_acls;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> acl,principal,privilege,is_grant,to_char(start_date, <span class="string">&#x27;dd-mon-yyyy&#x27;</span>) <span class="keyword">as</span> start_date,to_char(end_date, <span class="string">&#x27;dd-mon-yyyy&#x27;</span>) <span class="keyword">as</span> end_date </span><br><span class="line"><span class="keyword">from</span> dba_network_acl_privileges;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> any_path <span class="keyword">from</span> resource_view <span class="keyword">where</span> any_path <span class="keyword">like</span> <span class="string">&#x27;/sys/acls/%.xml&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="Schedule-Mail"><a href="#Schedule-Mail" class="headerlink" title="Schedule Mail"></a>Schedule Mail</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> DBA_SCHEDULER_GLOBAL_ATTRIBUTE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">execute</span> DBMS_SCHEDULER.SET_SCHEDULER_ATTRIBUTE (<span class="string">&#x27;EMAIL_SERVER&#x27;</span>,<span class="string">&#x27; Mail_IP&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">execute</span> DBMS_SCHEDULER.SET_SCHEDULER_ATTRIBUTE (<span class="string">&#x27;EMAIL_SENDER&#x27;</span>,<span class="string">&#x27;寄件者Mail&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Mail-PROCEDURE"><a href="#Mail-PROCEDURE" class="headerlink" title="Mail_PROCEDURE"></a>Mail_PROCEDURE</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE OR REPLACE PROCEDURE DBA_MONITOR_SEND_MAIL (</span><br><span class="line">   p_from          IN VARCHAR2,</span><br><span class="line">   p_to            IN VARCHAR2,   </span><br><span class="line">   p_cc            IN VARCHAR2 default null,</span><br><span class="line">   p_bcc           IN VARCHAR2 default null,</span><br><span class="line">   p_reply         IN VARCHAR2 default null,</span><br><span class="line">   p_subject       IN VARCHAR2,   </span><br><span class="line">   p_text          IN VARCHAR2 default null,</span><br><span class="line">   p_html          in VARCHAR2 default null,</span><br><span class="line">   p_smtp_hostname in varchar2,</span><br><span class="line">   p_smtp_portnum  in number,</span><br><span class="line">   p_domain        in varchar2 default null,</span><br><span class="line">   p_login         in varchar2,</span><br><span class="line">   p_pwd           in varchar2,</span><br><span class="line">   p_html_body     in clob </span><br><span class="line">   )</span><br><span class="line">IS</span><br><span class="line"> --宣告</span><br><span class="line">  l_mail_conn   UTL_SMTP.connection;</span><br><span class="line">  l_boundary    VARCHAR2(50) := &#x27;----=*#abc1234321cba#*=&#x27;;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">BEGIN</span><br><span class="line"> --設定伺服器</span><br><span class="line">  l_mail_conn := UTL_SMTP.open_connection(p_smtp_hostname, p_smtp_portnum);</span><br><span class="line">  --l_mail_conn := utl_smtp.open_connection(&#x27;1.1.1.1&#x27;, 25);</span><br><span class="line">  UTL_SMTP.helo(l_mail_conn, p_smtp_hostname);</span><br><span class="line"></span><br><span class="line"> --寄件者</span><br><span class="line">  UTL_SMTP.mail(l_mail_conn, p_from);</span><br><span class="line"></span><br><span class="line"> --收件者</span><br><span class="line">  UTL_SMTP.rcpt(l_mail_conn,  p_to);</span><br><span class="line">  if p_cc is not null then    </span><br><span class="line">    UTL_SMTP.rcpt(l_mail_conn,  p_cc);      </span><br><span class="line">  end if;</span><br><span class="line">  UTL_SMTP.open_data(l_mail_conn);</span><br><span class="line"></span><br><span class="line"> -- 主旨</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;From: &#x27; || p_from || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;To: &#x27; || p_to || UTL_TCP.crlf);</span><br><span class="line">  if p_cc is not null then    </span><br><span class="line">    UTL_SMTP.write_data(l_mail_conn, &#x27;Cc: &#x27; || p_cc || UTL_TCP.crlf);  </span><br><span class="line">  end if;</span><br><span class="line">  UTL_smtp.write_raw_data(l_mail_conn, utl_raw.cast_to_raw( &#x27;Subject: &#x27;|| p_subject || UTL_TCP.crlf));</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;MIME-Version: 1.0&#x27; || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;Content-Type: multipart/alternative; boundary=&quot;&#x27; || l_boundary || &#x27;&quot;&#x27; || UTL_TCP.crlf || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;--&#x27; || l_boundary || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;Content-Type: text/html; charset=utf-8/big5&#x27; || UTL_TCP.crlf || UTL_TCP.crlf);</span><br><span class="line">  --utl_smtp.write_data( l_mail_conn, &#x27;Content-Transfer-Encoding: 8bit&#x27; || UTL_TCP.crlf );</span><br><span class="line">  </span><br><span class="line">  --UTL_smtp.write_raw_data(l_mail_conn, utl_raw.cast_to_raw( p_html_body ));</span><br><span class="line">  UTL_smtp.write_raw_data(l_mail_conn, utl_raw.cast_to_raw(CONVERT(dbms_lob.substr(p_html_body), &#x27;UTF8&#x27;)));</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, UTL_TCP.crlf || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.write_data(l_mail_conn, &#x27;--&#x27; || l_boundary || &#x27;--&#x27; || UTL_TCP.crlf);</span><br><span class="line">  UTL_SMTP.close_data(l_mail_conn);</span><br><span class="line">  UTL_SMTP.quit(l_mail_conn);</span><br><span class="line">END;</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="Windows-Script"><a href="#Windows-Script" class="headerlink" title="Windows Script"></a>Windows Script</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rem:</span><br><span class="line">rem: WScript Send Mail</span><br><span class="line">rem: cscript SendMail.vbs /P_From:From /P_To:To /P_Subject:Subject /P_TextBody:TextBody /P_File:File</span><br><span class="line">/P_TextBody:TextBody_test /P_File:D:\binhu_folder\temp\README-BR.txt</span><br><span class="line">rem:</span><br><span class="line"></span><br><span class="line">SmtpName = <span class="string">&quot;SMTP主機IP&quot;</span></span><br><span class="line">Login = <span class="string">&quot;Mail帳號&quot;</span></span><br><span class="line">LoginPassword = <span class="string">&quot;Mail密碼&quot;</span></span><br><span class="line">Dim P_From</span><br><span class="line">Dim P_To</span><br><span class="line">Dim P_Subject</span><br><span class="line">Dim P_TextBody</span><br><span class="line">Dim P_File</span><br><span class="line"></span><br><span class="line">rem: WScript.Echo Wscript.Arguments.Named(<span class="string">&quot;P_From&quot;</span>)</span><br><span class="line">rem: WScript.Echo Wscript.Arguments.Named(<span class="string">&quot;P_To&quot;</span>)</span><br><span class="line">rem: WScript.Echo Wscript.Arguments.Named(<span class="string">&quot;P_Subject&quot;</span>)</span><br><span class="line">rem: WScript.Echo Wscript.Arguments.Named(<span class="string">&quot;P_TextBody&quot;</span>)</span><br><span class="line">rem: WScript.Echo Wscript.Arguments.Named(<span class="string">&quot;P_File&quot;</span>)</span><br><span class="line"></span><br><span class="line">P_From=Wscript.Arguments.Named(<span class="string">&quot;P_From&quot;</span>)</span><br><span class="line">P_To=Wscript.Arguments.Named(<span class="string">&quot;P_To&quot;</span>)</span><br><span class="line">P_Subject=Wscript.Arguments.Named(<span class="string">&quot;P_Subject&quot;</span>)</span><br><span class="line">P_TextBody=Wscript.Arguments.Named(<span class="string">&quot;P_TextBody&quot;</span>)</span><br><span class="line">P_File=Wscript.Arguments.Named(<span class="string">&quot;P_File&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Set objEmail = CreateObject(<span class="string">&quot;CDO.Message&quot;</span>)</span><br><span class="line">    objEmail.From = P_From</span><br><span class="line">    objEmail.To = P_To</span><br><span class="line">    objEmail.Subject = P_Subject</span><br><span class="line">    objEmail.Textbody = P_TextBody</span><br><span class="line">    Set objFSO = CreateObject(<span class="string">&quot;Scripting.FileSystemObject&quot;</span>)</span><br><span class="line">        IF objFSO.FileExists (P_File) <span class="keyword">then</span></span><br><span class="line">           objEmail.Addattachment P_File</span><br><span class="line">           rem: WScript.<span class="built_in">echo</span> <span class="string">&quot;File Exist&quot;</span></span><br><span class="line">        end <span class="keyword">if</span> </span><br><span class="line">    objEmail.Configuration.Fields.Item (<span class="string">&quot;http://schemas.microsoft.com/cdo/configuration/sendusing&quot;</span>) = 2</span><br><span class="line">    objEmail.Configuration.Fields.Item (<span class="string">&quot;http://schemas.microsoft.com/cdo/configuration/smtpserver&quot;</span>) = SmtpName</span><br><span class="line">    objEmail.Configuration.Fields.Item (<span class="string">&quot;http://schemas.microsoft.com/cdo/configuration/smtpserverport&quot;</span>) = 25</span><br><span class="line">    objEmail.Configuration.Fields.Item (<span class="string">&quot;http://schemas.microsoft.com/cdo/configuration/smtpauthenticate&quot;</span>) = 1</span><br><span class="line">    objEmail.Configuration.Fields.Item (<span class="string">&quot;http://schemas.microsoft.com/cdo/configuration/sendusername&quot;</span>) = Login</span><br><span class="line">    objEmail.Configuration.Fields.Item (<span class="string">&quot;http://schemas.microsoft.com/cdo/configuration/sendpassword&quot;</span>) = LoginPassword</span><br><span class="line">    objEmail.Configuration.Fields.Update</span><br><span class="line">    objEmail.Send</span><br><span class="line"></span><br><span class="line">Set objEmail = Nothing</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+        <tag>ACL</tag>
+        <tag>Email</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle Check URL</title>
+    <url>/2023/02/11/Oracle-Check-URL/</url>
+    <content><![CDATA[<p>Oracle檢查URL範本</p>
+<span id="more"></span>
+
+<h2 id="基本範例"><a href="#基本範例" class="headerlink" title="基本範例"></a>基本範例</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE OR REPLACE PROCEDURE DBA_Check_URL_Status(t_url in varchar2)</span><br><span class="line">IS</span><br><span class="line">  request UTL_HTTP.REQ;</span><br><span class="line">  response UTL_HTTP.RESP;</span><br><span class="line">  v_url varchar2(4000);</span><br><span class="line">  v_ck_txt varchar2(4000);</span><br><span class="line">  clob_buff CLOB;</span><br><span class="line">  buff VARCHAR2(4000);</span><br><span class="line">  v_seq number ;</span><br><span class="line">  V_MSG varchar2(4000);</span><br><span class="line">  V_USER_FROM varchar2(4000);  </span><br><span class="line">  c  utl_tcp.connection;  -- TCP/IP connection to the Web server</span><br><span class="line">  ret_val pls_integer;</span><br><span class="line">  v_temp varchar2 (1000);</span><br><span class="line">BEGIN</span><br><span class="line">  EXECUTE IMMEDIATE &#x27;ALTER SESSION SET NLS_LANGUAGE= &#x27;&#x27;AMERICAN&#x27;&#x27;&#x27;;</span><br><span class="line">  v_url := t_url;</span><br><span class="line">  v_ck_txt := null;</span><br><span class="line">  </span><br><span class="line">  if instr(lower(v_url),&#x27;https:&#x27;) &gt; 0 then</span><br><span class="line">    --處理HTTPS</span><br><span class="line">    select REGEXP_SUBSTR(REGEXP_REPLACE(v_url,&#x27;^http[s]?://&#x27;,&#x27;&#x27;,1),&#x27;[a-z,A-Z,0-9,-]+(\.\w+)+&#x27;) INTO v_temp from dual;</span><br><span class="line">    BEGIN</span><br><span class="line">       c := utl_tcp.open_connection(remote_host =&gt; v_temp,</span><br><span class="line">                                    remote_port =&gt;  443,</span><br><span class="line">                                    tx_timeout =&gt; 5,</span><br><span class="line">                                    charset     =&gt; &#x27;UTF-8&#x27;);  -- open connection</span><br><span class="line">       ret_val := utl_tcp.write_line(c, &#x27;GET / HTTP/1.1&#x27;);    -- send HTTP request</span><br><span class="line">       ret_val := utl_tcp.write_line(c);</span><br><span class="line">       BEGIN</span><br><span class="line">         LOOP</span><br><span class="line">           dbms_output.put_line(utl_tcp.get_line(c, TRUE));  -- read result</span><br><span class="line">         END LOOP;</span><br><span class="line">       EXCEPTION</span><br><span class="line">         WHEN utl_tcp.end_of_input THEN</span><br><span class="line">           dbms_output.put_line(&#x27;Check_SSL_URL_OK End&#x27;);  -- read result</span><br><span class="line">       END;</span><br><span class="line">       utl_tcp.close_connection(c);</span><br><span class="line">    EXCEPTION</span><br><span class="line">      WHEN OTHERS THEN</span><br><span class="line">        --記錄錯誤和簡訊通知</span><br><span class="line">    END;</span><br><span class="line">  else</span><br><span class="line">    BEGIN  </span><br><span class="line">      --處理HTTP</span><br><span class="line">      UTL_HTTP.SET_RESPONSE_ERROR_CHECK(FALSE);</span><br><span class="line">      request := UTL_HTTP.BEGIN_REQUEST(v_url, &#x27;GET&#x27;);</span><br><span class="line">      UTL_HTTP.SET_HEADER(request, &#x27;User-Agent&#x27;, &#x27;Mozilla/4.0&#x27;);</span><br><span class="line">      response := UTL_HTTP.GET_RESPONSE(request);</span><br><span class="line">      DBMS_OUTPUT.PUT_LINE(&#x27;HTTP response status code: &#x27; || response.status_code);</span><br><span class="line">      </span><br><span class="line">      IF response.status_code = 200 THEN</span><br><span class="line">            BEGIN</span><br><span class="line">                clob_buff := EMPTY_CLOB;</span><br><span class="line">                LOOP</span><br><span class="line">                    UTL_HTTP.READ_TEXT(response, buff, LENGTH(buff));</span><br><span class="line">                    clob_buff := clob_buff || buff;</span><br><span class="line">                END LOOP;</span><br><span class="line">                UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">            EXCEPTION</span><br><span class="line">                WHEN UTL_HTTP.END_OF_BODY THEN</span><br><span class="line">                        UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">                WHEN OTHERS THEN</span><br><span class="line">                  --記錄錯誤和簡訊通知</span><br><span class="line">             END;</span><br><span class="line">            --DBMS_OUTPUT.PUT_LINE(clob_buff);</span><br><span class="line">            v_ck_txt := substr(clob_buff,1,2000);</span><br><span class="line">            v_ck_txt := trim(v_ck_txt);</span><br><span class="line">            </span><br><span class="line">            IF instr(v_ck_txt,&#x27;ORA-&#x27;) &gt; 0  THEN</span><br><span class="line">               --記錄錯誤和簡訊通知</span><br><span class="line">            elsif length(v_ck_txt)=1 and v_ck_txt||&#x27;&#x27;=&#x27;1&#x27; then</span><br><span class="line">               --判讀回傳特定值就視為正確</span><br><span class="line">            else</span><br><span class="line">              --記錄錯誤和簡訊通知</span><br><span class="line">            END IF;</span><br><span class="line">      ELSE</span><br><span class="line">         --記錄錯誤和簡訊通知</span><br><span class="line">         UTL_HTTP.END_RESPONSE(response);</span><br><span class="line">      END IF;</span><br><span class="line">      </span><br><span class="line">    EXCEPTION</span><br><span class="line">        WHEN Utl_Http.request_failed THEN</span><br><span class="line">        v_ck_txt := substr(Utl_Http.get_detailed_sqlerrm,1,100);</span><br><span class="line">        --記錄錯誤和簡訊通知</span><br><span class="line">    END;</span><br><span class="line">   end if;                           </span><br><span class="line">END;</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle-Broker</title>
+    <url>/2023/03/12/Oracle-Broker/</url>
+    <content><![CDATA[<p>11g 刪除 broker 設定值</p>
+<span id="more"></span>
+
+
+
+<p>1.設定dg_broker_start為false</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">system</span> <span class="keyword">set</span> dg_broker_start <span class="operator">=</span> <span class="literal">FALSE</span> ;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.刪除dg_broker_config_file1/2</p>
+<blockquote>
+<p>刪除dg_broker_config_file1/2的檔案</p>
+</blockquote>
+<p>3.設定dg_broker_start為true</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">system</span> <span class="keyword">set</span> dg_broker_start <span class="operator">=</span> <span class="literal">TRUE</span> <span class="keyword">Scope</span><span class="operator">=</span><span class="keyword">both</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>4.重新配置broker</p>
+<blockquote>
+<p>show configuration應該要會空才對</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle11g</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle_DW</title>
+    <url>/2023/02/18/Oracle-DW/</url>
+    <content><![CDATA[<p>Data Warehouse 大資料匯入的優化手段</p>
+<span id="more"></span>
+
+<h2 id="external-table-截入cvs和dmp"><a href="#external-table-截入cvs和dmp" class="headerlink" title="external table 截入cvs和dmp"></a>external table 截入cvs和dmp</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> emp_ext (</span><br><span class="line">  id NUMBER(<span class="number">4</span>),</span><br><span class="line">  addr VARCHAR2(<span class="number">10</span>),</span><br><span class="line">  ctime <span class="type">DATE</span></span><br><span class="line">)</span><br><span class="line">ORGANIZATION <span class="keyword">EXTERNAL</span> (</span><br><span class="line">  TYPE CSV</span><br><span class="line">  <span class="keyword">DEFAULT</span> DIRECTORY data_dir</span><br><span class="line">  LOCATION (<span class="string">&#x27;test.csv&#x27;</span>)</span><br><span class="line">)</span><br><span class="line">REJECT LIMIT UNLIMITED;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--產生dmp File</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> emptest_ext (</span><br><span class="line">  id NUMBER(<span class="number">4</span>),</span><br><span class="line">  addr VARCHAR2(<span class="number">10</span>),</span><br><span class="line">  ctime <span class="type">DATE</span></span><br><span class="line">)</span><br><span class="line">ORGANIZATION <span class="keyword">EXTERNAL</span> (</span><br><span class="line">  TYPE ORACLE_DATAPUMP</span><br><span class="line">  <span class="keyword">DEFAULT</span> DIRECTORY dump_dir</span><br><span class="line">  LOCATION (<span class="string">&#x27;emptest.dmp&#x27;</span>)</span><br><span class="line">)</span><br><span class="line">PARALLEL <span class="number">4</span></span><br><span class="line">REJECT LIMIT UNLIMITED;</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> emptest_ext <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> emptest;</span><br><span class="line"></span><br><span class="line"><span class="comment">--戴入 emp_ext</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> emp_ext (</span><br><span class="line">  id NUMBER(<span class="number">4</span>),</span><br><span class="line">  addr VARCHAR2(<span class="number">10</span>),</span><br><span class="line">  ctime <span class="type">DATE</span></span><br><span class="line">)</span><br><span class="line">ORGANIZATION <span class="keyword">EXTERNAL</span> (</span><br><span class="line">  TYPE ORACLE_DATAPUMP</span><br><span class="line">  <span class="keyword">DEFAULT</span> DIRECTORY data_dir</span><br><span class="line">  LOCATION (<span class="string">&#x27;emptest.dmp&#x27;</span>)</span><br><span class="line">)</span><br><span class="line">REJECT LIMIT UNLIMITED;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>適合資料量很大，並且都是Full Table Scan處理的情境，要留意是無法建立index</p>
+</blockquote>
+<hr>
+<h2 id="DBMS-DATAPUMP"><a href="#DBMS-DATAPUMP" class="headerlink" title="DBMS_DATAPUMP"></a>DBMS_DATAPUMP</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">   v_handle     NUMBER;</span><br><span class="line">   v_status     VARCHAR2(<span class="number">20</span>);</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">   v_handle :<span class="operator">=</span> DBMS_DATAPUMP.OPEN(</span><br><span class="line">                  operation   <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;EXPORT&#x27;</span>,</span><br><span class="line">                  job_mode    <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;TABLE&#x27;</span>,</span><br><span class="line">                  remote_link <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;DBLINK_NAME&#x27;</span></span><br><span class="line">               );</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.ADD_FILE(</span><br><span class="line">      handle  <span class="operator">=</span><span class="operator">&gt;</span> v_handle,</span><br><span class="line">      filename<span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;EXPORT_DIR:table_export.dmp&#x27;</span>,</span><br><span class="line">      directory <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;EXPORT_DIR&#x27;</span>,</span><br><span class="line">      filetype <span class="operator">=</span><span class="operator">&gt;</span> DBMS_DATAPUMP.KU$_FILE_TYPE_DUMP_FILE);</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.ADD_FILE(</span><br><span class="line">      handle  <span class="operator">=</span><span class="operator">&gt;</span> v_handle,</span><br><span class="line">      filename<span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;EXPORT_DIR:table_export.log&#x27;</span>,</span><br><span class="line">      directory <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;EXPORT_DIR&#x27;</span>,</span><br><span class="line">      filetype <span class="operator">=</span><span class="operator">&gt;</span> DBMS_DATAPUMP.KU$_FILE_TYPE_LOG_FILE);</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.METADATA_FILTER(</span><br><span class="line">      handle <span class="operator">=</span><span class="operator">&gt;</span> v_handle,</span><br><span class="line">      name   <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;SCHEMA_EXPR&#x27;</span>,</span><br><span class="line">      <span class="keyword">value</span>  <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;IN(&#x27;&#x27;SCHEMA_NAME&#x27;&#x27;)&#x27;</span>);</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.START_JOB(handle <span class="operator">=</span><span class="operator">&gt;</span> v_handle);</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.WAIT_FOR_JOB(handle <span class="operator">=</span><span class="operator">&gt;</span> v_handle, job_state <span class="operator">=</span><span class="operator">&gt;</span> v_status);</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.DETACH(handle <span class="operator">=</span><span class="operator">&gt;</span> v_handle);</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">   v_handle     NUMBER;</span><br><span class="line">   v_status     VARCHAR2(<span class="number">20</span>);</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">   v_handle :<span class="operator">=</span> DBMS_DATAPUMP.OPEN(</span><br><span class="line">                  operation   <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;IMPORT&#x27;</span>,</span><br><span class="line">                  job_mode    <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;TABLE&#x27;</span>,</span><br><span class="line">                  remote_link <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;DBLINK_NAME&#x27;</span></span><br><span class="line">               );</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.ADD_FILE(</span><br><span class="line">      handle  <span class="operator">=</span><span class="operator">&gt;</span> v_handle,</span><br><span class="line">      filename<span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;IMPORT_DIR:table_export.dmp&#x27;</span>,</span><br><span class="line">      directory <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;IMPORT_DIR&#x27;</span>,</span><br><span class="line">      filetype <span class="operator">=</span><span class="operator">&gt;</span> DBMS_DATAPUMP.KU$_FILE_TYPE_DUMP_FILE);</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.ADD_FILE(</span><br><span class="line">      handle  <span class="operator">=</span><span class="operator">&gt;</span> v_handle,</span><br><span class="line">      filename<span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;IMPORT_DIR:table_export.log&#x27;</span>,</span><br><span class="line">      directory <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;IMPORT_DIR&#x27;</span>,</span><br><span class="line">      filetype <span class="operator">=</span><span class="operator">&gt;</span> DBMS_DATAPUMP.KU$_FILE_TYPE_LOG_FILE);</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.METADATA_REMAP(</span><br><span class="line">      handle     <span class="operator">=</span><span class="operator">&gt;</span> v_handle,</span><br><span class="line">      name       <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;REMAP_SCHEMA&#x27;</span>,</span><br><span class="line">      old_value  <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;OLD_SCHEMA_NAME&#x27;</span>,</span><br><span class="line">      new_value  <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;NEW_SCHEMA_NAME&#x27;</span>);</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.START_JOB(handle <span class="operator">=</span><span class="operator">&gt;</span> v_handle);</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.WAIT_FOR_JOB(handle <span class="operator">=</span><span class="operator">&gt;</span> v_handle, job_state <span class="operator">=</span><span class="operator">&gt;</span> v_status);</span><br><span class="line"></span><br><span class="line">   DBMS_DATAPUMP.DETACH(handle <span class="operator">=</span><span class="operator">&gt;</span> v_handle);</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用DBMS的方式不落地用expdp和impdp，一直在db裏完成，不需要進行os操作</p>
+</blockquote>
+<hr>
+<h2 id="Hint-–-insert-direct-path"><a href="#Hint-–-insert-direct-path" class="headerlink" title="Hint – insert direct path"></a>Hint – insert direct path</h2><blockquote>
+<p>INSERT /*+ APPEND */ 避開Buufer，直寫入DataFile，但要留意index會導致失效</p>
+</blockquote>
+<hr>
+<h2 id="Partition-Table"><a href="#Partition-Table" class="headerlink" title="Partition Table"></a>Partition Table</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE TABLE emp (</span><br><span class="line">  id     NUMBER,</span><br><span class="line">  t_date   DATE,</span><br><span class="line">  amount   NUMBER</span><br><span class="line">)</span><br><span class="line">PARTITION BY RANGE(t_date)</span><br><span class="line">INTERVAL(NUMTOYMINTERVAL(1, &#x27;MONTH&#x27;))</span><br><span class="line">(</span><br><span class="line">  PARTITION p1 VALUES LESS THAN (TO_DATE(&#x27;2022-01-01&#x27;, &#x27;YYYY-MM-DD&#x27;))</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>自動增加Partition</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ALTER TABLE emp ENABLE ROW MOVEMENT;  --一定要</span><br><span class="line">EXEC DBMS_PART_ADMIN.ENABLE_AUTO_PARTITIONING( </span><br><span class="line">  table_name  =&gt; &#x27;emp&#x27;,</span><br><span class="line">  interval    =&gt; &#x27;INTERVAL(NUMTOYMINTERVAL(1, &#x27;&#x27;MONTH&#x27;&#x27;))&#x27;,</span><br><span class="line">  start_date  =&gt; &#x27;2022-01-01&#x27;,</span><br><span class="line">  retention   =&gt; &#x27;INTERVAL &#x27;&#x27;1&#x27;&#x27; MONTH&#x27; --個為間隔單位</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>自動刪除舊的Partition (19c可以用，較舊的版本要測一下)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">BEGIN</span><br><span class="line">  DBMS_PART_ADMIN.ALTER_RETENTION(</span><br><span class="line">    table_name  =&gt; &#x27;emp&#x27;,</span><br><span class="line">    retention   =&gt; &#x27;INTERVAL &#x27;&#x27;1&#x27;&#x27; MONTH&#x27;</span><br><span class="line">  );</span><br><span class="line">END;</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
+
+<h3 id="針對Index再優化"><a href="#針對Index再優化" class="headerlink" title="針對Index再優化"></a>針對Index再優化</h3><p>Partial Indexes</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> INDEX idx_emp_partial</span><br><span class="line"><span class="keyword">ON</span> emp(t_date)</span><br><span class="line"><span class="keyword">WHERE</span> t_date <span class="operator">&gt;=</span> <span class="string">&#x27;2022-01-01&#x27;</span>;</span><br><span class="line"><span class="comment">-- index的資料只包含 2022-01-01之後的，之前的資料並不包含到index裏，可縮小index size</span></span><br></pre></td></tr></table></figure>
+
+<p>index生效的方式</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> t_date</span><br><span class="line"><span class="keyword">WHERE</span> t_date <span class="operator">&gt;=</span> <span class="string">&#x27;2022-02-01&#x27;</span> <span class="keyword">and</span> t_date <span class="operator">&lt;=</span> <span class="string">&#x27;2022-04-01&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>刪除和新增資料佔用I/O的時間錯開</p>
+</blockquote>
+<hr>
+<h2 id="換別的OLAP-DB"><a href="#換別的OLAP-DB" class="headerlink" title="換別的OLAP DB"></a>換別的OLAP DB</h2><blockquote>
+<p>考量用apache doris、clickhouse，要考量是否能維運</p>
+</blockquote>
+<hr>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><blockquote>
+<p>1.首選先考慮升級成SSD</p>
+<p>2.了解AP邏輯運作後再看有多少空檔時間可做維護，再選擇方案</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Oracle</category>
+      </categories>
+      <tags>
+        <tag>PerformanceTuning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle-ORA-1861</title>
+    <url>/2023/03/02/Oracle-ORA-1861/</url>
+    <content><![CDATA[<p>RMAN Recovery Session Fails with ORA-1861 (Doc ID 852723.1)</p>
+<span id="more"></span>
+
+<p>遇到的情況就是rman list backup出現 ORA-01861: literal does not match format string</p>
+<p>查的解決方法</p>
+<p>1.設定NLS，失敗</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Linux :</span><br><span class="line">export NLS_LANG=AMERICAN_AMERICA.WE8ISO8859P1</span><br><span class="line">export NLS_DATE_FORMAT=YYYY_MM_DD HH24:MI:SS</span><br><span class="line"></span><br><span class="line">Windows :</span><br><span class="line">set NLS_LANG=AMERICAN_AMERICA.WE8ISO8859P1</span><br><span class="line">set NLS_DATE_FORMAT=YYYY_MM_DD HH24:MI:SS</span><br></pre></td></tr></table></figure>
+
+<p>2.重建controlfile，懶的用，所以不採用</p>
+<p>3.依Doc ID 852723.1來做最簡單，裏面就只有plb檔要戴入而已</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">loadjava -user sys/sys_pwd pb.plb</span><br><span class="line"></span><br><span class="line">sqlplus sys/sys_pwd as sysdba</span><br><span class="line">@del.sql</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>結論:</p>
+<blockquote>
+<p>1.DataGuard 環境在Standby DB也要做一次@del.sql</p>
+<p>2.Standby Control File也可用restored的方式</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle11g</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle-EM</title>
+    <url>/2023/03/12/Oracle-EM/</url>
+    <content><![CDATA[<p>重建11g EM問題處理</p>
+<span id="more"></span>
+
+
+
+<p>1.環境變數</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">set ORACLE_UNQNAME</span><br><span class="line">set ORACLE_HOME</span><br><span class="line">set ORACLE_HOSTNAME</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>2.刪除EM的檢查</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">emca -deconfig dbcontrol db -repos drop</span><br><span class="line"></span><br><span class="line">手動檢查這些物件都要不存在</span><br><span class="line">SYSMAN</span><br><span class="line">MGMT_VIEW</span><br><span class="line">MGMT_USER</span><br><span class="line">MGMT_TARGET_BLACKOUTS</span><br><span class="line">SETEMVIEWUSERCONTEXT</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>3.建立EM</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">emca -config dbcontrol db -repos create</span><br><span class="line"></span><br><span class="line">--建立錯誤可考慮刪除舊的目錄</span><br><span class="line">$ORACLE_HOME/&lt;主機名稱&gt;_&lt;Oracle_SID&gt;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle11g</category>
+      </categories>
+      <tags>
+        <tag>ORA-</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle Zip壓縮檔案</title>
+    <url>/2023/02/11/Oracle-Zip/</url>
+    <content><![CDATA[<p>將目錄下的txt壓成一個zip檔的範本</p>
+<span id="more"></span>
+
+<h2 id="Java-Zip-Code"><a href="#Java-Zip-Code" class="headerlink" title="Java Zip Code"></a>Java Zip Code</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.zip.*;</span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.zip.ZipEntry;</span><br><span class="line"><span class="keyword">import</span> java.util.zip.ZipOutputStream;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">zipFile</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//java zipFile 來源目錄 zip檔案(含目錄)</span></span><br><span class="line">    <span class="comment">//java zipFile d:/temp d:/temp/t.zip</span></span><br><span class="line">    List&lt;String&gt; fileList;</span><br><span class="line">    zipFile()&#123;</span><br><span class="line">	   fileList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">( String[] args )</span></span><br><span class="line">    &#123;</span><br><span class="line">    	<span class="type">zipFile</span> <span class="variable">appZip</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">zipFile</span>();</span><br><span class="line">        <span class="type">String</span> <span class="variable">SOURCE_FOLDER</span> <span class="operator">=</span> args[<span class="number">0</span>];</span><br><span class="line">        <span class="type">String</span> <span class="variable">OUTPUT_ZIP_FILE</span> <span class="operator">=</span> args[<span class="number">1</span>];</span><br><span class="line">    	appZip.generateFileList(<span class="keyword">new</span> <span class="title class_">File</span>(SOURCE_FOLDER),SOURCE_FOLDER);</span><br><span class="line">    	appZip.zipIt(OUTPUT_ZIP_FILE,SOURCE_FOLDER);    	</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Zip it</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> zipFile output ZIP file location</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">zipIt</span><span class="params">(String zipFile,String s_folder)</span>&#123;</span><br><span class="line"></span><br><span class="line">     <span class="type">byte</span>[] buffer = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">     <span class="keyword">try</span>&#123;</span><br><span class="line"></span><br><span class="line">    	<span class="type">FileOutputStream</span> <span class="variable">fos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(zipFile);</span><br><span class="line">    	<span class="type">ZipOutputStream</span> <span class="variable">zos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ZipOutputStream</span>(fos);</span><br><span class="line"></span><br><span class="line">    	System.out.println(<span class="string">&quot;Output to Zip : &quot;</span> + zipFile);</span><br><span class="line"></span><br><span class="line">    	<span class="keyword">for</span>(String file : <span class="built_in">this</span>.fileList)&#123;</span><br><span class="line"></span><br><span class="line">    		System.out.println(<span class="string">&quot;File Added : &quot;</span> + file);</span><br><span class="line">    		ZipEntry ze= <span class="keyword">new</span> <span class="title class_">ZipEntry</span>(file);</span><br><span class="line">        	zos.putNextEntry(ze);</span><br><span class="line"></span><br><span class="line">        	<span class="type">FileInputStream</span> <span class="variable">in</span> <span class="operator">=</span></span><br><span class="line">                       <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(s_folder + File.separator + file);</span><br><span class="line"></span><br><span class="line">        	<span class="type">int</span> len;</span><br><span class="line">        	<span class="keyword">while</span> ((len = in.read(buffer)) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        		zos.write(buffer, <span class="number">0</span>, len);</span><br><span class="line">        	&#125;</span><br><span class="line"></span><br><span class="line">        	in.close();</span><br><span class="line">    	&#125;</span><br><span class="line"></span><br><span class="line">    	zos.closeEntry();</span><br><span class="line">    	<span class="comment">//remember close it</span></span><br><span class="line">    	zos.close();</span><br><span class="line"></span><br><span class="line">    	System.out.println(<span class="string">&quot;Done&quot;</span>);</span><br><span class="line">    &#125;<span class="keyword">catch</span>(IOException ex)&#123;</span><br><span class="line">       ex.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Traverse a directory and get all files,</span></span><br><span class="line"><span class="comment">     * and add the file into fileList</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> node file or directory</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">generateFileList</span><span class="params">(File node,String s_folder)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//add file only</span></span><br><span class="line">	<span class="keyword">if</span>(node.isFile())&#123;</span><br><span class="line">	   <span class="keyword">if</span> (node.getAbsoluteFile().toString().toLowerCase().lastIndexOf(<span class="string">&quot;.txt&quot;</span>) &gt;<span class="number">0</span> ) &#123;</span><br><span class="line">		  fileList.add(generateZipEntry(node.getAbsoluteFile().toString(),s_folder));</span><br><span class="line">       &#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(node.isDirectory())&#123;</span><br><span class="line">		String[] subNote = node.list();</span><br><span class="line">		<span class="keyword">for</span>(String filename : subNote)&#123;</span><br><span class="line">		   generateFileList(<span class="keyword">new</span> <span class="title class_">File</span>(node, filename),s_folder);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Format the file path for zip</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> file file path</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> Formatted file path</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">generateZipEntry</span><span class="params">(String file,String s_folder)</span>&#123;</span><br><span class="line">    	<span class="keyword">return</span> file.substring(s_folder.length()+<span class="number">1</span>, file.length());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="將java編譯好的class匯入到DB"><a href="#將java編譯好的class匯入到DB" class="headerlink" title="將java編譯好的class匯入到DB"></a>將java編譯好的class匯入到DB</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">set ORACLE_SID=xxx</span><br><span class="line">loadjvav -user DB帳號 zipFile.clasee</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="SYS執行"><a href="#SYS執行" class="headerlink" title="SYS執行"></a>SYS執行</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">  l_schema VARCHAR2(<span class="number">30</span>) :<span class="operator">=</span> <span class="string">&#x27;DB帳號&#x27;</span>; <span class="comment">-- Adjust as required.</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  DBMS_JAVA.grant_permission(l_schema, <span class="string">&#x27;java.io.FilePermission&#x27;</span>, <span class="string">&#x27;&lt;&lt;ALL FILES&gt;&gt;&#x27;</span>, <span class="string">&#x27;read ,write&#x27;</span>);</span><br><span class="line">  DBMS_JAVA.grant_permission(l_schema, <span class="string">&#x27;SYS:java.lang.RuntimePermission&#x27;</span>, <span class="string">&#x27;writeFileDescriptor&#x27;</span>, <span class="string">&#x27;&#x27;</span>);</span><br><span class="line">  DBMS_JAVA.grant_permission(l_schema, <span class="string">&#x27;SYS:java.lang.RuntimePermission&#x27;</span>, <span class="string">&#x27;readFileDescriptor&#x27;</span>, <span class="string">&#x27;&#x27;</span>);</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line"><span class="operator">/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--建立 Procedure</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">PROCEDURE</span> WH.zipFile(s_folder varchar2,zip_File VARCHAR2)</span><br><span class="line"><span class="keyword">AS</span> <span class="keyword">LANGUAGE</span> JAVA</span><br><span class="line">NAME <span class="string">&#x27;zipFile.main(java.lang.String[])&#x27;</span>;</span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="執行方式"><a href="#執行方式" class="headerlink" title="執行方式"></a>執行方式</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">exec zipFile(&#x27;d:/temp&#x27;,&#x27;d:/temp/t.zip&#x27;);</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+        <tag>Zip</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle11g_unwrap</title>
+    <url>/2023/02/14/Oracle11g-unwrap/</url>
+    <content><![CDATA[<p>Oracle11g 反解wrap的內容</p>
+<span id="more"></span>
+
+
+
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SET</span> SERVEROUTPUT <span class="keyword">ON</span> SIZE <span class="number">1000000</span></span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line"><span class="keyword">BEGIN</span>    </span><br><span class="line">     SYS.unwrap (<span class="string">&#x27;SchemaName&#x27;</span>, <span class="string">&#x27;Object_Name&#x27;</span>,<span class="string">&#x27;Object_Type&#x27;</span>);</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="程式碼"><a href="#程式碼" class="headerlink" title="程式碼"></a>程式碼</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE OR REPLACE PROCEDURE SYS.unwrap(p_owner IN VARCHAR,</span><br><span class="line">                   p_name  IN VARCHAR,</span><br><span class="line">                   p_type  IN VARCHAR) AS</span><br><span class="line">  </span><br><span class="line">    l_wrap varchar2(32767);</span><br><span class="line">  </span><br><span class="line">    l_inf       clob;</span><br><span class="line">    l_res       clob;</span><br><span class="line">    l_src       clob;</span><br><span class="line">    l_inflate   varchar2(32767);</span><br><span class="line">    l_temp      VARCHAR2(32767);</span><br><span class="line">    l_bt        varchar2(32767);</span><br><span class="line">    l_text      varchar2(32767);</span><br><span class="line">    l_char      varchar2(2);</span><br><span class="line">    l_len       number;</span><br><span class="line">    l_slen      integer;</span><br><span class="line">    l_offset    integer := 1;</span><br><span class="line">    l_chunk_len integer := 10080;</span><br><span class="line">  </span><br><span class="line">    --解密字節對照字典表</span><br><span class="line">    l_dict varchar2(512) := &#x27;3D6585B318DBE287F152AB634BB5A05F&#x27; ||</span><br><span class="line">                            &#x27;7D687B9B24C228678ADEA4261E03EB17&#x27; ||</span><br><span class="line">                            &#x27;6F343E7A3FD2A96A0FE935561FB14D10&#x27; ||</span><br><span class="line">                            &#x27;78D975F6BC4104816106F9ADD6D5297E&#x27; ||</span><br><span class="line">                            &#x27;869E79E505BA84CC6E278EB05DA8F39F&#x27; ||</span><br><span class="line">                            &#x27;D0A271B858DD2C38994C480755E4538C&#x27; ||</span><br><span class="line">                            &#x27;46B62DA5AF322240DC50C3A1258B9C16&#x27; ||</span><br><span class="line">                            &#x27;605CCFFD0C981CD4376D3C3A30E86C31&#x27; ||</span><br><span class="line">                            &#x27;47F533DA43C8E35E1994ECE6A39514E0&#x27; ||</span><br><span class="line">                            &#x27;9D64FA5915C52FCABB0BDFF297BF0A76&#x27; ||</span><br><span class="line">                            &#x27;B449445A1DF0009621807F1A82394FC1&#x27; ||</span><br><span class="line">                            &#x27;A7D70DD1D8FF139370EE5BEFBE09B977&#x27; ||</span><br><span class="line">                            &#x27;72E7B254B72AC7739066200E51EDF87C&#x27; ||</span><br><span class="line">                            &#x27;8F2EF412C62B83CDACCB3BC44EC06936&#x27; ||</span><br><span class="line">                            &#x27;6202AE88FCAA4208A64557D39ABDE123&#x27; ||</span><br><span class="line">                            &#x27;8D924A1189746B91FBFEC901EA1BF7CE&#x27;;</span><br><span class="line">    l_sl   varchar2(512) := &#x27;000102030405060708090A0B0C0D0E0F&#x27; ||</span><br><span class="line">                            &#x27;101112131415161718191A1B1C1D1E1F&#x27; ||</span><br><span class="line">                            &#x27;202122232425262728292A2B2C2D2E2F&#x27; ||</span><br><span class="line">                            &#x27;303132333435363738393A3B3C3D3E3F&#x27; ||</span><br><span class="line">                            &#x27;404142434445464748494A4B4C4D4E4F&#x27; ||</span><br><span class="line">                            &#x27;505152535455565758595A5B5C5D5E5F&#x27; ||</span><br><span class="line">                            &#x27;606162636465666768696A6B6C6D6E6F&#x27; ||</span><br><span class="line">                            &#x27;707172737475767778797A7B7C7D7E7F&#x27; ||</span><br><span class="line">                            &#x27;808182838485868788898A8B8C8D8E8F&#x27; ||</span><br><span class="line">                            &#x27;909192939495969798999A9B9C9D9E9F&#x27; ||</span><br><span class="line">                            &#x27;A0A1A2A3A4A5A6A7A8A9AAABACADAEAF&#x27; ||</span><br><span class="line">                            &#x27;B0B1B2B3B4B5B6B7B8B9BABBBCBDBEBF&#x27; ||</span><br><span class="line">                            &#x27;C0C1C2C3C4C5C6C7C8C9CACBCCCDCECF&#x27; ||</span><br><span class="line">                            &#x27;D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF&#x27; ||</span><br><span class="line">                            &#x27;E0E1E2E3E4E5E6E7E8E9EAEBECEDEEEF&#x27; ||</span><br><span class="line">                            &#x27;F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF&#x27;;</span><br><span class="line">    cursor c_src is</span><br><span class="line">      SELECT src.line, src.text</span><br><span class="line">        FROM DBA_SOURCE src</span><br><span class="line">       WHERE owner = p_owner</span><br><span class="line">         AND Name = p_name</span><br><span class="line">         AND TYPE = p_type</span><br><span class="line">       order by line;</span><br><span class="line">  BEGIN</span><br><span class="line">    dbms_lob.createtemporary(lob_loc =&gt; l_inf,</span><br><span class="line">                             cache   =&gt; TRUE,</span><br><span class="line">                             dur     =&gt; dbms_lob.session);</span><br><span class="line">    --取得package密文</span><br><span class="line">    for rec in c_src loop</span><br><span class="line">      l_src := l_src || rtrim(rec.text);</span><br><span class="line">    end loop;</span><br><span class="line">  </span><br><span class="line">     --out_put(&#x27;source:&lt;&#x27;||l_src||&#x27;&gt;&#x27;);</span><br><span class="line">    l_src := rtrim(substr(l_src, instr(l_src, chr(10), 1, 20) + 1), chr(10));</span><br><span class="line">    l_src := replace(l_src, chr(10), &#x27;&#x27;);</span><br><span class="line">    -- dbms_output.put_line(&#x27;source:&lt;&#x27;||l_src||&#x27;&gt;&#x27;);</span><br><span class="line">    --l_src:=substr(l_src,41);</span><br><span class="line">    </span><br><span class="line">    --base64解碼</span><br><span class="line">    l_len := dbms_lob.getlength(l_src);</span><br><span class="line">    while l_offset &lt; l_len loop</span><br><span class="line">      if (l_len - l_offset) &lt; 10080 then</span><br><span class="line">        l_chunk_len := (l_len - l_offset);</span><br><span class="line">      end if;</span><br><span class="line">      l_temp := dbms_lob.substr(l_src, l_chunk_len, l_offset);</span><br><span class="line">      l_bt   := utl_encode.base64_decode(utl_raw.cast_to_raw(l_temp));</span><br><span class="line">    </span><br><span class="line">      if l_bt is not null then</span><br><span class="line">        if l_offset = 1 then</span><br><span class="line">          --去掉前40位哈希串</span><br><span class="line">          l_bt := substr(l_bt, 41);</span><br><span class="line">        end if;</span><br><span class="line">        -- l_wrap := l_wrap || l_bt;</span><br><span class="line">        --字典表轉換</span><br><span class="line">        l_bt := utl_raw.translate(l_bt, l_sl, l_dict);</span><br><span class="line">      </span><br><span class="line">        l_offset := l_offset + l_chunk_len;</span><br><span class="line">        --    l_inflate := l_inflate || l_bt;</span><br><span class="line">        dbms_lob.writeappend(l_inf, length(l_bt), l_bt);</span><br><span class="line">      end if;</span><br><span class="line">    </span><br><span class="line">    end loop;</span><br><span class="line">  </span><br><span class="line">    /* dbms_output.put_line(&#x27;base:&#x27; || l_wrap);</span><br><span class="line">    dbms_output.put_line(&#x27;&lt;&#x27; || l_inflate || &#x27;&gt;&#x27;);*/</span><br><span class="line">    </span><br><span class="line">    --解壓縮</span><br><span class="line">    l_res := cux_unwrapper_pl.inflate(l_inf);</span><br><span class="line">    DBMS_OUTPUT.PUT_LINE(l_res);</span><br><span class="line">  END unwrap;</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><blockquote>
+<p>1.網路上試了好幾個版本，可在11g中使用無錯誤</p>
+<p>2.應該不支援11g之後的版本，Oracle的加密方式已有改變</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle11g</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle19c_Rman_Restore_Table</title>
+    <url>/2023/02/12/Oracle19c-Rman-Restore-Table/</url>
+    <content><![CDATA[<p>Oracle 19c 新功能 : Rman Restore table</p>
+<span id="more"></span>
+
+
+
+<h2 id="Recover-Table"><a href="#Recover-Table" class="headerlink" title="Recover Table"></a>Recover Table</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">recover table SchemaName.TableName until time &quot;to_date(&#x27;2020-06-12 15:07:08&#x27;,&#x27;yyyy-mm-dd hh24:mi:ss&#x27;)&quot; auxiliary destination &#x27;c:\ap\recover_temp&#x27;;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="目錄架構"><a href="#目錄架構" class="headerlink" title="目錄架構"></a>目錄架構</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200832.png" alt="image-20230212192032400"></p>
+<h2 id="執行的Log"><a href="#執行的Log" class="headerlink" title="執行的Log"></a>執行的Log</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676201158.png" alt="image-20230212192558673"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676201207.png" alt="image-20230212192647009"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676201231.png" alt="image-20230212192711109"></p>
+<p>暫存目錄檔案沒自動刪除乾淨…</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><blockquote>
+<p>1.在舊版本就只能restore配合skpi tablespace才能完成這個需求</p>
+<p>2.在還原Table的過程中是需要一定的硬碟空間需求</p>
+<p>3.Table取出後要記清除產生的暫存檔案</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle19c</category>
+      </categories>
+      <tags>
+        <tag>Rman</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ProxySQL</title>
+    <url>/2023/02/07/ProxySQL/</url>
+    <content><![CDATA[<p>Prox暫定</p>
+<span id="more"></span>
+
+<p>待</p>
+]]></content>
+      <categories>
+        <category>MariaDB</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>dblink_oracle_mssql</title>
+    <url>/2023/04/16/dblink-oracle-mssql/</url>
+    <content><![CDATA[<p>MSSQL建 DB Link 到Oracle</p>
+<span id="more"></span>
+
+
+
+<h2 id="OLEDB-Install"><a href="#OLEDB-Install" class="headerlink" title="OLEDB Install"></a>OLEDB Install</h2><p>install.bat oledb D:\app\oracle odac  #D:\app\oracle 依需求自行調整</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632514.png" alt="image-20230416160810692"></p>
+<p>將目錄加入OS環境變數後，要重開主機</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632590.png" alt="image-20230416160950747"></p>
+<h2 id="設定SQL-Server-To-Oracle"><a href="#設定SQL-Server-To-Oracle" class="headerlink" title="設定SQL Server To Oracle"></a>設定SQL Server To Oracle</h2><p>1.安裝Oracle Client和配置tnsnames.ora</p>
+<p>2.MSSQL 建立DB Link</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632785.png" alt="image-20230416161305303"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632912.png" alt="image-20230416161512250"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632965.png" alt="image-20230416161605145"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from [DB Link 名稱]..SchemaName.TableName</span><br><span class="line">SchemaName和TableName要為大寫的</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>MSSQL</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL_FailOver_Cluster</title>
+    <url>/2023/02/19/SQL-FailOver-Cluster/</url>
+    <content><![CDATA[<p>前罝作業</p>
+<span id="more"></span>
+
+<blockquote>
+<p>1.測SQL FailOver Cluster是要AD和iSCSI</p>
+<p>2.是測AlwaysOn可不用AD，可用工作群組設</p>
+<p>3.方便測試可關畢:密碼政策、防火牆</p>
+<p>4.不論是FailOver Cluster或AlwaysOn都需要Windows Failover Cluster</p>
+<p>5.FailOver Cluster安裝時要留意安裝SQL Home時的硬碟有沒有選錯，進FailOver Cluster Manager確認一下，以免安裝錯誤要調整或重來一次都麻煩</p>
+<p>6.TLS 1.0 要考慮是否要開起，舊版的SQL並不支援TLS 1.2</p>
+<p>7.遠端登入要開起</p>
+<p>8.Windows Update記的要做，以免少Patch</p>
+<p>9.AD有包含DNS的話，記的把C:\Windows\System32\drivers\etc\hosts內容盡可能清空，以免讓DNS和hosts裏面的內容出現衝突</p>
+</blockquote>
+<hr>
+<h2 id="TLS-1-0-開起方式"><a href="#TLS-1-0-開起方式" class="headerlink" title="TLS 1.0 開起方式"></a>TLS 1.0 開起方式</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.regedit</span><br><span class="line">2.HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols</span><br><span class="line">3.建新目錄TLS 1.0，下面再建Client和Server，各別新增2個 DWORD </span><br><span class="line">  --DisabledByDefault  (值設為0)</span><br><span class="line">  --Enabled  (值設為1)</span><br><span class="line">4.重開OS後，用powershell進行檢查</span><br><span class="line">Get-ItemProperty -Path &quot;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client&quot; -Name DisabledByDefault</span><br><span class="line">Get-ItemProperty -Path &quot;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server&quot; -Name DisabledByDefault</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="Windows-FailOver-Cluster留意事項"><a href="#Windows-FailOver-Cluster留意事項" class="headerlink" title="Windows FailOver Cluster留意事項"></a>Windows FailOver Cluster留意事項</h2><h3 id="設定Quorum-Disk-仲裁磁碟"><a href="#設定Quorum-Disk-仲裁磁碟" class="headerlink" title="設定Quorum Disk(仲裁磁碟)"></a>設定Quorum Disk(仲裁磁碟)</h3><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816546.png" alt="image-20230219222207793"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816583.png" alt="image-20230219222254144"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816669.png" alt="image-20230219222429300"></p>
+<p>選擇那個硬碟要當仲裁磁碟</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816710.png" alt="image-20230219222509987"></p>
+<p>沒錯誤的話，應該會是Disk Witness in Quorum</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230219_1676816796.png" alt="image-20230219222636220"></p>
+<hr>
+<h2 id="SQL-FailOver-Cluster錯誤處理"><a href="#SQL-FailOver-Cluster錯誤處理" class="headerlink" title="SQL FailOver Cluster錯誤處理"></a>SQL FailOver Cluster錯誤處理</h2><h3 id="多張網卡"><a href="#多張網卡" class="headerlink" title="多張網卡"></a>多張網卡</h3><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677078814.png" alt="image-20230222231334277"></p>
+<blockquote>
+<p>設定網卡只留一個cluster and client在除錯上會容易很多</p>
+</blockquote>
+<h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677079083.png" alt="image-20230222231803452"></p>
+<blockquote>
+<p>1.安裝windows failover cluster 的帳號要有異動dns和查詢node主機資源的權限，用較大的權限建立避免一些權限問題</p>
+<p>2.當windows/sql 的 failover cluster的vip無法自動建立在dns裏時，可手動補建。相對來說，如有產生錯誤的dns記錄的話，直接手動刪除就可以</p>
+<p>3.node主機網卡的第一個dns ip建議寫網域的</p>
+</blockquote>
+<h3 id="Remote-Registry-權限"><a href="#Remote-Registry-權限" class="headerlink" title="Remote Registry 權限"></a>Remote Registry 權限</h3><blockquote>
+<p>Run wmimgmt.msc</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677161946.png" alt="image-20230223221906009"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162135.png" alt="image-20230223222215469"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162243.png" alt="image-20230223222403422"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162311.png" alt="image-20230223222511496"></p>
+<h3 id="DCOM-權限"><a href="#DCOM-權限" class="headerlink" title="DCOM 權限"></a>DCOM 權限</h3><blockquote>
+<p>Run dcomcnfg</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162648.png" alt="image-20230223223048305"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162760.png" alt="image-20230223223240744"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677162811.png" alt="image-20230223223331758"></p>
+<h3 id="WMI-權限"><a href="#WMI-權限" class="headerlink" title="WMI 權限"></a>WMI 權限</h3><blockquote>
+<p>Run dcomcnfg</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163154.png" alt="image-20230223223914623"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163644.png" alt="image-20230223224057210"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163396.png" alt="image-20230223224316383"></p>
+<h3 id="修正SQL-Server-Agent是null的情況"><a href="#修正SQL-Server-Agent是null的情況" class="headerlink" title="修正SQL Server Agent是null的情況"></a>修正SQL Server Agent是null的情況</h3><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677164904.png" alt="image-20230223230823870"></p>
+<h4 id="PowerShell"><a href="#PowerShell" class="headerlink" title="PowerShell"></a>PowerShell</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ClusterName = &quot;sqlcluster&quot;</span><br><span class="line">$FciClusterGroupName = &quot;SQL Server (MSSQLSERVER)&quot;</span><br><span class="line">Add-ClusterResourceType -Name &quot;SQL Server Agent&quot; -Dll &quot;sqagtres.dll&quot; </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677165290.png" alt="image-20230223231450729"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677165408.png" alt="image-20230223231647851"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677166783.png" alt="image-20230223233943452"></p>
+<h4 id="SQL-Server-Agent進行配置"><a href="#SQL-Server-Agent進行配置" class="headerlink" title="SQL Server Agent進行配置"></a>SQL Server Agent進行配置</h4><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677166824.png" alt="image-20230223234023893"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677166863.png" alt="image-20230223234103405"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677167958.png" alt="image-20230223235918061"></p>
+<p>重起SQL FailOver Cluster後再用SSMS試看看能否正常登入DB</p>
+<h2 id="Add-Node-to-SQL-FailOver-Cluster不知的錯誤"><a href="#Add-Node-to-SQL-FailOver-Cluster不知的錯誤" class="headerlink" title="Add Node to SQL FailOver Cluster不知的錯誤"></a>Add Node to SQL FailOver Cluster不知的錯誤</h2><blockquote>
+<p>遇到該檢查和確認的都沒問題，但就是在安裝過程中出現錯誤，試的檢查 regedit : Primary DB主機，這些參數都要為1</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677167755.png" alt="image-20230223235555095"></p>
+<hr>
+<h2 id="SQL-FailOver-Cluster安裝"><a href="#SQL-FailOver-Cluster安裝" class="headerlink" title="SQL FailOver Cluster安裝"></a>SQL FailOver Cluster安裝</h2><h3 id="Node-A"><a href="#Node-A" class="headerlink" title="Node A"></a>Node A</h3><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899515.png" alt="image-20230220212455255"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899539.png" alt="image-20230220212522748"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899554.png" alt="image-20230220212553903"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676899600.png" alt="image-20230220212640200"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903422.png" alt="image-20230220223021981"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903495.png" alt="image-20230220223135663"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903529.png" alt="image-20230220223208973"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903611.png" alt="image-20230220223331211"></p>
+<p>我網卡沒配置好，不然應該是要設成固定IP較佳</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903634.png" alt="image-20230220223353803"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903732.png" alt="image-20230220223532356"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903783.png" alt="image-20230220223623645"></p>
+<p>Share Disk</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903833.png" alt="image-20230220223713560"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903883.png" alt="image-20230220223803736"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903936.png" alt="image-20230220223856159"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676903969.png" alt="image-20230220223929225"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230220_1676905003.png" alt="image-20230220225643580"></p>
+<blockquote>
+<p>可先建立起後，再進windows failover cluster manager進行重新檢查sql failover cluster無法起動的原因</p>
+<p>檢查:TLS支援度、各node、vip 主機名稱在DNS裏是不是正確、防火牆、起動sql服務的ad帳號權限是否有node主機的administrator權限</p>
+</blockquote>
+<h3 id="Node-B"><a href="#Node-B" class="headerlink" title="Node B"></a>Node B</h3><p>新增node到sql failover cluster</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080612.png" alt="image-20230222234331936"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080642.png" alt="image-20230222234401864"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080660.png" alt="image-20230222234420672"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230222_1677080679.png" alt="image-20230222234439731"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163709.png" alt="image-20230223224829524"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163787.png" alt="image-20230223224932838"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677163826.png" alt="image-20230223225026687"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230223_1677167405.png" alt="image-20230223235005122"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168121.png" alt="image-20230224000200930"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168557.png" alt="image-20230224000917091"></p>
+<p>重起原本的primdy db主機後，可以在另一台主機看到已正確接手</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168797.png" alt="image-20230224001317302"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230224_1677168807.png" alt="image-20230224001327038"></p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論:"></a>結論:</h2><blockquote>
+<p>1.安裝SQL的主機權限要額外設定，不然就算用Administrator安裝也一樣報錯</p>
+<p>2.DCOM的權限是跟SSIS有關</p>
+<p>3.WMI和Reomte Registry的權限問題是有關連的，要一併處理</p>
+<p>4.FailOver Cluster的價錢比AlwaysOn便宜，並且無AlwaysOn切換時有資料不一致問題。如Storage有保護機制的，FailOver Cluster也不是無法使用的HA方案</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>HA</category>
+        <category>MSSQL</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo雜記</title>
+    <url>/2023/02/11/hexo%E9%9B%9C%E8%A8%98/</url>
+    <content><![CDATA[<p>Hexo設定記錄</p>
+<span id="more"></span>
+
+<h2 id="如何刪除-Hexo-已發佈的文章"><a href="#如何刪除-Hexo-已發佈的文章" class="headerlink" title="如何刪除 Hexo 已發佈的文章"></a>如何刪除 Hexo 已發佈的文章</h2><ol>
+<li><p>在%HEXO_HOME%/source/_post 資料夾中刪除不要的文章</p>
+</li>
+<li><p>CMD 執行hexo clean</p>
+</li>
+<li><p>在%HEXO_HOME% 刪除 db.json</p>
+</li>
+<li><p>執行hexo cl</p>
+</li>
+<li><p>執行hexo g -d</p>
+</li>
+</ol>
+<h2 id="首頁只顯示部份內容"><a href="#首頁只顯示部份內容" class="headerlink" title="首頁只顯示部份內容"></a>首頁只顯示部份內容</h2><p>文章中插<!--more-->就只會顯示該行以上的內容</p>
+<h2 id="留言版"><a href="#留言版" class="headerlink" title="留言版"></a>留言版</h2><p>參考 <a href="https://annkuoq.github.io/blog/2020-03-09-add-utterances-comment-widget-to-hexo/">https://annkuoq.github.io/blog/2020-03-09-add-utterances-comment-widget-to-hexo/</a></p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>lab設定</title>
+    <url>/2023/02/15/lab-info/</url>
+    <content><![CDATA[<p>做測試時會用的設定參考網址</p>
+<span id="more"></span>
+
+<h2 id="Windows-關畢密碼政策"><a href="#Windows-關畢密碼政策" class="headerlink" title="Windows 關畢密碼政策"></a>Windows 關畢密碼政策</h2><blockquote>
+<p>1.<a href="https://dev.twsiyuan.com/2017/01/configuring-password-policies-with-windows-server-2016.html">https://dev.twsiyuan.com/2017/01/configuring-password-policies-with-windows-server-2016.html</a></p>
+<p>2.gpedit.msc</p>
+</blockquote>
+<h2 id="Windows-AD-關畢密碼政策"><a href="#Windows-AD-關畢密碼政策" class="headerlink" title="Windows AD 關畢密碼政策"></a>Windows AD 關畢密碼政策</h2><blockquote>
+<p>1.gpmc.msc</p>
+<p>2.Computer Configuration &gt; Policies &gt; Windows Settings &gt; Security Settings &gt; Account Policies &gt; Password Policy</p>
+<p>3.Double-click on the “Password must meet complexity requirements” policy &gt; Select “Disabled”</p>
+</blockquote>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><blockquote>
+<p>7Zip</p>
+<p>Notepad++</p>
+<p>Typora</p>
+<p>virtualbox</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>OS</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>安裝多個MariaDB在同台主機上</title>
+    <url>/2023/02/07/mariadb-multiple-install/</url>
+    <content><![CDATA[<p>安裝多個MariaDB在同台主機上</p>
+<span id="more"></span>
+
+<p>待</p>
+]]></content>
+      <categories>
+        <category>MariaDB</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>rman_info</title>
+    <url>/2023/02/12/rman-info/</url>
+    <content><![CDATA[<p>rman限制I/O和檢查datafile</p>
+<span id="more"></span>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"></span><br><span class="line">@For /F <span class="string">&quot;tokens=1,2,3 delims=:. &quot;</span> %%A <span class="keyword">in</span> (<span class="string">&#x27;echo %time%&#x27;</span>) <span class="keyword">do</span> @(</span><br><span class="line">Set Hour=%%A</span><br><span class="line">Set Min=%%B</span><br><span class="line">Set Sec=%%C</span><br><span class="line">Set p_time=%%A_%%B_%%C</span><br><span class="line">)</span><br><span class="line">rem: xp @For /f <span class="string">&quot;tokens=1-3 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%c-%%b-%%a)</span><br><span class="line">rem: windows 2003 /f <span class="string">&quot;tokens=1-4 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%c-%%b-%%d)</span><br><span class="line">@For /f <span class="string">&quot;tokens=1-4 delims=/ &quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;date /t&#x27;</span>) <span class="keyword">do</span> (<span class="built_in">set</span> p_date=%%b-%%c)</span><br><span class="line"><span class="built_in">set</span> DateString=%p_date%-%p_time%</span><br><span class="line"></span><br><span class="line">@For /F <span class="string">&quot;tokens=1,2,3 delims=:. &quot;</span> %%A <span class="keyword">in</span> (<span class="string">&#x27;echo %time%&#x27;</span>) <span class="keyword">do</span> @(</span><br><span class="line">Set Hour=%%A</span><br><span class="line">Set Min=%%B</span><br><span class="line">Set Sec=%%C</span><br><span class="line">Set mail_time=%%A:%%B:%%C</span><br><span class="line">)</span><br><span class="line"><span class="built_in">set</span> ScriptHome=f:\dba</span><br><span class="line"><span class="built_in">set</span> ORACLE_SID=xxxx</span><br><span class="line"><span class="built_in">set</span> RmanBackupsetFolder=F:\Backup_RMAN_history\%ORACLE_SID%</span><br><span class="line"><span class="built_in">set</span> RmanRcvFile=%ScriptHome%\Rman\Log\rman_full_db_archivelog_%ORACLE_SID%.rcv</span><br><span class="line"><span class="built_in">set</span> RmanLogFile=%ScriptHome%\Rman\Log\rman_full_db_and_archivelog-%DateString%_%ORACLE_SID%.<span class="built_in">log</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> GetDateSql=%ScriptHome%\Rman\Log\GetDateString_for_rman_fbrhist.sql</span><br><span class="line"><span class="built_in">set</span> GetDateTxt=%ScriptHome%\Rman\Log\GetDateString_for_rman_fbrhist.txt</span><br><span class="line"></span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br><span class="line"><span class="built_in">echo</span> run &gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> &#123; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE RETENTION POLICY TO REDUNDANCY 3; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE BACKUP OPTIMIZATION OFF; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> SET CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_CONTROLFILE_%%F&#x27;</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> CONFIGURE CONTROLFILE AUTOBACKUP ON; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> crosscheck backup; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> crosscheck archivelog all; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt expired backup; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt expired archivelog all; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t1 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t2 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> allocate channel t3 <span class="built_in">type</span> disk rate 30M; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_DB_FULL_%%U&#x27;</span> database include current controlfile; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_ARCH_%%U&#x27;</span> archivelog all not backed up 1 <span class="built_in">times</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as compressed backupset format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_%DateString%_ARCH_%%U&#x27;</span> archivelog until time <span class="string">&#x27;sysdate-1&#x27;</span> delete input not backed up 1 <span class="built_in">times</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup as copy current controlfile format <span class="string">&#x27;%RmanBackupsetFolder%\%ORACLE_SID%_CONTROLFILE_%DateString%_%%U&#x27;</span>; &gt;&gt; %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> delete noprompt obsolete; &gt;&gt;  %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> backup validate check logical database; &gt;&gt;  %RmanRcvFile%</span><br><span class="line"><span class="built_in">echo</span> &#125; &gt;&gt; %RmanRcvFile%</span><br><span class="line"></span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br><span class="line">rman target / @%RmanRcvFile% &gt; %RmanLogFile%</span><br><span class="line">ping 1.1.1.1 -n 1 -w 5000&gt;nul</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+        <tag>Rman</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>oracle19c_auto_index</title>
+    <url>/2023/02/12/oracle19c-auto-index/</url>
+    <content><![CDATA[<p>Oracle 19c 新功能 : index 自動建立 (SQL Server早就有…..)</p>
+<span id="more"></span>
+
+<h2 id="Exadate的功能，一般Oracle要自行開起"><a href="#Exadate的功能，一般Oracle要自行開起" class="headerlink" title="Exadate的功能，一般Oracle要自行開起"></a>Exadate的功能，一般Oracle要自行開起</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200123.png" alt="image-20230212184248797"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200363.png" alt="image-20230212184342490"></p>
+<h2 id="設定存放Index的Tablespace"><a href="#設定存放Index的Tablespace" class="headerlink" title="設定存放Index的Tablespace"></a>設定存放Index的Tablespace</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200130.png" alt="image-20230212184445846"></p>
+<h2 id="指定那個schema生效，預設是全帳的schema"><a href="#指定那個schema生效，預設是全帳的schema" class="headerlink" title="指定那個schema生效，預設是全帳的schema"></a>指定那個schema生效，預設是全帳的schema</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200141.png" alt="image-20230212184520235"></p>
+<h2 id="可設定index自動維護是否關畢、產出建議、立即生效"><a href="#可設定index自動維護是否關畢、產出建議、立即生效" class="headerlink" title="可設定index自動維護是否關畢、產出建議、立即生效"></a>可設定index自動維護是否關畢、產出建議、立即生效</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200146.png" alt="image-20230212184551105"></p>
+<blockquote>
+<p>auto_index_retention_for_manual : 設定手動建立的index是否也要納入自動管理，也就手動建立的index可能因為很久沒有使用到，將會被自動刪除。預設是不納入自動管理</p>
+</blockquote>
+<h2 id="相關的view"><a href="#相關的view" class="headerlink" title="相關的view"></a>相關的view</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200151.png" alt="image-20230212184641019"></p>
+<h2 id="查看report"><a href="#查看report" class="headerlink" title="查看report"></a>查看report</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200155.png" alt="image-20230212184706042"></p>
+<blockquote>
+<p>SET SERVEROUTPUT ON SIZE 1000000<br>declare<br>  num number := 1;<br>  v_object_id number;<br>begin<br>  while num &lt;= 500<br>  loop<br>    select object_id into v_object_id from tts_binhu.auto_idx_test where object_id=trunc(dbms_random.value(0,10000));<br>    dbms_output.put_line(‘v_object_id:’||nvl(v_object_id,0));<br>    num := num + 1;<br>  end loop;<br>end;</p>
+<p>select * from dba_indexes where owner =’TTS_BINHU’ and table_name=’AUTO_IDX_TEST’</p>
+</blockquote>
+<hr>
+<h2 id="測試"><a href="#測試" class="headerlink" title="測試"></a>測試</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200161.png" alt="image-20230212184812670"></p>
+<h2 id="SELECT-DBMS-AUTO-INDEX-report-activity-FROM-dual"><a href="#SELECT-DBMS-AUTO-INDEX-report-activity-FROM-dual" class="headerlink" title="SELECT DBMS_AUTO_INDEX.report_activity() FROM dual;"></a>SELECT DBMS_AUTO_INDEX.report_activity() FROM dual;</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GENERAL INFORMATION</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Activity start               : 29-10月-2019 14:29:44 </span><br><span class="line"> Activity end                 : 30-10月-2019 14:29:44 </span><br><span class="line"> Executions completed         : 3                    </span><br><span class="line"> Executions interrupted       : 0                    </span><br><span class="line"> Executions with fatal error  : 0                    </span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">SUMMARY (AUTO INDEXES)</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Index candidates                              : 2                       </span><br><span class="line"> Indexes created (visible / invisible)         : 2 (2 / 0)               </span><br><span class="line"> Space used (visible / invisible)              : 7.34 MB (7.34 MB / 0 B) </span><br><span class="line"> Indexes dropped                               : 0                       </span><br><span class="line"> SQL statements verified                       : 6                       </span><br><span class="line"> SQL statements improved (improvement factor)  : 5 (1419.1x)             </span><br><span class="line"> SQL plan baselines created                    : 0                       </span><br><span class="line"> Overall improvement factor                    : 1183x                   </span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">SUMMARY (MANUAL INDEXES)</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Unused indexes    : 0   </span><br><span class="line"> Space used        : 0 B </span><br><span class="line"> Unusable indexes  : 0   </span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">INDEX DETAILS</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">1. The following indexes were created:</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">----------------------------------------------------------------------------------------------------</span><br><span class="line">| Owner     | Table         | Index                | Key                     | Type   | Properties |</span><br><span class="line">----------------------------------------------------------------------------------------------------</span><br><span class="line">| TTS_BINHU | AUTO_IDX_TEST | SYS_AI_0nfqz048chrwz | OBJECT_ID               | B-TREE | NONE       |</span><br><span class="line">| TTS_BINHU | AUTO_IDX_TEST | SYS_AI_5afppmx4u3fjp | OBJECT_NAME,OBJECT_TYPE | B-TREE | NONE       |</span><br><span class="line">----------------------------------------------------------------------------------------------------</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">VERIFICATION DETAILS</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">1. The performance of the following statements improved:</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : 6h02v1c3jm99z                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where object_name </span><br><span class="line">                      = &#x27;AUTO_IDX_TEST&#x27; and object_type=&#x27;TABLE&#x27;                 </span><br><span class="line"> Improvement Factor   : 1423.7x                                                 </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  715640                        36386                        </span><br><span class="line"> CPU Time (s):      492167                        127                          </span><br><span class="line"> Buffer Gets:       59872                         3                            </span><br><span class="line"> Optimizer Cost:    395                           4                            </span><br><span class="line"> Disk Reads:        1422                          2                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    0                             0                            </span><br><span class="line"> Executions:        42                            1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  395 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  395 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 1880695109 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    1 |   132 |    4 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    1 |   132 |    4 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_5afppmx4u3fjp |    1 |       |    3 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_NAME&quot;=&#x27;AUTO_IDX_TEST&#x27; AND &quot;OBJECT_TYPE&quot;=&#x27;TABLE&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : 6mmkppzn4pyd8                                           </span><br><span class="line"> SQL Text             : SELECT OBJECT_ID FROM TTS_BINHU.AUTO_IDX_TEST WHERE     </span><br><span class="line">                      OBJECT_ID=TRUNC(DBMS_RANDOM.VALUE(0,10000))               </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  720172                        22908                        </span><br><span class="line"> CPU Time (s):      717822                        9823                         </span><br><span class="line"> Buffer Gets:       2838                          2                            </span><br><span class="line"> Optimizer Cost:    412                           1                            </span><br><span class="line"> Disk Reads:        0                             1                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    1                             1                            </span><br><span class="line"> Executions:        2                             1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  412 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |     5 |  412 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 252073491 </span><br><span class="line"></span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation          | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT   |                      |    1 |     5 |    1 | 00:00:01 |</span><br><span class="line">| * 1 |   INDEX RANGE SCAN | SYS_AI_0nfqz048chrwz |    1 |     5 |    1 | 00:00:01 |</span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 1 - access(&quot;OBJECT_ID&quot;=TRUNC(&quot;DBMS_RANDOM&quot;.&quot;VALUE&quot;(0,10000)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : acdnsvfpdjnw0                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where object_name </span><br><span class="line">                      = &#x27;MV_WH_COMPANY&#x27; and object_type=&#x27;TABLE&#x27;                 </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  535958                        874                          </span><br><span class="line"> CPU Time (s):      469385                        0                            </span><br><span class="line"> Buffer Gets:       60976                         4                            </span><br><span class="line"> Optimizer Cost:    395                           4                            </span><br><span class="line"> Disk Reads:        0                             1                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    43                            1                            </span><br><span class="line"> Executions:        43                            1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  395 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  395 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 1880695109 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    2 |   264 |    4 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    2 |   264 |    4 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_5afppmx4u3fjp |    1 |       |    3 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_NAME&quot;=&#x27;MV_WH_COMPANY&#x27; AND &quot;OBJECT_TYPE&quot;=&#x27;TABLE&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : c3c69a1dkwucj                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where             </span><br><span class="line">                      object_id=trunc(dbms_random.value(0,10000))               </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  397948                        17176                        </span><br><span class="line"> CPU Time (s):      397844                        158                          </span><br><span class="line"> Buffer Gets:       1420                          3                            </span><br><span class="line"> Optimizer Cost:    412                           2                            </span><br><span class="line"> Disk Reads:        0                             7                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    2                             1                            </span><br><span class="line"> Executions:        1                             1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  412 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  412 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3717726382 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_0nfqz048chrwz |    1 |       |    1 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_ID&quot;=TRUNC(&quot;DBMS_RANDOM&quot;.&quot;VALUE&quot;(0,10000)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : dt1tymnjfa8m6                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where             </span><br><span class="line">                      object_id=trunc(dbms_random.value(0,10000))               </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  5006616                       190                          </span><br><span class="line"> CPU Time (s):      4992671                       190                          </span><br><span class="line"> Buffer Gets:       17018                         3                            </span><br><span class="line"> Optimizer Cost:    412                           2                            </span><br><span class="line"> Disk Reads:        0                             0                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    9                             1                            </span><br><span class="line"> Executions:        12                            1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  412 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  412 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3717726382 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_0nfqz048chrwz |    1 |       |    1 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_ID&quot;=TRUNC(&quot;DBMS_RANDOM&quot;.&quot;VALUE&quot;(0,10000)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">ERRORS</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line">No errors found.</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="刪除自動建立的index"><a href="#刪除自動建立的index" class="headerlink" title="刪除自動建立的index"></a>刪除自動建立的index</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200169.png" alt="image-20230212185015654"></p>
+<blockquote>
+<p>無法直接刪除</p>
+</blockquote>
+<h2 id="更新狀態由Auto由Yes-gt-No"><a href="#更新狀態由Auto由Yes-gt-No" class="headerlink" title="更新狀態由Auto由Yes-&gt;No"></a>更新狀態由Auto由Yes-&gt;No</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200178.png" alt="image-20230212185212945"></p>
+<h2 id="刪除Index-Name有區分大小寫"><a href="#刪除Index-Name有區分大小寫" class="headerlink" title="刪除Index Name有區分大小寫"></a>刪除Index Name有區分大小寫</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200202.png" alt="image-20230212185256081"></p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><blockquote>
+<p>1.測試的DB版本:Oracle 19c</p>
+<p>2.自動建立index不支援function/partition table</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle19c</category>
+      </categories>
+      <tags>
+        <tag>PerformanceTuning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>script_ftp_restart</title>
+    <url>/2023/04/16/script-ftp-restart/</url>
+    <content><![CDATA[<p>Ftp檢查檔案Size不相同，執行續傳功能</p>
+<span id="more"></span>
+
+
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/bash</span></span><br><span class="line"></span><br><span class="line">zip_passwd=`<span class="built_in">date</span> +%b%d%Y`</span><br><span class="line">dump_folder=/dbback/data_pump</span><br><span class="line">ftp_name=/oradata/schedule/log/dba_ftp_</span><br><span class="line">ftp_name_list=<span class="variable">$&#123;ftp_name&#125;</span>_list</span><br><span class="line">ftp_ck_name=/oradata/schedule/log/dba_ftp_ck_</span><br><span class="line">ftp_size_name=/oradata/schedule/log/dba_ftp_size_</span><br><span class="line">ftp_reput_name=/oradata/schedule/log/dba_ftp_reput_</span><br><span class="line"></span><br><span class="line"><span class="built_in">ls</span> -ltr <span class="variable">$&#123;dump_folder&#125;</span> | grep <span class="variable">$&#123;zip_passwd&#125;</span> | <span class="built_in">tr</span> -s <span class="string">&#x27; &#x27;</span> | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f9 &gt; <span class="variable">$&#123;ftp_name_list&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;user ftpuser ftppasswd&#x27;</span> &gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;bi&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;prompt&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> lcd <span class="variable">$&#123;dump_folder&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> put <span class="variable">$&#123;line&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">   <span class="built_in">echo</span> <span class="string">&#x27;bye&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&#x27;user ftpuser ftppasswd&#x27;</span> &gt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">  <span class="built_in">echo</span> <span class="built_in">dir</span> <span class="variable">$&#123;line&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&#x27;bye&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  ftp -n FTP_IP &lt; <span class="variable">$&#123;ftp_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">  ftp -n FTP_IP &lt; <span class="variable">$&#123;ftp_ck_name&#125;</span><span class="variable">$&#123;line&#125;</span> &gt; <span class="variable">$&#123;ftp_size_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> <span class="variable">$&#123;ftp_name_list&#125;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  ftp_sfile=`<span class="built_in">cat</span> <span class="variable">$&#123;ftp_size_name&#125;</span><span class="variable">$&#123;line&#125;</span> | grep <span class="variable">$&#123;zip_passwd&#125;</span> | <span class="built_in">tr</span> -s <span class="string">&#x27; &#x27;</span> | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f5`</span><br><span class="line">  local_sfile=`<span class="built_in">ls</span> -ltr <span class="variable">$&#123;dump_folder&#125;</span> | grep <span class="variable">$&#123;line&#125;</span> | <span class="built_in">tr</span> -s <span class="string">&#x27; &#x27;</span> | <span class="built_in">cut</span> -d <span class="string">&#x27; &#x27;</span> -f5`</span><br><span class="line">  <span class="keyword">if</span> [ <span class="variable">$&#123;ftp_sfile&#125;</span> -gt 0 ] &amp;&amp; [ <span class="variable">$&#123;ftp_sfile&#125;</span> -ne <span class="variable">$&#123;local_sfile&#125;</span> ]; <span class="keyword">then</span></span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;user ftpuser ftppasswd&#x27;</span> &gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;bi&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;prompt&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> lcd <span class="variable">$&#123;dump_folder&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> restart <span class="variable">$&#123;ftp_sfile&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> put <span class="variable">$&#123;line&#125;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     <span class="built_in">echo</span> <span class="string">&#x27;bye&#x27;</span> &gt;&gt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span>;</span><br><span class="line">     ftp -n FTP_IP &lt; <span class="variable">$&#123;ftp_reput_name&#125;</span><span class="variable">$&#123;line&#125;</span> ;</span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>OS</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sqlldr_hdsize</title>
+    <url>/2023/02/12/sqlldr-hdsize/</url>
+    <content><![CDATA[<p>sqlldr傳硬碟資訊到table</p>
+<span id="more"></span>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rem: @echo off</span><br><span class="line">set ORACLE_SID=xxxx</span><br><span class="line">set ScriptHome=F:\dba_for_primary_role\Os</span><br><span class="line">set LogFolder=%ScriptHome%\Log</span><br><span class="line">set OS_HDSize_Info_File=%LogFolder%\OS_HDSize.csv</span><br><span class="line">set SQLLDR_BADFILE=%LogFolder%\OS_HDSize.bad</span><br><span class="line">set SQLLDR_DISCARDFILE=%LogFolder%\OS_HDSize.dsc</span><br><span class="line">set TableName=binhu.dba_HDSIZE_LOG</span><br><span class="line">set SQLLDR_CTL_File=%ScriptHome%\Log\LoadHDSize.ctl</span><br><span class="line">set SQLLDR_CTL_Log=%ScriptHome%\Log\LoadHDSize.log</span><br><span class="line">set GetHOSTIPSql=%ScriptHome%\Log\GetHOSTIP.sql</span><br><span class="line">set GetHOSTIPTxt=%ScriptHome%\Log\GetHOSTIP.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set IP=xxx.xxx.xxx.xxx</span><br><span class="line"></span><br><span class="line">wmic.exe /OUTPUT:%OS_HDSize_Info_File%  logicaldisk where &quot;drivetype=3&quot; get name,freespace,size </span><br><span class="line"></span><br><span class="line">rem: for windows 2008</span><br><span class="line">set GET_COMPUTERNAME=%COMPUTERNAME%</span><br><span class="line"></span><br><span class="line">echo LOAD DATA &gt; %SQLLDR_CTL_File%</span><br><span class="line">echo CHARACTERSET &#x27;AL16UTF16&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo INFILE &#x27;%OS_HDSize_Info_File%&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo BADFILE &#x27;%SQLLDR_BADFILE%&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo DISCARDFILE &#x27;%SQLLDR_DISCARDFILE%&#x27; &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo INTO TABLE %TableName% &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo APPEND &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo FIELDS TERMINATED BY WHITESPACE &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo TRAILING NULLCOLS &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo (HOSTNAME CONSTANT &quot;%GET_COMPUTERNAME%&quot;, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo FREE_SIZE_BYTE, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo MOUNT_POINT_NAME, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo MOUNT_POINT_SIZE_BYTE, &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line">echo HOSTIP CONSTANT  &quot;%IP%&quot;) &gt;&gt; %SQLLDR_CTL_File%</span><br><span class="line"></span><br><span class="line">sqlldr / control=%SQLLDR_CTL_File%  log=%SQLLDR_CTL_Log%</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>windows_update</title>
+    <url>/2023/02/13/windows-update/</url>
+    <content><![CDATA[<p>Update失敗時解決方案1</p>
+<span id="more"></span>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">net stop wuauserv</span><br><span class="line">--停止update服務</span><br><span class="line"></span><br><span class="line">C:\Windows\SoftwareDistribution</span><br><span class="line">--將目錄更名後，再重建一個SoftwareDistribution</span><br><span class="line"></span><br><span class="line">net start wuauserv</span><br><span class="line">--起動update服務</span><br><span class="line"></span><br><span class="line">再試看看了~</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+</search>
