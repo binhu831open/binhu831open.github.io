@@ -73,6 +73,40 @@
       </tags>
   </entry>
   <entry>
+    <title>Oracle-EM</title>
+    <url>/2023/03/12/Oracle-EM/</url>
+    <content><![CDATA[<p>重建11g EM問題處理</p>
+<span id="more"></span>
+
+
+
+<p>1.環境變數</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">set ORACLE_UNQNAME</span><br><span class="line">set ORACLE_HOME</span><br><span class="line">set ORACLE_HOSTNAME</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>2.刪除EM的檢查</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">emca -deconfig dbcontrol db -repos drop</span><br><span class="line"></span><br><span class="line">手動檢查這些物件都要不存在</span><br><span class="line">SYSMAN</span><br><span class="line">MGMT_VIEW</span><br><span class="line">MGMT_USER</span><br><span class="line">MGMT_TARGET_BLACKOUTS</span><br><span class="line">SETEMVIEWUSERCONTEXT</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>3.建立EM</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">emca -config dbcontrol db -repos create</span><br><span class="line"></span><br><span class="line">--建立錯誤可考慮刪除舊的目錄</span><br><span class="line">$ORACLE_HOME/&lt;主機名稱&gt;_&lt;Oracle_SID&gt;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle11g</category>
+      </categories>
+      <tags>
+        <tag>ORA-</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Oracle-Broker</title>
     <url>/2023/03/12/Oracle-Broker/</url>
     <content><![CDATA[<p>11g 刪除 broker 設定值</p>
@@ -121,40 +155,6 @@
       </categories>
       <tags>
         <tag>Script</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Oracle-EM</title>
-    <url>/2023/03/12/Oracle-EM/</url>
-    <content><![CDATA[<p>重建11g EM問題處理</p>
-<span id="more"></span>
-
-
-
-<p>1.環境變數</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">set ORACLE_UNQNAME</span><br><span class="line">set ORACLE_HOME</span><br><span class="line">set ORACLE_HOSTNAME</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>2.刪除EM的檢查</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">emca -deconfig dbcontrol db -repos drop</span><br><span class="line"></span><br><span class="line">手動檢查這些物件都要不存在</span><br><span class="line">SYSMAN</span><br><span class="line">MGMT_VIEW</span><br><span class="line">MGMT_USER</span><br><span class="line">MGMT_TARGET_BLACKOUTS</span><br><span class="line">SETEMVIEWUSERCONTEXT</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>3.建立EM</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">emca -config dbcontrol db -repos create</span><br><span class="line"></span><br><span class="line">--建立錯誤可考慮刪除舊的目錄</span><br><span class="line">$ORACLE_HOME/&lt;主機名稱&gt;_&lt;Oracle_SID&gt;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Oracle</category>
-        <category>Oracle11g</category>
-      </categories>
-      <tags>
-        <tag>ORA-</tag>
       </tags>
   </entry>
   <entry>
@@ -323,6 +323,21 @@
       </tags>
   </entry>
   <entry>
+    <title>ProxySQL</title>
+    <url>/2023/02/07/ProxySQL/</url>
+    <content><![CDATA[<p>Prox暫定</p>
+<span id="more"></span>
+
+<p>待</p>
+]]></content>
+      <categories>
+        <category>MariaDB</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Oracle19c_Rman_Restore_Table</title>
     <url>/2023/02/12/Oracle19c-Rman-Restore-Table/</url>
     <content><![CDATA[<p>Oracle 19c 新功能 : Rman Restore table</p>
@@ -356,15 +371,38 @@
       </tags>
   </entry>
   <entry>
-    <title>ProxySQL</title>
-    <url>/2023/02/07/ProxySQL/</url>
-    <content><![CDATA[<p>Prox暫定</p>
+    <title>dblink_oracle_mssql</title>
+    <url>/2023/04/16/dblink-oracle-mssql/</url>
+    <content><![CDATA[<p>MSSQL建 DB Link 到Oracle</p>
 <span id="more"></span>
 
-<p>待</p>
+
+
+<h2 id="OLEDB-Install"><a href="#OLEDB-Install" class="headerlink" title="OLEDB Install"></a>OLEDB Install</h2><p>install.bat oledb D:\app\oracle odac  #D:\app\oracle 依需求自行調整</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632514.png" alt="image-20230416160810692"></p>
+<p>將目錄加入OS環境變數後，要重開主機</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632590.png" alt="image-20230416160950747"></p>
+<h2 id="設定SQL-Server-To-Oracle"><a href="#設定SQL-Server-To-Oracle" class="headerlink" title="設定SQL Server To Oracle"></a>設定SQL Server To Oracle</h2><p>1.安裝Oracle Client和配置tnsnames.ora</p>
+<p>2.MSSQL 建立DB Link</p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632785.png" alt="image-20230416161305303"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632912.png" alt="image-20230416161512250"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632965.png" alt="image-20230416161605145"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from [DB Link 名稱]..SchemaName.TableName</span><br><span class="line">SchemaName和TableName要為大寫的</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
 ]]></content>
       <categories>
-        <category>MariaDB</category>
+        <category>Oracle</category>
+        <category>MSSQL</category>
       </categories>
       <tags>
         <tag>Install</tag>
@@ -499,41 +537,32 @@
       </tags>
   </entry>
   <entry>
-    <title>dblink_oracle_mssql</title>
-    <url>/2023/04/16/dblink-oracle-mssql/</url>
-    <content><![CDATA[<p>MSSQL建 DB Link 到Oracle</p>
+    <title>lab設定</title>
+    <url>/2023/02/15/lab-info/</url>
+    <content><![CDATA[<p>做測試時會用的設定參考網址</p>
 <span id="more"></span>
 
-
-
-<h2 id="OLEDB-Install"><a href="#OLEDB-Install" class="headerlink" title="OLEDB Install"></a>OLEDB Install</h2><p>install.bat oledb D:\app\oracle odac  #D:\app\oracle 依需求自行調整</p>
-<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632514.png" alt="image-20230416160810692"></p>
-<p>將目錄加入OS環境變數後，要重開主機</p>
-<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632590.png" alt="image-20230416160950747"></p>
-<h2 id="設定SQL-Server-To-Oracle"><a href="#設定SQL-Server-To-Oracle" class="headerlink" title="設定SQL Server To Oracle"></a>設定SQL Server To Oracle</h2><p>1.安裝Oracle Client和配置tnsnames.ora</p>
-<p>2.MSSQL 建立DB Link</p>
-<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632785.png" alt="image-20230416161305303"></p>
-<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632912.png" alt="image-20230416161512250"></p>
-<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/04/upgit_20230416_1681632965.png" alt="image-20230416161605145"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from [DB Link 名稱]..SchemaName.TableName</span><br><span class="line">SchemaName和TableName要為大寫的</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
+<h2 id="Windows-關畢密碼政策"><a href="#Windows-關畢密碼政策" class="headerlink" title="Windows 關畢密碼政策"></a>Windows 關畢密碼政策</h2><blockquote>
+<p>1.<a href="https://dev.twsiyuan.com/2017/01/configuring-password-policies-with-windows-server-2016.html">https://dev.twsiyuan.com/2017/01/configuring-password-policies-with-windows-server-2016.html</a></p>
+<p>2.gpedit.msc</p>
+</blockquote>
+<h2 id="Windows-AD-關畢密碼政策"><a href="#Windows-AD-關畢密碼政策" class="headerlink" title="Windows AD 關畢密碼政策"></a>Windows AD 關畢密碼政策</h2><blockquote>
+<p>1.gpmc.msc</p>
+<p>2.Computer Configuration &gt; Policies &gt; Windows Settings &gt; Security Settings &gt; Account Policies &gt; Password Policy</p>
+<p>3.Double-click on the “Password must meet complexity requirements” policy &gt; Select “Disabled”</p>
+</blockquote>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><blockquote>
+<p>7Zip</p>
+<p>Notepad++</p>
+<p>Typora</p>
+<p>virtualbox</p>
+</blockquote>
 ]]></content>
       <categories>
-        <category>Oracle</category>
-        <category>MSSQL</category>
+        <category>OS</category>
       </categories>
       <tags>
-        <tag>Install</tag>
+        <tag>Script</tag>
       </tags>
   </entry>
   <entry>
@@ -569,35 +598,6 @@
       </tags>
   </entry>
   <entry>
-    <title>lab設定</title>
-    <url>/2023/02/15/lab-info/</url>
-    <content><![CDATA[<p>做測試時會用的設定參考網址</p>
-<span id="more"></span>
-
-<h2 id="Windows-關畢密碼政策"><a href="#Windows-關畢密碼政策" class="headerlink" title="Windows 關畢密碼政策"></a>Windows 關畢密碼政策</h2><blockquote>
-<p>1.<a href="https://dev.twsiyuan.com/2017/01/configuring-password-policies-with-windows-server-2016.html">https://dev.twsiyuan.com/2017/01/configuring-password-policies-with-windows-server-2016.html</a></p>
-<p>2.gpedit.msc</p>
-</blockquote>
-<h2 id="Windows-AD-關畢密碼政策"><a href="#Windows-AD-關畢密碼政策" class="headerlink" title="Windows AD 關畢密碼政策"></a>Windows AD 關畢密碼政策</h2><blockquote>
-<p>1.gpmc.msc</p>
-<p>2.Computer Configuration &gt; Policies &gt; Windows Settings &gt; Security Settings &gt; Account Policies &gt; Password Policy</p>
-<p>3.Double-click on the “Password must meet complexity requirements” policy &gt; Select “Disabled”</p>
-</blockquote>
-<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><blockquote>
-<p>7Zip</p>
-<p>Notepad++</p>
-<p>Typora</p>
-<p>virtualbox</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>OS</category>
-      </categories>
-      <tags>
-        <tag>Script</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>安裝多個MariaDB在同台主機上</title>
     <url>/2023/02/07/mariadb-multiple-install/</url>
     <content><![CDATA[<p>安裝多個MariaDB在同台主機上</p>
@@ -627,6 +627,27 @@
 <blockquote>
 <p>預設的extended events還是不怎好用，只好手動寫一隻Mail告警Lock</p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>MSSQL</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+        <tag>Email</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mssql_info</title>
+    <url>/2023/05/25/mssql-info/</url>
+    <content><![CDATA[<p>SQL 維護雜記</p>
+<span id="more"></span>
+
+<h2 id="給於SQL-Agent權限"><a href="#給於SQL-Agent權限" class="headerlink" title="給於SQL Agent權限"></a>給於SQL Agent權限</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">USE msdb;</span><br><span class="line">GO</span><br><span class="line">EXEC sp_addrolemember &#x27;SQLAgentOperatorRole&#x27;, &#x27;使用者&#x27;;</span><br><span class="line">GO</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="給User有Truncate權限"><a href="#給User有Truncate權限" class="headerlink" title="給User有Truncate權限"></a>給User有Truncate權限</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">解決方案參閱 https://www.mssqltips.com/sqlservertip/2583/grant-truncate-table-permissions-in-sql-server-without-alter-table/</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>MSSQL</category>
