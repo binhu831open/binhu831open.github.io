@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"binhu831open.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="SQL 維護Script">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mssql_script">
+<meta property="og:url" content="https://binhu831open.github.io/2024/03/27/mssql-script/index.html">
+<meta property="og:site_name" content="敗家貓">
+<meta property="og:description" content="SQL 維護Script">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2024-03-27T15:09:53.000Z">
+<meta property="article:modified_time" content="2024-03-27T15:15:30.301Z">
+<meta property="article:author" content="敗家貓">
+<meta property="article:tag" content="Script">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://binhu831open.github.io/2024/03/27/mssql-script/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>mssql_script | 敗家貓</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">敗家貓</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://binhu831open.github.io/2024/03/27/mssql-script/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="敗家貓">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="敗家貓">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          mssql_script
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2024-03-27 23:09:53 / 修改時間：23:15:30" itemprop="dateCreated datePublished" datetime="2024-03-27T23:09:53+08:00">2024-03-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MSSQL/" itemprop="url" rel="index"><span itemprop="name">MSSQL</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>SQL 維護Script</p>
+<span id="more"></span>
+
+
+
+<h1 id="SQL-Server-Script"><a href="#SQL-Server-Script" class="headerlink" title="SQL Server Script"></a>SQL Server Script</h1><h2 id="PowerShell-SMO"><a href="#PowerShell-SMO" class="headerlink" title="PowerShell+SMO"></a>PowerShell+SMO</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$server</span> = <span class="string">&quot;ServerName&quot;</span></span><br><span class="line"><span class="variable">$srcDB</span>  = <span class="string">&quot;DBName&quot;</span></span><br><span class="line"><span class="variable">$dump</span>   = <span class="string">&quot;path folder&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Stop on any error</span></span><br><span class="line"><span class="variable">$ErrorActionPreference</span> = <span class="string">&quot;stop&quot;</span></span><br><span class="line"></span><br><span class="line">[<span class="built_in">void</span>] [<span class="type">System.Reflection.Assembly</span>]::LoadWithPartialName(<span class="string">&#x27;Microsoft.SqlServer.SMO&#x27;</span>)</span><br><span class="line">[<span class="built_in">void</span>] [<span class="type">System.Reflection.Assembly</span>]::LoadWithPartialName(<span class="string">&#x27;Microsoft.SQlServer.SMOExtended&#x27;</span>)</span><br><span class="line"><span class="variable">$xfer</span> = [<span class="type">Microsoft.SqlServer.Management.SMO.Transfer</span>] ([<span class="type">Microsoft.SqlServer.Management.SMO.Server</span>] <span class="variable">$server</span>).Databases[<span class="variable">$srcDB</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Set export options.</span></span><br><span class="line"><span class="variable">$opts</span> = <span class="built_in">New-Object</span> Microsoft.SqlServer.Management.SMO.ScriptingOptions</span><br><span class="line"><span class="variable">$opts</span>.Filename              = <span class="variable">$dump</span></span><br><span class="line"><span class="variable">$opts</span>.ToFileOnly            = <span class="variable">$true</span></span><br><span class="line"><span class="variable">$opts</span>.AllowSystemObjects    = <span class="variable">$false</span></span><br><span class="line"><span class="variable">$opts</span>.Statistics            = <span class="variable">$false</span></span><br><span class="line"><span class="variable">$opts</span>.ScriptDataCompression = <span class="variable">$true</span></span><br><span class="line"><span class="variable">$opts</span>.DRIAll = <span class="variable">$true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##table / index</span></span><br><span class="line"><span class="variable">$opts</span>.ClusteredIndexes = <span class="variable">$true</span></span><br><span class="line"><span class="variable">$opts</span>.NonClusteredIndexes = <span class="variable">$true</span></span><br><span class="line"><span class="variable">$opts</span>.Indexes = <span class="variable">$true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##trigger</span></span><br><span class="line"><span class="variable">$opts</span>.Triggers = <span class="variable">$true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##grant</span></span><br><span class="line"><span class="variable">$opts</span>.Permissions = <span class="variable">$true</span></span><br><span class="line"><span class="variable">$opts</span>.PrimaryObject = <span class="variable">$true</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$xfer</span>.options    = <span class="variable">$opts</span></span><br><span class="line"><span class="variable">$xfer</span>.ScriptTransfer()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="查SMO可用的參數"><a href="#查SMO可用的參數" class="headerlink" title="查SMO可用的參數"></a>查SMO可用的參數</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#PowerShell環境執行</span></span><br><span class="line"><span class="variable">$options</span> = <span class="built_in">New-DbaScriptingOption</span></span><br><span class="line"><span class="variable">$options</span> | <span class="built_in">Get-Member</span></span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="DBATools-Script"><a href="#DBATools-Script" class="headerlink" title="DBATools/Script"></a>DBATools/Script</h2><h3 id="DBATools"><a href="#DBATools" class="headerlink" title="DBATools"></a>DBATools</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.官網: https://dbatools.io/</span><br><span class="line">2.戴入方式 :  </span><br><span class="line">  Import-Module f:\tools\dbatools.library</span><br><span class="line">  Import-Module f:\tools\dbatools</span><br><span class="line">  </span><br><span class="line">  Set-DbatoolsConfig -FullName sql.connection.trustcert -Value $true -Register</span><br><span class="line">  Set-DbatoolsConfig -FullName sql.connection.encrypt -Value $false -Register</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Server-Role"><a href="#Server-Role" class="headerlink" title="Server Role"></a>Server Role</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Export-DbaServerRole -SqlInstance &quot;ServerName&quot; -ExcludeFixedRole -Path d:\tmp\5 -Append</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="DB-Role"><a href="#DB-Role" class="headerlink" title="DB Role"></a>DB Role</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Export-DbaDbRole -SqlInstance &quot;ServerName&quot; -Database DB1 -ExcludeFixedRole -IncludeRoleMember -Path d:\tmp\</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="User-amp-Grant"><a href="#User-amp-Grant" class="headerlink" title="User&amp;Grant"></a>User&amp;Grant</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Export-DbaUser -SqlInstance &quot;ServerName&quot; -Database DB1 -Path d:\tmp\5 #-Append</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Table"><a href="#Table" class="headerlink" title="Table"></a>Table</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-DbaDbTable -SqlInstance &quot;ServerName&quot; -Database DB1 | Export-DbaScript -FilePath &quot;d:\tmp\db_tables.sql&quot; -Append</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="View"><a href="#View" class="headerlink" title="View"></a>View</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-DbaDbView -SqlInstance &quot;ServerName&quot; -Database DB1 -ExcludeSystemView | Export-DbaScript -FilePath &quot;d:\tmp\db_view.sql&quot;  -Append</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="StoredProcedures"><a href="#StoredProcedures" class="headerlink" title="StoredProcedures"></a>StoredProcedures</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-DbaDbStoredProcedure  -SqlInstance &quot;ServerName&quot; -Database DB1  -ExcludeSystemSp | Export-DbaScript -FilePath &quot;d:\tmp\db_sp.sql&quot; -Append</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Triggers"><a href="#Triggers" class="headerlink" title="Triggers"></a>Triggers</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-DbaDbObjectTrigger -SqlInstance &quot;ServerName&quot; -Database DB1 | Export-DbaScript -FilePath &quot;d:\tmp\db_trigger.sql&quot; -Append</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> functions(routine_name) <span class="keyword">as</span> </span><br><span class="line">  (<span class="keyword">SELECT</span> ROUTINE_NAME <span class="keyword">FROM</span> information_schema.routines <span class="keyword">WHERE</span> routine_type <span class="operator">=</span> <span class="string">&#x27;FUNCTION&#x27;</span>)</span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line">  OBJECT_DEFINITION(OBJECT_ID(routine_name)) <span class="keyword">AS</span> [Object Definition] </span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">  functions</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line">SELECT &#x27; CREATE &#x27; +</span><br><span class="line">       CASE </span><br><span class="line">            WHEN I.is_unique = 1 THEN &#x27; UNIQUE &#x27;</span><br><span class="line">            ELSE &#x27;&#x27;</span><br><span class="line">       END +</span><br><span class="line">       I.type_desc COLLATE DATABASE_DEFAULT + &#x27; INDEX &#x27; +</span><br><span class="line">       &#x27;[&#x27; + I.name+ &#x27;]&#x27;   + &#x27; ON &#x27; +</span><br><span class="line">       SCHEMA_NAME(T.schema_id) + &#x27;.&#x27; + T.name + &#x27; ( &#x27; +</span><br><span class="line">       KeyColumns + &#x27; )  &#x27; +</span><br><span class="line">       ISNULL(&#x27; INCLUDE (&#x27; + IncludedColumns + &#x27; ) &#x27;, &#x27;&#x27;) +</span><br><span class="line">       ISNULL(&#x27; WHERE  &#x27; + I.filter_definition, &#x27;&#x27;) + &#x27; WITH ( &#x27; +</span><br><span class="line">       CASE </span><br><span class="line">            WHEN I.is_padded = 1 THEN &#x27; PAD_INDEX = ON &#x27;</span><br><span class="line">            ELSE &#x27; PAD_INDEX = OFF &#x27;</span><br><span class="line">       END + &#x27;,&#x27; +</span><br><span class="line">       &#x27;FILLFACTOR = &#x27; + CONVERT(</span><br><span class="line">           CHAR(5),</span><br><span class="line">           CASE </span><br><span class="line">                WHEN I.fill_factor = 0 THEN 100</span><br><span class="line">                ELSE I.fill_factor</span><br><span class="line">           END</span><br><span class="line">       ) + &#x27;,&#x27; +</span><br><span class="line">       -- default value </span><br><span class="line">       &#x27;SORT_IN_TEMPDB = OFF &#x27; + &#x27;,&#x27; +</span><br><span class="line">       CASE </span><br><span class="line">            WHEN I.ignore_dup_key = 1 THEN &#x27; IGNORE_DUP_KEY = ON &#x27;</span><br><span class="line">            ELSE &#x27; IGNORE_DUP_KEY = OFF &#x27;</span><br><span class="line">       END + &#x27;,&#x27; +</span><br><span class="line">       CASE </span><br><span class="line">            WHEN ST.no_recompute = 0 THEN &#x27; STATISTICS_NORECOMPUTE = OFF &#x27;</span><br><span class="line">            ELSE &#x27; STATISTICS_NORECOMPUTE = ON &#x27;</span><br><span class="line">       END + &#x27;,&#x27; +</span><br><span class="line">       &#x27; ONLINE = OFF &#x27; + &#x27;,&#x27; +</span><br><span class="line">       CASE </span><br><span class="line">            WHEN I.allow_row_locks = 1 THEN &#x27; ALLOW_ROW_LOCKS = ON &#x27;</span><br><span class="line">            ELSE &#x27; ALLOW_ROW_LOCKS = OFF &#x27;</span><br><span class="line">       END + &#x27;,&#x27; +</span><br><span class="line">       CASE </span><br><span class="line">            WHEN I.allow_page_locks = 1 THEN &#x27; ALLOW_PAGE_LOCKS = ON &#x27;</span><br><span class="line">            ELSE &#x27; ALLOW_PAGE_LOCKS = OFF &#x27;</span><br><span class="line">       END + &#x27; ) ON [&#x27; +</span><br><span class="line">       DS.name + &#x27; ] &#x27; +  CHAR(13) + CHAR(10) + &#x27; GO&#x27; [CreateIndexScript]</span><br><span class="line">FROM   sys.indexes I</span><br><span class="line">       JOIN sys.tables T</span><br><span class="line">            ON  T.object_id = I.object_id</span><br><span class="line">       JOIN sys.sysindexes SI</span><br><span class="line">            ON  I.object_id = SI.id</span><br><span class="line">            AND I.index_id = SI.indid</span><br><span class="line">       JOIN (</span><br><span class="line">                SELECT *</span><br><span class="line">                FROM   (</span><br><span class="line">                           SELECT IC2.object_id,</span><br><span class="line">                                  IC2.index_id,</span><br><span class="line">                                  STUFF(</span><br><span class="line">                                      (</span><br><span class="line">                                          SELECT &#x27; , &#x27; + C.name + CASE </span><br><span class="line">                                                                       WHEN MAX(CONVERT(INT, IC1.is_descending_key)) </span><br><span class="line">                                                                            = 1 THEN </span><br><span class="line">                                                                            &#x27; DESC &#x27;</span><br><span class="line">                                                                       ELSE </span><br><span class="line">                                                                            &#x27; ASC &#x27;</span><br><span class="line">                                                                  END</span><br><span class="line">                                          FROM   sys.index_columns IC1</span><br><span class="line">                                                 JOIN sys.columns C</span><br><span class="line">                                                      ON  C.object_id = IC1.object_id</span><br><span class="line">                                                      AND C.column_id = IC1.column_id</span><br><span class="line">                                                      AND IC1.is_included_column = </span><br><span class="line">                                                          0</span><br><span class="line">                                          WHERE  IC1.object_id = IC2.object_id</span><br><span class="line">                                                 AND IC1.index_id = IC2.index_id</span><br><span class="line">                                          GROUP BY</span><br><span class="line">                                                 IC1.object_id,</span><br><span class="line">                                                 C.name,</span><br><span class="line">                                                 index_id</span><br><span class="line">                                          ORDER BY</span><br><span class="line">                                                 MAX(IC1.key_ordinal) </span><br><span class="line">                                                 FOR XML PATH(&#x27;&#x27;)</span><br><span class="line">                                      ),</span><br><span class="line">                                      1,</span><br><span class="line">                                      2,</span><br><span class="line">                                      &#x27;&#x27;</span><br><span class="line">                                  ) KeyColumns</span><br><span class="line">                           FROM   sys.index_columns IC2 </span><br><span class="line">                                  --WHERE IC2.Object_id = object_id(&#x27;Person.Address&#x27;) --Comment for all tables</span><br><span class="line">                           GROUP BY</span><br><span class="line">                                  IC2.object_id,</span><br><span class="line">                                  IC2.index_id</span><br><span class="line">                       ) tmp3</span><br><span class="line">            )tmp4</span><br><span class="line">            ON  I.object_id = tmp4.object_id</span><br><span class="line">            AND I.Index_id = tmp4.index_id</span><br><span class="line">       JOIN sys.stats ST</span><br><span class="line">            ON  ST.object_id = I.object_id</span><br><span class="line">            AND ST.stats_id = I.index_id</span><br><span class="line">       JOIN sys.data_spaces DS</span><br><span class="line">            ON  I.data_space_id = DS.data_space_id</span><br><span class="line">       JOIN sys.filegroups FG</span><br><span class="line">            ON  I.data_space_id = FG.data_space_id</span><br><span class="line">       LEFT JOIN (</span><br><span class="line">                SELECT *</span><br><span class="line">                FROM   (</span><br><span class="line">                           SELECT IC2.object_id,</span><br><span class="line">                                  IC2.index_id,</span><br><span class="line">                                  STUFF(</span><br><span class="line">                                      (</span><br><span class="line">                                          SELECT &#x27; , &#x27; + C.name</span><br><span class="line">                                          FROM   sys.index_columns IC1</span><br><span class="line">                                                 JOIN sys.columns C</span><br><span class="line">                                                      ON  C.object_id = IC1.object_id</span><br><span class="line">                                                      AND C.column_id = IC1.column_id</span><br><span class="line">                                                      AND IC1.is_included_column = </span><br><span class="line">                                                          1</span><br><span class="line">                                          WHERE  IC1.object_id = IC2.object_id</span><br><span class="line">                                                 AND IC1.index_id = IC2.index_id</span><br><span class="line">                                          GROUP BY</span><br><span class="line">                                                 IC1.object_id,</span><br><span class="line">                                                 C.name,</span><br><span class="line">                                                 index_id </span><br><span class="line">                                                 FOR XML PATH(&#x27;&#x27;)</span><br><span class="line">                                      ),</span><br><span class="line">                                      1,</span><br><span class="line">                                      2,</span><br><span class="line">                                      &#x27;&#x27;</span><br><span class="line">                                  ) IncludedColumns</span><br><span class="line">                           FROM   sys.index_columns IC2 </span><br><span class="line">                                  --WHERE IC2.Object_id = object_id(&#x27;Person.Address&#x27;) --Comment for all tables</span><br><span class="line">                           GROUP BY</span><br><span class="line">                                  IC2.object_id,</span><br><span class="line">                                  IC2.index_id</span><br><span class="line">                       ) tmp1</span><br><span class="line">                WHERE  IncludedColumns IS NOT NULL</span><br><span class="line">            ) tmp2</span><br><span class="line">            ON  tmp2.object_id = I.object_id</span><br><span class="line">            AND tmp2.index_id = I.index_id</span><br><span class="line">WHERE  I.is_primary_key = 0</span><br><span class="line">       AND I.is_unique_constraint = 0</span><br><span class="line">           --AND I.Object_id = object_id(&#x27;Person.Address&#x27;) --Comment for all tables</span><br><span class="line">           --AND I.name = &#x27;IX_Address_PostalCode&#x27; --comment for all indexes </span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Agent-Job"><a href="#Agent-Job" class="headerlink" title="Agent Job"></a>Agent Job</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-DbaAgentJob -SqlInstance &quot;ServerName&quot; | Export-DbaScript -FilePath &quot;d:\tmp\AgentJob.sql&quot; -Append</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Script/" rel="tag"># Script</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/05/25/mssql-info/" rel="prev" title="mssql_info">
+      <i class="fa fa-chevron-left"></i> mssql_info
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+<script src="https://utteranc.es/client.js"
+        repo="binhu831open/repo"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-Server-Script"><span class="nav-number">1.</span> <span class="nav-text">SQL Server Script</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PowerShell-SMO"><span class="nav-number">1.1.</span> <span class="nav-text">PowerShell+SMO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5SMO%E5%8F%AF%E7%94%A8%E7%9A%84%E5%8F%83%E6%95%B8"><span class="nav-number">1.1.1.</span> <span class="nav-text">查SMO可用的參數</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DBATools-Script"><span class="nav-number">1.2.</span> <span class="nav-text">DBATools&#x2F;Script</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DBATools"><span class="nav-number">1.2.1.</span> <span class="nav-text">DBATools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Server-Role"><span class="nav-number">1.2.2.</span> <span class="nav-text">Server Role</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DB-Role"><span class="nav-number">1.2.3.</span> <span class="nav-text">DB Role</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#User-amp-Grant"><span class="nav-number">1.2.4.</span> <span class="nav-text">User&amp;Grant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Table"><span class="nav-number">1.2.5.</span> <span class="nav-text">Table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#View"><span class="nav-number">1.2.6.</span> <span class="nav-text">View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#StoredProcedures"><span class="nav-number">1.2.7.</span> <span class="nav-text">StoredProcedures</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Triggers"><span class="nav-number">1.2.8.</span> <span class="nav-text">Triggers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Function"><span class="nav-number">1.2.9.</span> <span class="nav-text">Function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Index"><span class="nav-number">1.2.10.</span> <span class="nav-text">Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Agent-Job"><span class="nav-number">1.2.11.</span> <span class="nav-text">Agent Job</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">敗家貓</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/binhu831open" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;binhu831open" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">敗家貓</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 強力驅動
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
