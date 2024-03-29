@@ -24,6 +24,41 @@
       </tags>
   </entry>
   <entry>
+    <title>Oracle-Broker</title>
+    <url>/2023/03/12/Oracle-Broker/</url>
+    <content><![CDATA[<p>11g 刪除 broker 設定值</p>
+<span id="more"></span>
+
+
+
+<p>1.設定dg_broker_start為false</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">system</span> <span class="keyword">set</span> dg_broker_start <span class="operator">=</span> <span class="literal">FALSE</span> ;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.刪除dg_broker_config_file1/2</p>
+<blockquote>
+<p>刪除dg_broker_config_file1/2的檔案</p>
+</blockquote>
+<p>3.設定dg_broker_start為true</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">system</span> <span class="keyword">set</span> dg_broker_start <span class="operator">=</span> <span class="literal">TRUE</span> <span class="keyword">Scope</span><span class="operator">=</span><span class="keyword">both</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>4.重新配置broker</p>
+<blockquote>
+<p>show configuration應該要會空才對</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle11g</category>
+      </categories>
+      <tags>
+        <tag>Install</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Oracle ACL設定</title>
     <url>/2023/02/11/Oracle-ACL/</url>
     <content><![CDATA[<p>ACL維護和Mail</p>
@@ -86,75 +121,6 @@
       </categories>
       <tags>
         <tag>Script</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Oracle-Broker</title>
-    <url>/2023/03/12/Oracle-Broker/</url>
-    <content><![CDATA[<p>11g 刪除 broker 設定值</p>
-<span id="more"></span>
-
-
-
-<p>1.設定dg_broker_start為false</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">system</span> <span class="keyword">set</span> dg_broker_start <span class="operator">=</span> <span class="literal">FALSE</span> ;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>2.刪除dg_broker_config_file1/2</p>
-<blockquote>
-<p>刪除dg_broker_config_file1/2的檔案</p>
-</blockquote>
-<p>3.設定dg_broker_start為true</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">system</span> <span class="keyword">set</span> dg_broker_start <span class="operator">=</span> <span class="literal">TRUE</span> <span class="keyword">Scope</span><span class="operator">=</span><span class="keyword">both</span>;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>4.重新配置broker</p>
-<blockquote>
-<p>show configuration應該要會空才對</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Oracle</category>
-        <category>Oracle11g</category>
-      </categories>
-      <tags>
-        <tag>Install</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Oracle-EM</title>
-    <url>/2023/03/12/Oracle-EM/</url>
-    <content><![CDATA[<p>重建11g EM問題處理</p>
-<span id="more"></span>
-
-
-
-<p>1.環境變數</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">set ORACLE_UNQNAME</span><br><span class="line">set ORACLE_HOME</span><br><span class="line">set ORACLE_HOSTNAME</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>2.刪除EM的檢查</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">emca -deconfig dbcontrol db -repos drop</span><br><span class="line"></span><br><span class="line">手動檢查這些物件都要不存在</span><br><span class="line">SYSMAN</span><br><span class="line">MGMT_VIEW</span><br><span class="line">MGMT_USER</span><br><span class="line">MGMT_TARGET_BLACKOUTS</span><br><span class="line">SETEMVIEWUSERCONTEXT</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>3.建立EM</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">emca -config dbcontrol db -repos create</span><br><span class="line"></span><br><span class="line">--建立錯誤可考慮刪除舊的目錄</span><br><span class="line">$ORACLE_HOME/&lt;主機名稱&gt;_&lt;Oracle_SID&gt;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Oracle</category>
-        <category>Oracle11g</category>
-      </categories>
-      <tags>
-        <tag>ORA-</tag>
       </tags>
   </entry>
   <entry>
@@ -222,36 +188,37 @@
       </tags>
   </entry>
   <entry>
-    <title>Oracle-ORA-1861</title>
-    <url>/2023/03/02/Oracle-ORA-1861/</url>
-    <content><![CDATA[<p>RMAN Recovery Session Fails with ORA-1861 (Doc ID 852723.1)</p>
+    <title>Oracle-EM</title>
+    <url>/2023/03/12/Oracle-EM/</url>
+    <content><![CDATA[<p>重建11g EM問題處理</p>
 <span id="more"></span>
 
-<p>遇到的情況就是rman list backup出現 ORA-01861: literal does not match format string</p>
-<p>查的解決方法</p>
-<p>1.設定NLS，失敗</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Linux :</span><br><span class="line">export NLS_LANG=AMERICAN_AMERICA.WE8ISO8859P1</span><br><span class="line">export NLS_DATE_FORMAT=YYYY_MM_DD HH24:MI:SS</span><br><span class="line"></span><br><span class="line">Windows :</span><br><span class="line">set NLS_LANG=AMERICAN_AMERICA.WE8ISO8859P1</span><br><span class="line">set NLS_DATE_FORMAT=YYYY_MM_DD HH24:MI:SS</span><br></pre></td></tr></table></figure>
 
-<p>2.重建controlfile，懶的用，所以不採用</p>
-<p>3.依Doc ID 852723.1來做最簡單，裏面就只有plb檔要戴入而已</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">loadjava -user sys/sys_pwd pb.plb</span><br><span class="line"></span><br><span class="line">sqlplus sys/sys_pwd as sysdba</span><br><span class="line">@del.sql</span><br></pre></td></tr></table></figure>
+
+<p>1.環境變數</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">set ORACLE_UNQNAME</span><br><span class="line">set ORACLE_HOME</span><br><span class="line">set ORACLE_HOSTNAME</span><br></pre></td></tr></table></figure>
 
 
 
 
 
-<p>結論:</p>
-<blockquote>
-<p>1.DataGuard 環境在Standby DB也要做一次@del.sql</p>
-<p>2.Standby Control File也可用restored的方式</p>
-</blockquote>
+<p>2.刪除EM的檢查</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">emca -deconfig dbcontrol db -repos drop</span><br><span class="line"></span><br><span class="line">手動檢查這些物件都要不存在</span><br><span class="line">SYSMAN</span><br><span class="line">MGMT_VIEW</span><br><span class="line">MGMT_USER</span><br><span class="line">MGMT_TARGET_BLACKOUTS</span><br><span class="line">SETEMVIEWUSERCONTEXT</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>3.建立EM</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">emca -config dbcontrol db -repos create</span><br><span class="line"></span><br><span class="line">--建立錯誤可考慮刪除舊的目錄</span><br><span class="line">$ORACLE_HOME/&lt;主機名稱&gt;_&lt;Oracle_SID&gt;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>Oracle</category>
         <category>Oracle11g</category>
       </categories>
       <tags>
-        <tag>Script</tag>
+        <tag>ORA-</tag>
       </tags>
   </entry>
   <entry>
@@ -290,6 +257,39 @@
       </tags>
   </entry>
   <entry>
+    <title>Oracle-ORA-1861</title>
+    <url>/2023/03/02/Oracle-ORA-1861/</url>
+    <content><![CDATA[<p>RMAN Recovery Session Fails with ORA-1861 (Doc ID 852723.1)</p>
+<span id="more"></span>
+
+<p>遇到的情況就是rman list backup出現 ORA-01861: literal does not match format string</p>
+<p>查的解決方法</p>
+<p>1.設定NLS，失敗</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Linux :</span><br><span class="line">export NLS_LANG=AMERICAN_AMERICA.WE8ISO8859P1</span><br><span class="line">export NLS_DATE_FORMAT=YYYY_MM_DD HH24:MI:SS</span><br><span class="line"></span><br><span class="line">Windows :</span><br><span class="line">set NLS_LANG=AMERICAN_AMERICA.WE8ISO8859P1</span><br><span class="line">set NLS_DATE_FORMAT=YYYY_MM_DD HH24:MI:SS</span><br></pre></td></tr></table></figure>
+
+<p>2.重建controlfile，懶的用，所以不採用</p>
+<p>3.依Doc ID 852723.1來做最簡單，裏面就只有plb檔要戴入而已</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">loadjava -user sys/sys_pwd pb.plb</span><br><span class="line"></span><br><span class="line">sqlplus sys/sys_pwd as sysdba</span><br><span class="line">@del.sql</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>結論:</p>
+<blockquote>
+<p>1.DataGuard 環境在Standby DB也要做一次@del.sql</p>
+<p>2.Standby Control File也可用restored的方式</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle11g</category>
+      </categories>
+      <tags>
+        <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Oracle11g_unwrap</title>
     <url>/2023/02/14/Oracle11g-unwrap/</url>
     <content><![CDATA[<p>Oracle11g 反解wrap的內容</p>
@@ -320,6 +320,39 @@
       </categories>
       <tags>
         <tag>Script</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle19c_Rman_Restore_Table</title>
+    <url>/2023/02/12/Oracle19c-Rman-Restore-Table/</url>
+    <content><![CDATA[<p>Oracle 19c 新功能 : Rman Restore table</p>
+<span id="more"></span>
+
+
+
+<h2 id="Recover-Table"><a href="#Recover-Table" class="headerlink" title="Recover Table"></a>Recover Table</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">recover table SchemaName.TableName until time &quot;to_date(&#x27;2020-06-12 15:07:08&#x27;,&#x27;yyyy-mm-dd hh24:mi:ss&#x27;)&quot; auxiliary destination &#x27;c:\ap\recover_temp&#x27;;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="目錄架構"><a href="#目錄架構" class="headerlink" title="目錄架構"></a>目錄架構</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200832.png" alt="image-20230212192032400"></p>
+<h2 id="執行的Log"><a href="#執行的Log" class="headerlink" title="執行的Log"></a>執行的Log</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676201158.png" alt="image-20230212192558673"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676201207.png" alt="image-20230212192647009"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676201231.png" alt="image-20230212192711109"></p>
+<p>暫存目錄檔案沒自動刪除乾淨…</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><blockquote>
+<p>1.在舊版本就只能restore配合skpi tablespace才能完成這個需求</p>
+<p>2.在還原Table的過程中是需要一定的硬碟空間需求</p>
+<p>3.Table取出後要記清除產生的暫存檔案</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle19c</category>
+      </categories>
+      <tags>
+        <tag>Rman</tag>
       </tags>
   </entry>
   <entry>
@@ -624,53 +657,6 @@
       </tags>
   </entry>
   <entry>
-    <title>oracle19c_auto_index</title>
-    <url>/2023/02/12/oracle19c-auto-index/</url>
-    <content><![CDATA[<p>Oracle 19c 新功能 : index 自動建立 (SQL Server早就有…..)</p>
-<span id="more"></span>
-
-<h2 id="Exadate的功能，一般Oracle要自行開起"><a href="#Exadate的功能，一般Oracle要自行開起" class="headerlink" title="Exadate的功能，一般Oracle要自行開起"></a>Exadate的功能，一般Oracle要自行開起</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200123.png" alt="image-20230212184248797"></p>
-<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200363.png" alt="image-20230212184342490"></p>
-<h2 id="設定存放Index的Tablespace"><a href="#設定存放Index的Tablespace" class="headerlink" title="設定存放Index的Tablespace"></a>設定存放Index的Tablespace</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200130.png" alt="image-20230212184445846"></p>
-<h2 id="指定那個schema生效，預設是全帳的schema"><a href="#指定那個schema生效，預設是全帳的schema" class="headerlink" title="指定那個schema生效，預設是全帳的schema"></a>指定那個schema生效，預設是全帳的schema</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200141.png" alt="image-20230212184520235"></p>
-<h2 id="可設定index自動維護是否關畢、產出建議、立即生效"><a href="#可設定index自動維護是否關畢、產出建議、立即生效" class="headerlink" title="可設定index自動維護是否關畢、產出建議、立即生效"></a>可設定index自動維護是否關畢、產出建議、立即生效</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200146.png" alt="image-20230212184551105"></p>
-<blockquote>
-<p>auto_index_retention_for_manual : 設定手動建立的index是否也要納入自動管理，也就手動建立的index可能因為很久沒有使用到，將會被自動刪除。預設是不納入自動管理</p>
-</blockquote>
-<h2 id="相關的view"><a href="#相關的view" class="headerlink" title="相關的view"></a>相關的view</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200151.png" alt="image-20230212184641019"></p>
-<h2 id="查看report"><a href="#查看report" class="headerlink" title="查看report"></a>查看report</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200155.png" alt="image-20230212184706042"></p>
-<blockquote>
-<p>SET SERVEROUTPUT ON SIZE 1000000<br>declare<br>  num number := 1;<br>  v_object_id number;<br>begin<br>  while num &lt;= 500<br>  loop<br>    select object_id into v_object_id from tts_binhu.auto_idx_test where object_id=trunc(dbms_random.value(0,10000));<br>    dbms_output.put_line(‘v_object_id:’||nvl(v_object_id,0));<br>    num := num + 1;<br>  end loop;<br>end;</p>
-<p>select * from dba_indexes where owner =’TTS_BINHU’ and table_name=’AUTO_IDX_TEST’</p>
-</blockquote>
-<hr>
-<h2 id="測試"><a href="#測試" class="headerlink" title="測試"></a>測試</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200161.png" alt="image-20230212184812670"></p>
-<h2 id="SELECT-DBMS-AUTO-INDEX-report-activity-FROM-dual"><a href="#SELECT-DBMS-AUTO-INDEX-report-activity-FROM-dual" class="headerlink" title="SELECT DBMS_AUTO_INDEX.report_activity() FROM dual;"></a>SELECT DBMS_AUTO_INDEX.report_activity() FROM dual;</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GENERAL INFORMATION</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Activity start               : 29-10月-2019 14:29:44 </span><br><span class="line"> Activity end                 : 30-10月-2019 14:29:44 </span><br><span class="line"> Executions completed         : 3                    </span><br><span class="line"> Executions interrupted       : 0                    </span><br><span class="line"> Executions with fatal error  : 0                    </span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">SUMMARY (AUTO INDEXES)</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Index candidates                              : 2                       </span><br><span class="line"> Indexes created (visible / invisible)         : 2 (2 / 0)               </span><br><span class="line"> Space used (visible / invisible)              : 7.34 MB (7.34 MB / 0 B) </span><br><span class="line"> Indexes dropped                               : 0                       </span><br><span class="line"> SQL statements verified                       : 6                       </span><br><span class="line"> SQL statements improved (improvement factor)  : 5 (1419.1x)             </span><br><span class="line"> SQL plan baselines created                    : 0                       </span><br><span class="line"> Overall improvement factor                    : 1183x                   </span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">SUMMARY (MANUAL INDEXES)</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Unused indexes    : 0   </span><br><span class="line"> Space used        : 0 B </span><br><span class="line"> Unusable indexes  : 0   </span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">INDEX DETAILS</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">1. The following indexes were created:</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">----------------------------------------------------------------------------------------------------</span><br><span class="line">| Owner     | Table         | Index                | Key                     | Type   | Properties |</span><br><span class="line">----------------------------------------------------------------------------------------------------</span><br><span class="line">| TTS_BINHU | AUTO_IDX_TEST | SYS_AI_0nfqz048chrwz | OBJECT_ID               | B-TREE | NONE       |</span><br><span class="line">| TTS_BINHU | AUTO_IDX_TEST | SYS_AI_5afppmx4u3fjp | OBJECT_NAME,OBJECT_TYPE | B-TREE | NONE       |</span><br><span class="line">----------------------------------------------------------------------------------------------------</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">VERIFICATION DETAILS</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">1. The performance of the following statements improved:</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : 6h02v1c3jm99z                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where object_name </span><br><span class="line">                      = &#x27;AUTO_IDX_TEST&#x27; and object_type=&#x27;TABLE&#x27;                 </span><br><span class="line"> Improvement Factor   : 1423.7x                                                 </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  715640                        36386                        </span><br><span class="line"> CPU Time (s):      492167                        127                          </span><br><span class="line"> Buffer Gets:       59872                         3                            </span><br><span class="line"> Optimizer Cost:    395                           4                            </span><br><span class="line"> Disk Reads:        1422                          2                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    0                             0                            </span><br><span class="line"> Executions:        42                            1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  395 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  395 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 1880695109 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    1 |   132 |    4 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    1 |   132 |    4 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_5afppmx4u3fjp |    1 |       |    3 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_NAME&quot;=&#x27;AUTO_IDX_TEST&#x27; AND &quot;OBJECT_TYPE&quot;=&#x27;TABLE&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : 6mmkppzn4pyd8                                           </span><br><span class="line"> SQL Text             : SELECT OBJECT_ID FROM TTS_BINHU.AUTO_IDX_TEST WHERE     </span><br><span class="line">                      OBJECT_ID=TRUNC(DBMS_RANDOM.VALUE(0,10000))               </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  720172                        22908                        </span><br><span class="line"> CPU Time (s):      717822                        9823                         </span><br><span class="line"> Buffer Gets:       2838                          2                            </span><br><span class="line"> Optimizer Cost:    412                           1                            </span><br><span class="line"> Disk Reads:        0                             1                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    1                             1                            </span><br><span class="line"> Executions:        2                             1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  412 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |     5 |  412 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 252073491 </span><br><span class="line"></span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation          | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT   |                      |    1 |     5 |    1 | 00:00:01 |</span><br><span class="line">| * 1 |   INDEX RANGE SCAN | SYS_AI_0nfqz048chrwz |    1 |     5 |    1 | 00:00:01 |</span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 1 - access(&quot;OBJECT_ID&quot;=TRUNC(&quot;DBMS_RANDOM&quot;.&quot;VALUE&quot;(0,10000)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : acdnsvfpdjnw0                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where object_name </span><br><span class="line">                      = &#x27;MV_WH_COMPANY&#x27; and object_type=&#x27;TABLE&#x27;                 </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  535958                        874                          </span><br><span class="line"> CPU Time (s):      469385                        0                            </span><br><span class="line"> Buffer Gets:       60976                         4                            </span><br><span class="line"> Optimizer Cost:    395                           4                            </span><br><span class="line"> Disk Reads:        0                             1                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    43                            1                            </span><br><span class="line"> Executions:        43                            1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  395 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  395 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 1880695109 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    2 |   264 |    4 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    2 |   264 |    4 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_5afppmx4u3fjp |    1 |       |    3 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_NAME&quot;=&#x27;MV_WH_COMPANY&#x27; AND &quot;OBJECT_TYPE&quot;=&#x27;TABLE&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : c3c69a1dkwucj                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where             </span><br><span class="line">                      object_id=trunc(dbms_random.value(0,10000))               </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  397948                        17176                        </span><br><span class="line"> CPU Time (s):      397844                        158                          </span><br><span class="line"> Buffer Gets:       1420                          3                            </span><br><span class="line"> Optimizer Cost:    412                           2                            </span><br><span class="line"> Disk Reads:        0                             7                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    2                             1                            </span><br><span class="line"> Executions:        1                             1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  412 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  412 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3717726382 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_0nfqz048chrwz |    1 |       |    1 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_ID&quot;=TRUNC(&quot;DBMS_RANDOM&quot;.&quot;VALUE&quot;(0,10000)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : dt1tymnjfa8m6                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where             </span><br><span class="line">                      object_id=trunc(dbms_random.value(0,10000))               </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  5006616                       190                          </span><br><span class="line"> CPU Time (s):      4992671                       190                          </span><br><span class="line"> Buffer Gets:       17018                         3                            </span><br><span class="line"> Optimizer Cost:    412                           2                            </span><br><span class="line"> Disk Reads:        0                             0                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    9                             1                            </span><br><span class="line"> Executions:        12                            1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  412 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  412 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3717726382 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_0nfqz048chrwz |    1 |       |    1 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_ID&quot;=TRUNC(&quot;DBMS_RANDOM&quot;.&quot;VALUE&quot;(0,10000)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">ERRORS</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line">No errors found.</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="刪除自動建立的index"><a href="#刪除自動建立的index" class="headerlink" title="刪除自動建立的index"></a>刪除自動建立的index</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200169.png" alt="image-20230212185015654"></p>
-<blockquote>
-<p>無法直接刪除</p>
-</blockquote>
-<h2 id="更新狀態由Auto由Yes-gt-No"><a href="#更新狀態由Auto由Yes-gt-No" class="headerlink" title="更新狀態由Auto由Yes-&gt;No"></a>更新狀態由Auto由Yes-&gt;No</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200178.png" alt="image-20230212185212945"></p>
-<h2 id="刪除Index-Name有區分大小寫"><a href="#刪除Index-Name有區分大小寫" class="headerlink" title="刪除Index Name有區分大小寫"></a>刪除Index Name有區分大小寫</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200202.png" alt="image-20230212185256081"></p>
-<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><blockquote>
-<p>1.測試的DB版本:Oracle 19c</p>
-<p>2.自動建立index不支援function/partition table</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Oracle</category>
-        <category>Oracle19c</category>
-      </categories>
-      <tags>
-        <tag>PerformanceTuning</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>mssql_script</title>
     <url>/2024/03/27/mssql-script/</url>
     <content><![CDATA[<p>SQL 維護Script</p>
@@ -738,6 +724,53 @@
       </tags>
   </entry>
   <entry>
+    <title>oracle19c_auto_index</title>
+    <url>/2023/02/12/oracle19c-auto-index/</url>
+    <content><![CDATA[<p>Oracle 19c 新功能 : index 自動建立 (SQL Server早就有…..)</p>
+<span id="more"></span>
+
+<h2 id="Exadate的功能，一般Oracle要自行開起"><a href="#Exadate的功能，一般Oracle要自行開起" class="headerlink" title="Exadate的功能，一般Oracle要自行開起"></a>Exadate的功能，一般Oracle要自行開起</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200123.png" alt="image-20230212184248797"></p>
+<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200363.png" alt="image-20230212184342490"></p>
+<h2 id="設定存放Index的Tablespace"><a href="#設定存放Index的Tablespace" class="headerlink" title="設定存放Index的Tablespace"></a>設定存放Index的Tablespace</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200130.png" alt="image-20230212184445846"></p>
+<h2 id="指定那個schema生效，預設是全帳的schema"><a href="#指定那個schema生效，預設是全帳的schema" class="headerlink" title="指定那個schema生效，預設是全帳的schema"></a>指定那個schema生效，預設是全帳的schema</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200141.png" alt="image-20230212184520235"></p>
+<h2 id="可設定index自動維護是否關畢、產出建議、立即生效"><a href="#可設定index自動維護是否關畢、產出建議、立即生效" class="headerlink" title="可設定index自動維護是否關畢、產出建議、立即生效"></a>可設定index自動維護是否關畢、產出建議、立即生效</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200146.png" alt="image-20230212184551105"></p>
+<blockquote>
+<p>auto_index_retention_for_manual : 設定手動建立的index是否也要納入自動管理，也就手動建立的index可能因為很久沒有使用到，將會被自動刪除。預設是不納入自動管理</p>
+</blockquote>
+<h2 id="相關的view"><a href="#相關的view" class="headerlink" title="相關的view"></a>相關的view</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200151.png" alt="image-20230212184641019"></p>
+<h2 id="查看report"><a href="#查看report" class="headerlink" title="查看report"></a>查看report</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200155.png" alt="image-20230212184706042"></p>
+<blockquote>
+<p>SET SERVEROUTPUT ON SIZE 1000000<br>declare<br>  num number := 1;<br>  v_object_id number;<br>begin<br>  while num &lt;= 500<br>  loop<br>    select object_id into v_object_id from tts_binhu.auto_idx_test where object_id=trunc(dbms_random.value(0,10000));<br>    dbms_output.put_line(‘v_object_id:’||nvl(v_object_id,0));<br>    num := num + 1;<br>  end loop;<br>end;</p>
+<p>select * from dba_indexes where owner =’TTS_BINHU’ and table_name=’AUTO_IDX_TEST’</p>
+</blockquote>
+<hr>
+<h2 id="測試"><a href="#測試" class="headerlink" title="測試"></a>測試</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200161.png" alt="image-20230212184812670"></p>
+<h2 id="SELECT-DBMS-AUTO-INDEX-report-activity-FROM-dual"><a href="#SELECT-DBMS-AUTO-INDEX-report-activity-FROM-dual" class="headerlink" title="SELECT DBMS_AUTO_INDEX.report_activity() FROM dual;"></a>SELECT DBMS_AUTO_INDEX.report_activity() FROM dual;</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GENERAL INFORMATION</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Activity start               : 29-10月-2019 14:29:44 </span><br><span class="line"> Activity end                 : 30-10月-2019 14:29:44 </span><br><span class="line"> Executions completed         : 3                    </span><br><span class="line"> Executions interrupted       : 0                    </span><br><span class="line"> Executions with fatal error  : 0                    </span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">SUMMARY (AUTO INDEXES)</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Index candidates                              : 2                       </span><br><span class="line"> Indexes created (visible / invisible)         : 2 (2 / 0)               </span><br><span class="line"> Space used (visible / invisible)              : 7.34 MB (7.34 MB / 0 B) </span><br><span class="line"> Indexes dropped                               : 0                       </span><br><span class="line"> SQL statements verified                       : 6                       </span><br><span class="line"> SQL statements improved (improvement factor)  : 5 (1419.1x)             </span><br><span class="line"> SQL plan baselines created                    : 0                       </span><br><span class="line"> Overall improvement factor                    : 1183x                   </span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">SUMMARY (MANUAL INDEXES)</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Unused indexes    : 0   </span><br><span class="line"> Space used        : 0 B </span><br><span class="line"> Unusable indexes  : 0   </span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">INDEX DETAILS</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">1. The following indexes were created:</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">----------------------------------------------------------------------------------------------------</span><br><span class="line">| Owner     | Table         | Index                | Key                     | Type   | Properties |</span><br><span class="line">----------------------------------------------------------------------------------------------------</span><br><span class="line">| TTS_BINHU | AUTO_IDX_TEST | SYS_AI_0nfqz048chrwz | OBJECT_ID               | B-TREE | NONE       |</span><br><span class="line">| TTS_BINHU | AUTO_IDX_TEST | SYS_AI_5afppmx4u3fjp | OBJECT_NAME,OBJECT_TYPE | B-TREE | NONE       |</span><br><span class="line">----------------------------------------------------------------------------------------------------</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">VERIFICATION DETAILS</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">1. The performance of the following statements improved:</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : 6h02v1c3jm99z                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where object_name </span><br><span class="line">                      = &#x27;AUTO_IDX_TEST&#x27; and object_type=&#x27;TABLE&#x27;                 </span><br><span class="line"> Improvement Factor   : 1423.7x                                                 </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  715640                        36386                        </span><br><span class="line"> CPU Time (s):      492167                        127                          </span><br><span class="line"> Buffer Gets:       59872                         3                            </span><br><span class="line"> Optimizer Cost:    395                           4                            </span><br><span class="line"> Disk Reads:        1422                          2                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    0                             0                            </span><br><span class="line"> Executions:        42                            1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  395 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  395 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 1880695109 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    1 |   132 |    4 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    1 |   132 |    4 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_5afppmx4u3fjp |    1 |       |    3 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_NAME&quot;=&#x27;AUTO_IDX_TEST&#x27; AND &quot;OBJECT_TYPE&quot;=&#x27;TABLE&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : 6mmkppzn4pyd8                                           </span><br><span class="line"> SQL Text             : SELECT OBJECT_ID FROM TTS_BINHU.AUTO_IDX_TEST WHERE     </span><br><span class="line">                      OBJECT_ID=TRUNC(DBMS_RANDOM.VALUE(0,10000))               </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  720172                        22908                        </span><br><span class="line"> CPU Time (s):      717822                        9823                         </span><br><span class="line"> Buffer Gets:       2838                          2                            </span><br><span class="line"> Optimizer Cost:    412                           1                            </span><br><span class="line"> Disk Reads:        0                             1                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    1                             1                            </span><br><span class="line"> Executions:        2                             1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  412 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |     5 |  412 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 252073491 </span><br><span class="line"></span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation          | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT   |                      |    1 |     5 |    1 | 00:00:01 |</span><br><span class="line">| * 1 |   INDEX RANGE SCAN | SYS_AI_0nfqz048chrwz |    1 |     5 |    1 | 00:00:01 |</span><br><span class="line">------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 1 - access(&quot;OBJECT_ID&quot;=TRUNC(&quot;DBMS_RANDOM&quot;.&quot;VALUE&quot;(0,10000)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : acdnsvfpdjnw0                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where object_name </span><br><span class="line">                      = &#x27;MV_WH_COMPANY&#x27; and object_type=&#x27;TABLE&#x27;                 </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  535958                        874                          </span><br><span class="line"> CPU Time (s):      469385                        0                            </span><br><span class="line"> Buffer Gets:       60976                         4                            </span><br><span class="line"> Optimizer Cost:    395                           4                            </span><br><span class="line"> Disk Reads:        0                             1                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    43                            1                            </span><br><span class="line"> Executions:        43                            1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  395 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  395 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 1880695109 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    2 |   264 |    4 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    2 |   264 |    4 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_5afppmx4u3fjp |    1 |       |    3 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_NAME&quot;=&#x27;MV_WH_COMPANY&#x27; AND &quot;OBJECT_TYPE&quot;=&#x27;TABLE&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : c3c69a1dkwucj                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where             </span><br><span class="line">                      object_id=trunc(dbms_random.value(0,10000))               </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  397948                        17176                        </span><br><span class="line"> CPU Time (s):      397844                        158                          </span><br><span class="line"> Buffer Gets:       1420                          3                            </span><br><span class="line"> Optimizer Cost:    412                           2                            </span><br><span class="line"> Disk Reads:        0                             7                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    2                             1                            </span><br><span class="line"> Executions:        1                             1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  412 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  412 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3717726382 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_0nfqz048chrwz |    1 |       |    1 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_ID&quot;=TRUNC(&quot;DBMS_RANDOM&quot;.&quot;VALUE&quot;(0,10000)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"> Parsing Schema Name  : SYS                                                     </span><br><span class="line"> SQL ID               : dt1tymnjfa8m6                                           </span><br><span class="line"> SQL Text             : select * from tts_binhu.auto_idx_test where             </span><br><span class="line">                      object_id=trunc(dbms_random.value(0,10000))               </span><br><span class="line"> Improvement Factor   : 1418x                                                   </span><br><span class="line"></span><br><span class="line">Execution Statistics:</span><br><span class="line">-----------------------------</span><br><span class="line">                    Original Plan                 Auto Index Plan              </span><br><span class="line">                    ----------------------------  ---------------------------- </span><br><span class="line"> Elapsed Time (s):  5006616                       190                          </span><br><span class="line"> CPU Time (s):      4992671                       190                          </span><br><span class="line"> Buffer Gets:       17018                         3                            </span><br><span class="line"> Optimizer Cost:    412                           2                            </span><br><span class="line"> Disk Reads:        0                             0                            </span><br><span class="line"> Direct Writes:     0                             0                            </span><br><span class="line"> Rows Processed:    9                             1                            </span><br><span class="line"> Executions:        12                            1                            </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLANS SECTION</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- Original</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3956758376 </span><br><span class="line"></span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">| Id | Operation           | Name          | Rows | Bytes | Cost | Time     |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">|  0 | SELECT STATEMENT    |               |      |       |  412 |          |</span><br><span class="line">|  1 |   TABLE ACCESS FULL | AUTO_IDX_TEST |    1 |   132 |  412 | 00:00:01 |</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">- With Auto Indexes</span><br><span class="line">-----------------------------</span><br><span class="line"> Plan Hash Value  : 3717726382 </span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">| Id  | Operation                             | Name                 | Rows | Bytes | Cost | Time     |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line">|   0 | SELECT STATEMENT                      |                      |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">|   1 |   TABLE ACCESS BY INDEX ROWID BATCHED | AUTO_IDX_TEST        |    1 |   132 |    2 | 00:00:01 |</span><br><span class="line">| * 2 |    INDEX RANGE SCAN                   | SYS_AI_0nfqz048chrwz |    1 |       |    1 | 00:00:01 |</span><br><span class="line">-------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Predicate Information (identified by operation id):</span><br><span class="line">------------------------------------------</span><br><span class="line">* 2 - access(&quot;OBJECT_ID&quot;=TRUNC(&quot;DBMS_RANDOM&quot;.&quot;VALUE&quot;(0,10000)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">-----</span><br><span class="line">- Dynamic sampling used for this statement ( level = 11 )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">ERRORS</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line">No errors found.</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="刪除自動建立的index"><a href="#刪除自動建立的index" class="headerlink" title="刪除自動建立的index"></a>刪除自動建立的index</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200169.png" alt="image-20230212185015654"></p>
+<blockquote>
+<p>無法直接刪除</p>
+</blockquote>
+<h2 id="更新狀態由Auto由Yes-gt-No"><a href="#更新狀態由Auto由Yes-gt-No" class="headerlink" title="更新狀態由Auto由Yes-&gt;No"></a>更新狀態由Auto由Yes-&gt;No</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200178.png" alt="image-20230212185212945"></p>
+<h2 id="刪除Index-Name有區分大小寫"><a href="#刪除Index-Name有區分大小寫" class="headerlink" title="刪除Index Name有區分大小寫"></a>刪除Index Name有區分大小寫</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200202.png" alt="image-20230212185256081"></p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><blockquote>
+<p>1.測試的DB版本:Oracle 19c</p>
+<p>2.自動建立index不支援function/partition table</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Oracle</category>
+        <category>Oracle19c</category>
+      </categories>
+      <tags>
+        <tag>PerformanceTuning</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>rman_info</title>
     <url>/2023/02/12/rman-info/</url>
     <content><![CDATA[<p>rman限制I/O和檢查datafile</p>
@@ -775,36 +808,37 @@
       </tags>
   </entry>
   <entry>
-    <title>Oracle19c_Rman_Restore_Table</title>
-    <url>/2023/02/12/Oracle19c-Rman-Restore-Table/</url>
-    <content><![CDATA[<p>Oracle 19c 新功能 : Rman Restore table</p>
+    <title>ssh_info</title>
+    <url>/2024/03/29/ssh-info/</url>
+    <content><![CDATA[<p>SSH 筆記</p>
 <span id="more"></span>
 
 
 
-<h2 id="Recover-Table"><a href="#Recover-Table" class="headerlink" title="Recover Table"></a>Recover Table</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">recover table SchemaName.TableName until time &quot;to_date(&#x27;2020-06-12 15:07:08&#x27;,&#x27;yyyy-mm-dd hh24:mi:ss&#x27;)&quot; auxiliary destination &#x27;c:\ap\recover_temp&#x27;;</span><br></pre></td></tr></table></figure>
+<p>list ciphers/macs/kexalgorithms</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://superuser.com/questions/868998/how-can-i-find-a-list-of-macs-ciphers-and-kexalgorithms-that-my-openssh-client</span><br></pre></td></tr></table></figure>
 
 
 
+<p>SSH設定</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://www.vixual.net/blog/archives/64</span><br><span class="line">https://blog.mingchang.tw/blog/?filename=SSH-Secure-Settings.md&amp;commit=0058290</span><br></pre></td></tr></table></figure>
 
 
-<h2 id="目錄架構"><a href="#目錄架構" class="headerlink" title="目錄架構"></a>目錄架構</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676200832.png" alt="image-20230212192032400"></p>
-<h2 id="執行的Log"><a href="#執行的Log" class="headerlink" title="執行的Log"></a>執行的Log</h2><p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676201158.png" alt="image-20230212192558673"></p>
-<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676201207.png" alt="image-20230212192647009"></p>
-<p><img src="https://raw.githubusercontent.com/binhu831open/image/master/2023/02/upgit_20230212_1676201231.png" alt="image-20230212192711109"></p>
-<p>暫存目錄檔案沒自動刪除乾淨…</p>
-<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><blockquote>
-<p>1.在舊版本就只能restore配合skpi tablespace才能完成這個需求</p>
-<p>2.在還原Table的過程中是需要一定的硬碟空間需求</p>
-<p>3.Table取出後要記清除產生的暫存檔案</p>
-</blockquote>
+
+<p>Net.SSH</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://mattjameschampion.com/2020/08/24/changing-host-key-algorithm-in-ssh-net/</span><br></pre></td></tr></table></figure>
+
+
+
+<p>SSH相容表</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://ssh-comparison.quendi.de/comparison/kex.html</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
-        <category>Oracle</category>
-        <category>Oracle19c</category>
+        <category>SSH</category>
       </categories>
       <tags>
-        <tag>Rman</tag>
+        <tag>SSH</tag>
       </tags>
   </entry>
   <entry>
